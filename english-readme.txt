@@ -4,7 +4,7 @@ English-readme of fidoip
 
 * This instruction intended only for English spoken users. If you are Russian please use only Russian documentation fido.rus.* files
 
-Updated version of this document you could find at https://sourceforge.net/apps/mediawiki/fidoip/index.php?title=English-readme
+Updated version of this document you could find at http://sourceforge.net/apps/mediawiki/fidoip/index.php?title=English-readme
 ===========================
 
   Contents
@@ -28,7 +28,7 @@ Basically fidoip intended for IP-points, but with additional adjustment of confi
 fidoip - (fido software installation package of binkd, husky hpt and GoldEd-NSF ) consists of:
 
 
-Contents of archive fidoip-1.0.5.tar:
+Contents of archive fidoip-1.0.5_1.tar:
 
    * fido_slack.sh - script for starting creation Slackware packages via SlackBuilds;
    * fido_slamd64.sh - script for starting creation packages via SlackBuilds for Slamd64(64-bit Slackware);
@@ -77,7 +77,7 @@ And in configuration of template golded.tpl there used @OFGHIUrl macro which is 
 1. Setup FreeBSD ports collection and update it as this described in FreeBSD Handbook; 2. As root extract fidoip from tarball:
 
 su
-tar -xpf fidoip-1.0.5.tar
+tar -xpf fidoip-1.0.5_1.tar
 cd fidoip-1.0.5
 
 3. Connect to Internet, then run script fido_freebsd.sh:
@@ -112,7 +112,7 @@ where login is your login name. Login as your login and use recv script for reci
 
 
 su
-tar -xpf fidoip-1.0.5.tar
+tar -xpf fidoip-1.0.5_1.tar
 cd fidoip-1.0.5
 
 
@@ -162,7 +162,7 @@ Login as your login and use recv script for receiving, send script for sending a
 1. As root extract fidoip from tarball:
 
 su
-tar -xpf fidoip-1.0.5.tar
+tar -xpf fidoip-1.0.5_1.tar
 cd fidoip-1.0.5
 
 2. As root run script
@@ -203,7 +203,7 @@ export PATH=$PATH:/usr/local/bin
 1. As root extract fidoip from tarball:
 
 su
-tar -xpf fidoip-1.0.5.tar
+tar -xpf fidoip-1.0.5_1.tar
 cd fidoip-1.0.5
 
 2. Connect to Internet and install all software packages that required for installation of fidoip and using of binkd, husky hpt and Golded-NSF:

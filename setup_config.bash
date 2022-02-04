@@ -450,6 +450,8 @@ echo "it in the URLHANDLER in /usr/local/etc/golded+/golded.cfg"
 sleep 5
 fi
 
+sed -i "s|luit\ -encoding|luit\ -x\ -encoding|" /usr/local/bin/gl
+
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
 fi
@@ -571,6 +573,9 @@ cat /tmp/binkd.cfg10 > /usr/local/etc/binkd.cfg
 cat /tmp/recv1 > /usr/local/bin/recv
 cat /tmp/send1 > /usr/local/bin/send
 
+sed "s|luit\ -encoding|luit\ -x\ -encoding|" /usr/local/bin/gl > /tmp/gl1
+cat /tmp/gl1 > /usr/local/bin/gl
+
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
 
@@ -586,6 +591,7 @@ if [ -e /tmp/binkd.cfg1 ]; then
 	rm /tmp/send1
 	rm /tmp/config*
 	rm /tmp/golded.cfg*
+        rm /tmp/gl1
 fi
 
 

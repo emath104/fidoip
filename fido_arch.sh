@@ -107,6 +107,20 @@ fi
 echo ""
 echo "-----------------------------------"
 
+
+##  make sure make available
+makeloc=`which make`
+
+if [ -x "$makeloc" ]
+then
+    echo "make utility found: $makeloc"
+else
+    echo "WARNING: make not found."
+    echo "Trying to install it from repository"
+    pacman -S make 
+fi
+echo ""
+echo "-----------------------------------"
 ## make sure C compiler/linker available
 
 gccloc=`which gcc`

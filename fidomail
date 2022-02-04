@@ -5,7 +5,7 @@
 # /usr/local/bin
 # sudo cp fidomail /usr/local/bin
 # and add to crontab this string:
-# */50 * * * * /usr/local/bin/fidorecv >/dev/null 2>&1  
+# */50 * * * * /usr/local/bin/fidomail >/dev/null 2>&1  
 # Script created by Vladimir Smagin - 2:5020/8080.21
 #
 USERNAME=`whoami` ; T1="root"
