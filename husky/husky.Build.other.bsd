@@ -1,0 +1,235 @@
+#!/bin/sh
+
+########################
+# NOTES:
+#
+########################
+# Husky Fido Project http://husky.sourceforge.net/index.html
+# Download latest verisons rename in bottom
+# You could do it automatically if uncomment this line:  
+#wget -c http://heanet.dl.sourceforge.net/sourceforge/husky/fidoconf-1.4-rc5.tar.gz
+#wget -c http://surfnet.dl.sourceforge.net/sourceforge/husky/smapi-2.4-rc5.tar.gz
+#wget -c http://surfnet.dl.sourceforge.net/sourceforge/husky/huskybase-1.4-tar.gz
+#wget -c http://switch.dl.sourceforge.net/sourceforge/husky/hpt-1.4-rc5.tar.gz
+# And optional for point and useful for fido node husky programms:
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/hptkill-1.10.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/hptsqfix-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/hpucode-1.2.4-src.tar.gz
+# reserved for future wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/htick-1.0.4-src.tar.gz
+# reserved for future wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/nltools-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/sqpack-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/bsopack-0.2.4-src.tar.gz
+# To simplify editing configuration files added an easy to use text editor ee:
+#wget -c http://mahon.cwx.net/sources/ee-1.4.6.src.tgz
+########################
+
+# Set initial variables:
+
+NAME=husky			# Program name
+PNAME=husky			# Package name (Useful for changing case, removing "-"s, etc.)
+VERSION=1.4.rc5		# Program version
+PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
+ARCH=${ARCH:-i486}	# Package architecture
+BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
+
+CWD=`pwd`
+TMP=${TMP:-/tmp}	# Location to compile the source
+PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
+
+HPTVER=hpt-1.4-rc5
+FIDOCONFVER=fidoconf-1.4-rc5
+HASKYBASEVER=huskybase-1.4-tar.gz
+SMAPIVER=smapi-2.4-rc5
+
+#Additional husky program
+HPTKILLVER=hptkill-1.12-rc5.tar.gz
+HPTSQFIXVER=hptsqfix-1.4-rc5-1.tar.gz
+HPUCODEVER=hpucode-1.4-rc5-tar.gz
+HTICKVER=htick-1.4-rc5.tar.gz
+NLTOOLVER=nltools-1.4-rc5.tar.gz
+SQPACKVER=sqpack-1.4-rc5.tar.gz
+BSOPACKVER=bsopack-1.4.0-rc5.tar.gz
+
+mkdir -p /usr/local
+mkdir -p /usr/local/bin
+mkdir -p /usr/local/sbin
+mkdir -p /usr/local/etc
+mkdir -p /usr/local/etc/fidoip
+
+rm -rf $PKG		# Get rid of any leftovers
+mkdir -p $PKG		# Make sure $PKG and $TMP (-p switch) exist
+
+
+########################
+# Husky temporary files delete
+cd $TMP
+rm -rf huskybse
+rm -rf smapi
+rm -rf hpt
+rm -rf fidoconf
+
+# Additional husky temporary delete 
+rm -rf hptkill
+rm -rf hptsqfix
+rm -rf hpucode
+rm -rf htick
+rm -rf nltools
+rm -rf sqpack
+rm -rf bsopack
+
+tar xvzf $CWD/$HPTVER.tar.gz
+tar xvzf $CWD/$FIDOCONFVER.tar.gz
+tar xvzf $CWD/$HASKYBASEVER
+tar xvzf $CWD/$SMAPIVER.tar.gz
+# Additional husky programm extract
+tar xvzf $CWD/$HPTKILLVER
+tar xvzf $CWD/$HPTSQFIXVER
+tar xvzf $CWD/$HPUCODEVER
+tar xvzf $CWD/$HTICKVER
+tar xvzf $CWD/$NLTOOLVER
+tar xvzf $CWD/$SQPACKVER
+tar xvzf $CWD/$BSOPACKVER
+
+#copy Husky rules for compily
+
+cp $CWD/huskymak.cfg $TMP/
+
+cd smapi 
+cat $CWD/smapi.os.patch | patch -p0
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../fidoconf
+cat $CWD/fidoconf.os.patch | patch -p0
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../hpt
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+
+cd ../hptkill
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../hptsqfix
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../hpucode
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../htick
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../nltools
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../sqpack
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+cd ../bsopack
+
+gmake clean
+gmake all
+gmake PREFIX=/usr/local install
+
+
+#Creating configuration directory 
+   
+mkdir -p /usr/local/etc
+mkdir -p /usr/local/etc/fido
+cp $TMP/huskymak.cfg /usr/local/etc/fido 
+chmod -R 644 /usr/local/doc/$PNAME-$VERSION/*
+
+#Copy Husky configuration file  
+
+if [ -e $CWD/config ]; then
+  mkdir -p /usr/local/etc/fidoip
+  cat $CWD/config.freebsd > /usr/local/etc/fido/config
+  cat $CWD/config.freebsd > /usr/local/etc/fidoip/config.template
+
+fi
+
+if [ -e $CWD/hpt_area.pl ]; then
+  mkdir -p /usr/local/bin
+  cat $CWD/hpt_area.pl > /usr/local/bin/hpt_area.pl
+  chmod +x /usr/local/bin/hpt_area.pl
+  cat $CWD/hpt_log.pl > /usr/local/bin/hpt_log.pl
+  chmod +x /usr/local/bin/hpt_log.pl
+  cat $CWD/hpt_info.sh > /usr/local/bin/hpt_info.sh
+  chmod +x /usr/local/bin/hpt_info.sh
+  cat $CWD/linkarea_stat.sh > /usr/local/bin/linkarea_stat.sh
+  chmod +x /usr/local/bin/linkarea_stat.sh
+  cat $CWD/import_arealist_from_windows.sh > /usr/local/bin/import_arealist_from_windows.sh
+  chmod +x /usr/local/bin/import_arealist_from_windows.sh
+  cat $CWD/export_arealist_to_windows.sh > /usr/local/bin/export_arealist_to_windows.sh
+  chmod +x /usr/local/bin/export_arealist_to_windows.sh
+  cat $CWD/save_arealist.sh > /usr/local/bin/save_arealist.sh
+  chmod +x /usr/local/bin/save_arealist.sh
+fi
+
+
+mkdir -p /home
+mkdir -p /home/fido
+
+
+# Add logs for hpt:
+
+if [ -e $CWD/echotoss.log ]; then
+  mkdir -p /home
+  mkdir -p /home/fido
+  cat $CWD/echotoss.log > /home/fido/echotoss.log
+fi
+
+if [ -e $CWD/import.log ]; then
+   mkdir -p /home
+   mkdir -p /home/fido
+   cat $CWD/import.log > /home/fido/import.log
+fi
+
+if [ -e $CWD/htick.log ]; then
+    mkdir -p /home
+   mkdir -p /home/fido
+   cat $CWD/htick.log > /home/fido/htick.log
+fi
+
+if [ -e $CWD/sqpack.log ]; then
+   mkdir -p /home
+   mkdir -p /home/fido
+   cat $CWD/sqpack.log > /home/fido/sqpack.log
+fi
+
+  mkdir -p /home
+  mkdir -p /home/fido
+ cat $CWD/hpt.log > /home/fido/hpt.log
+
+
+# Clean up the extra stuff:
+
+if [ "$1" = "--cleanup" ]; then
+  rm -rf $PKG
+fi

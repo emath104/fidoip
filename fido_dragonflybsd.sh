@@ -1,5 +1,5 @@
 #!/bin/sh
-# Usage:  fido_linux_koi.sh login
+# Usage:  fido_dragonflybsd.sh login
 CWD=`pwd`
 OSNAME=`uname`
 USERNAME=`whoami`
@@ -8,17 +8,17 @@ shortdate=`echo ${date} | sed s/^...//`
 shortname=fidoip_configs_${shortdate}.tar
 
 T1="root"
-T2="Linux"
+T2="DragonFly"
 
 if [ ! -z "$2" ]; then
-echo "Use 1 argument only. Usage: fido_linux.sh login" ; exit
+echo "Use 1 argument only. Usage: fido_dragonflybsd.sh login" ; exit
 fi
 
 if [ ! -z "$1" ]
 then
 VAR_01=$1
 else
-  echo " To setup fidoip you need type you login name as argument. Usage: fido_linux.sh login" ; exit
+  echo " To setup fidoip you need type you login name as argument. Usage: fido_dragonflybsd.sh login" ; exit
 fi
 
 echo ""
@@ -37,7 +37,7 @@ fi
 if [ "$T2" = "$OSNAME" ]; then
 echo  ''
 else
-echo 'Please run this script on a Linux' ; exit
+echo 'Please run this script on a DradonFly' ; exit
 fi
 
 f1()
@@ -98,6 +98,18 @@ echo '-------------------------------------------------------------------'
 sleep 3
 echo ""
 
+## checking pkgsrc install directory
+
+if [ -e /usr/pkgsrc/archivers/unzip ]; then
+echo "Found pkgsrc directory."
+else 
+echo "Warning: pkgsrc directory /usr/pkgsrc not found."
+echo "You should install and update pkgsrc or it will not be 
+echo "possible to install fidoip on this mashine."
+echo "Please install pkgsrc and run this "script again."
+exit
+fi
+
 ##  make sure unzip extractor available
 
 unziploc=`which unzip`
@@ -107,11 +119,22 @@ then
     echo "unzip extractor found: $unziploc"
 else
     echo "WARNING: unzip not found."
+    echo "Tryng to install it from pkgsrc"
+    cd /usr/pkgsrc/archivers/unzip ; bmake install clean
+fi
+
+unziploc=`which unzip`
+if [ -x "$unziploc" ]
+then
+    echo "unzip extractor found: $unziploc"
+    else
+    echo "WARNING: unzip not found. pkgsrc installation failed" 
     echo "So it will not be possible to extract fidoip on this machine."
     echo " You should take steps to get unzip installed,"
     echo " as described in fidoip.rus.* files."
     exit
 fi
+
 echo ""
 echo "-----------------------------------"
 
@@ -123,11 +146,23 @@ then
     echo "zip packer found: $ziploc"
 else
     echo "WARNING: zip not found."
+    echo "Trying to install it from pkgsrc"
+    cd /usr/pkgsrc/archivers/zip ; bmake install clean
+fi
+
+ziploc=`which zip`
+
+if [ -x "$ziploc" ]
+then
+    echo "zip packer found: $ziploc"
+else
+    echo "WARNING: zip not found. pkgsrc install failed."
     echo "So it will not be possible to pack fido packets on this machine."
     echo " You should take steps to get zip installed,"
     echo " as described in fidoip.rus.* files."
     exit
 fi
+
 echo ""
 echo "-----------------------------------"
 
@@ -139,64 +174,75 @@ then
     echo "bzip2 packer found: $bzip2loc"
 else
     echo "WARNING: bzip2 not found."
+    echo "Trying install it from pkgsrc."
+    cd /usr/pkgsrc/archivers/bzip2 ; bmake install clean    
+fi
+
+bzip2loc=`which bzip2`
+
+if [ -x "$bzip2loc" ]
+then
+    echo "bzip2 packer found: $bzip2loc"
+else
+    echo "WARNING: bzip2 not found. pkgsrc install failed."
     echo "So it will not be possible extract fidoip sources on this machine."
     echo " You should take steps to get bzip2 installed,"
     echo " as described in fidoip.rus.* files."
     exit
 fi
+
 echo ""
 echo "-----------------------------------"
 
-## make sure C compiler/linker available
+## make sure gmake available
 
-gccloc=`which gcc`
+gmakeloc=`which gmake`
 
-if [ -x "$gccloc" ]
+if [ -x "$gmakeloc" ]
 then
-    echo "C compiler found: $gccloc"
+    echo "gmake found: $gmakeloc"
 else
-    echo "WARNING: gcc not found."
+    echo "WARNING: gmake not found."
+    echo "Trying to install it from pkgsrc."
+    cd /usr/pkgsrc/devel/gmake ; bmake install clean
+fi
+
+gmakeloc=`which gmake`
+
+if [ -x "$gmakeloc" ]
+then
+    echo "gmake found: $gmakeloc"
+else
+    echo "WARNING: gmake not found. pkgsrc install failed."
     echo "So it will not be possible to compily fidoip on this machine."
-    echo " You should take steps to get gcc installed,"
+    echo " You should take steps to get gmake installed,"
     echo " as described in fidoip.rus.* files."
     exit
 fi
 
 echo ""
 echo "-----------------------------------"
+bashloc=`which bash`
 
-
-## make sure C++ compiler/linker available
-
-gploc=`which g++`
-
-if [ -x "$gploc" ]
+if [ -x "$bashloc" ]
 then
-    echo "C++ compiler found: $gploc"
+    echo "bash found: $bashloc"
 else
-    echo "WARNING: C++ support for gcc not found."
-    echo "So it will not be possible to compily fidoip on this machine."
-    echo " You should take steps to get c++ installed,"
+    echo "WARNING: bash not found."
+    echo "Trying to install it from pkgsrc."
+    cd /usr/pkgsrc/shells/bash ; bmake install clean
+fi
+bashloc=`which bash`
+
+if [ -x "$bashloc" ]
+then
+    echo "bash found: $bashloc"
+else
+    echo "WARNING: bash not found. pkgsrc install failed."
+    echo "So it will not be possible to configure fidoip on this machine."
+    echo " You should take steps to get bash installed,"
     echo " as described in fidoip.rus.* files."
     exit
-fi
-
-echo ""
-echo "-----------------------------------"
-
-## make sure ncurses-devel library available
-
-if [ -e /usr/include/ncurses.h ]
-then
-    echo "Ncurses-devel library found: /usr/include/ncurses.h"
-else
-    echo "WARNING: ncurses-devel library not found."
-    echo "So it may not be possible to compily GoldEd+ on this machine."
-    echo " You should take steps to make ncurses-devel library be installed,"
-    echo " as described in fidoip.rus.* files."
-    echo " You could press Ctrl-C now to stop this script," 
-    echo " if not - GoldEd+ could not be compiled."
-    sleep 5 
 fi
 
 echo ""
@@ -211,30 +257,95 @@ then
     echo "Screen package found: $scrloc"
 else
     echo "Information: Screen package not found."
+    echo "Trying to install it from pkgsrc."
+    cd /usr/pkgsrc/misc/screen ; bmake install clean 
+fi
+
+if [ -x "$scrloc" ]
+then
+    echo "Screen package found: $scrloc"
+else
+    echo "Information: Screen package not found."
     echo "You may need install it later,"
     echo "as described in fidoip.rus.* files."
     sleep 5
 fi
+echo ""
+echo "-----------------------------------"
+
+luitloc=`which luit`
+if [ -x "$luitloc" ]
+then
+    echo "luit package found: $luitloc"
+else
+    echo "Information: luit package not found."
+    echo "If you have UTF-8 codepade and will use script gl, you may need" 
+    echo "install it later, from pkgsrc:"
+    echo "cd /usr/pkgsrc/x11/luit ; bmake install clean"
+    sleep 5
+fi
+
 
 echo ""
 echo "-----------------------------------"
 
 
+## make sure libiconv available
+
+if [ -e /usr/pkg/share/doc/libiconv ]
+then
+    echo "libiconv found: /usr/pkg/share/doc/libiconv"
+else
+    echo "Information: libiconv package not found."
+    echo "Trying to install in from pkgsrc"
+    cd /usr/pkgsrc/converters/libiconv ; bmake install clean
+fi
+if [ -e /usr/pkg/share/doc/libiconv ]
+then
+    echo "libiconv found: /usr/pkg/share/doc/libiconv"
+else
+    echo "Information: libiconv package not found. pkgsrc install failed."
+    echo "You need install it as described in fidoip.rus.* files." 
+    exit
+fi
+
+echo ""
+echo "-----------------------------------"
 
 ## make sure gettext available
 
-if [ -e /usr/share/gettext ]
+if [ -e /usr/pkg/share/gettext ]
 then
-    echo "Gettext found: /usr/share/gettext"
+    echo "Gettext found: /usr/pkg/share/gettext"
 else
     echo "Information: Gettext package not found."
+    echo "Trying to install in from pkgsrc"
+    cd /usr/pkgsrc/devel/gettext ; bmake install clean 
+fi
+
+if [ -e /usr/pkg/share/gettext ]
+then
+    echo "Gettext found: /usr/pkg/share/gettext"
+else
+    echo "Information: Gettext package not found. pkgsrc install failed."
     echo "You may need install it later,"
     echo "as described in fidoip.rus.* files."
     sleep 5
 fi
+
 echo ""
 echo "-----------------------------------"
 
+wgetloc=`which wget`
+
+if [ -x "$wgetloc" ]
+then
+    echo "Wget package found: $wgetloc"
+else
+    echo "Information: Wget package not found."
+    echo "Trying to install from pkgsrc."
+    cd /usr/pkgsrc/net/wget ; bmake install clean
+fi
 wgetloc=`which wget`
 
 if [ -x "$wgetloc" ]
@@ -259,14 +370,23 @@ echo '--------------------------------------------------------------'
 echo ''
 sleep 10
 
+cd $CWD
 cd binkd
-sh binkd.Build
-cd ../husky
-sh husky.Build
+sh binkd.Build.other.bsd
 cd ../golded
-sh golded.Build+
+sh golded.Build+.other.bsd
+UNAME=`uname -m`
 
+if [ "$UNAME" = "amd64" ];
+then
+export MACHINE="i386"
+export UNAME_p="i386"
+export UNAME_m="i386"
+export CFLAGS="-fPIC"
+fi
 
+cd ../husky
+sh husky.Build.other.bsd
 
 echo '-----------------------------------------------------------------------------'
 echo "  Creating fidoip's directories for user "$VAR_01" in /home/fido/  "
@@ -315,6 +435,7 @@ else
 cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
 fi
 
+
 # Add logs for hpt:
 
 if [ -e $CWD/husky/echotoss.log ]; then
@@ -352,9 +473,9 @@ fi
 
 #Linking libraries
 
-ln -sf /usr/local/lib/libfidoconfig.so.1.4 /lib/libfidoconfig.so.1.4
-ln -sf /usr/local/lib/libsmapi.so.2.4 /lib/libsmapi.so.2.4
-ln -sf /usr/local/lib/libfidoconfig.so /lib/libfidoconfig.so.1.4
+#ln -sf /usr/local/lib/libfidoconfig.so.1.4 /lib/libfidoconfig.so.1.4
+#ln -sf /usr/local/lib/libsmapi.so.2.4 /lib/libsmapi.so.2.4
+#ln -sf /usr/local/lib/libfidoconfig.so /lib/libfidoconfig.so.1.4
 
 echo ''
 echo '-----------------------------------------------------'
@@ -388,31 +509,18 @@ echo "Ownship and permission for user "$VAR_01" are setted!"
 echo '-----------------------------------------------------'
 echo ''
 
-
+sed "6s/username2change"/"$VAR_01""/" $CWD/binkd/binkd.initbsd-style > /etc/rc.d/binkd 
+echo 'daemon copied to /etc/rc.d If you would like to'
+echo 'acivate binkd daemon set permission before:'
+echo 'chmod +x /etc/rc.d/binkd'
+echo 'And add /etc/rc.d/binkd start to /etc/rc.local to start it at boot time:'
+echo "echo '/etc/rc.d/binkd start' >> /etc/rc.local"
+echo "chmod +x /etc/rc.local"
+echo "Also add /etc/rc.d/binkd stop to /etc/rc.shutdown.local to stop it at shutdown time:"
+echo "echo '/etc/rc.d/binkd stop' >> /etc/rc.shutdown.local"
+echo "chmod +x /etc/rc.shutdown.local"
 echo ''
-
-if [ -e /etc/rc.d ]; then
- cat $CWD/binkd/binkd.initbsd-style > /etc/rc.d/binkd
- sed -i "6s/username2change"/"$VAR_01""/" /etc/rc.d/binkd
- echo 'Found BSD style init-scripts. Script for staring binkd'
- echo 'daemon copied to /etc/rc.d/binkd. If you would like to'
- echo 'acivate binkd daemon set permission before:'
- echo 'chmod +x /etc/rc.d/binkd'
-fi
-
-echo ''
-
-if [ -e /etc/init.d ]; then
- cat $CWD/binkd/binkd.initatt-style > /etc/init.d/binkd
- sed -i "6s/username2change"/"$VAR_01""/" /etc/init.d/binkd
- echo 'Found AT&T style init-scripts. Script for staring binkd'
- echo 'daemon copied to /etc/init.d/binkd. If you would like to'
- echo 'acivate binkd daemon set permission before:'
- echo 'chmod +x /etc/init.d/binkd'
-fi
-
-echo ''
-
+sleep 5
 
 echo '------------------------------------------------------------------'
 echo 'Checking installation of additional Husky programms...'

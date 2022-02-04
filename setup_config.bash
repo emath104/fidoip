@@ -12,6 +12,17 @@ shortname=fidoip_configs_${shortdate}.tar
 T1="root"
 T2="Linux"
 T3="FreeBSD"
+T4="DragonFly"
+
+if [ "$OSNAME" = "$T3" ]; then
+Z1="BSD"
+fi
+
+if [ "$OSNAME" = "$T4" ]; then
+Z1="BSD"
+Z2="PKGSRC"
+fi
+
 
 # Declaration of allowed symbol for user input scrubbing
 declare -r AllowedChars="1234567890/., :-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -451,15 +462,17 @@ sleep 5
 fi
 
 sed -i "s|luit\ -encoding|luit\ -x\ -encoding|" /usr/local/bin/gl
+sed -i "s|null\ \&|null\ 2\>\&1\ \&|" /usr/local/etc/golded+/golded.cfg
+sed -i "s|EditCompletion|UseSoftCRxlat\ Yes\ \;EditCompletion|" /usr/local/etc/golded+/golded.cfg
 
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
 fi
 
-if [ "$T3" = "$OSNAME" ]; then
+if [ "$Z1" = "BSD" ]; then
 echo ''
 echo 'Detecting OS...'
-echo 'Your OS is FreeBSD.'
+echo 'Your OS is BSD-like.'
 
 sed "2s/Vasiliy\ Pampasov"/"$fullname1""/" /usr/local/etc/fido/config > /tmp/config1
 sed "4s/Vasiliy\ Pampasov"/"$fullname1""/" /tmp/config1 > /tmp/config2
@@ -562,18 +575,31 @@ cp /tmp/config21 /tmp/config20
 cp /tmp/golded.cfg20 /tmp/golded.cfg19 
 fi
 
-cat /tmp/golded.cfg19 > /usr/local/etc/golded+/golded.cfg
-
-cat /tmp/config20 > /usr/local/etc/fido/config
+sed "s|null\ \&|null\ 2\>\&1\ \&|" /tmp/golded.cfg19 > /tmp/golded.cfg20 
 
 sed "2s|outbound\ 2|outbound\ "$zonenumber"|" /tmp/binkd.cfg8  > /tmp/binkd.cfg9
 sed "34s|defnode\ \-nr\ \*|\#for\ default\ node\ use\#\ defnode\ \-nr\ \-nd\ \-md\ \-|" /tmp/binkd.cfg9 > /tmp/binkd.cfg10
 
-cat /tmp/binkd.cfg10 > /usr/local/etc/binkd.cfg
 cat /tmp/recv1 > /usr/local/bin/recv
 cat /tmp/send1 > /usr/local/bin/send
 
 sed "s|luit\ -encoding|luit\ -x\ -encoding|" /usr/local/bin/gl > /tmp/gl1
+
+if [ "$Z2" = "PKGSRC" ]; then
+sed "s|\/usr\/local\/bin\/unzip|\/usr\/pkg\/bin\/unzip|" /tmp/config20 > /tmp/config22
+rm -rf /tmp/config20
+cat /tmp/config22 > /tmp/config20
+sed "s|\/usr\/local\/bin\/firefox3|\/usr\/pkg\/bin\/firefox3|" /tmp/golded.cfg20 > /tmp/golded.cfg21
+rm -rf /tmp/golded.cfg20
+cat /tmp/golded.cfg21 > /tmp/golded.cfg20
+sed "s|\/usr\/bin\/luit|\/usr\/pkg\/bin\/luit|" /tmp/gl1 > /tmp/gl2
+rm -rf /tmp/gl1
+cat /tmp/gl2 > /tmp/gl1 
+fi
+
+cat /tmp/binkd.cfg10 > /usr/local/etc/binkd.cfg
+cat /tmp/config20 > /usr/local/etc/fido/config
+sed "s|EditCompletion|UseSoftCRxlat\ Yes\ \;EditCompletion|" /tmp/golded.cfg20 > /usr/local/etc/golded+/golded.cfg
 cat /tmp/gl1 > /usr/local/bin/gl
 
 echo "OK. Original configuration files modified successfully."

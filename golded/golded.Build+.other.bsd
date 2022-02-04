@@ -21,32 +21,16 @@ VERSION=1.1.5-b		# Program version
 PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
 ARCH=${ARCH:-i486}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
-ZIPNAME=gps90710.tb2
+ZIPNAME=golded-nsf-v003.tar.bz2
 
 CWD=`pwd`
-TMP="/tmp"	# Location to compile the source
+TMP=${TMP:-/tmp}	# Location to compile the source
 PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
 
-PDOC="$TMP/golded+/docs/*"
 
 date=`date +%Y%m%d`
 shortdate=`echo ${date} | sed s/^...//`
 shortname=$TMP/gpl${shortdate}.zip
-
-# Define compiler flags based on intended architecture:
-# Can easily expand this for alternate compilations
-
-if [ "$ARCH" = "i386" ]; then
-  SLKCFLAGS="-O2 -march=i386 -mcpu=i686"
-elif [ "$ARCH" = "i486" ]; then
-  SLKCFLAGS="-O2 -march=i486 -mcpu=i686"
-elif [ "$ARCH" = "i686" ]; then
-  SLKCFLAGS="-O2 -march=i686 -mcpu=i686"
-elif [ "$ARCH" = "s390" ]; then
-  SLKCFLAGS="-O2"
-elif [ "$ARCH" = "x86_64" ]; then
-  SLKCFLAGS="-O2"
-fi
 
 rm -rf $PKG		# Get rid of any leftovers
 
@@ -59,27 +43,19 @@ mkdir -p /usr/local/etc/golded+
 mkdir -p /usr/local/etc/fidoip
 
 cd $TMP
-rm -rf $TMP/golded+
+rm -rf $TMP/golded-nsf-v003
 
 # Correct GoldEd+ zip file name if you are using fresh version. 
 tar -xjpf $CWD/$ZIPNAME
 
-cd $TMP/golded+
+bzcat $CWD/golded_fghi_v003.diff.bz2 | patch -p0
+cd $TMP/golded-nsf-v003
 
+cat $CWD/golded3.cpp.patch | patch -p0
+cat $CWD/gcmpall.h.patch | patch -p0
 
 sh dist-gpl.sh
-sh dist-gpl.sh
-# Correct general permissions/ownership:
-
-# Create package docs:
-# Probably should define the package documentation with
-# a variable ($PDOCS) up top and replace the names with it
-
-mkdir -p /usr/local/doc/$PNAME-$VERSION
-cp -a $PDOC /usr/local/doc/$PNAME-$VERSION/ 
- 
-
-chmod 644 /usr/local/doc/$PNAME-$VERSION/*
+gmake
 
 
 if [ -e $CWD/decode.txt ]; then
@@ -126,7 +102,7 @@ fi
 
 if [ -e $CWD/ge ]; then
   mkdir -p /usr/local/bin
-   cp -p $CWD/ge /usr/local/bin/
+   cp -p $CWD/ge /usr/local/bin/ge
 fi
 
 if [ -e $CWD/g ]; then
@@ -140,9 +116,9 @@ if [ -e $CWD/gl ]; then
 fi
 
 mkdir -p /usr/local/etc/golded+ 
-cp -a $TMP/golded+/cfgs /usr/local/etc/golded+/
-cp -a $TMP/golded+/bin/* /usr/local/sbin/
-cp -a $TMP/golded+/chsgen/* /usr/local/etc/golded+/
+cp -R $TMP/golded-nsf-v003/cfgs /usr/local/etc/golded+/
+cp $TMP/golded-nsf-v003/bin/* /usr/local/sbin/
+cp -R $TMP/golded-nsf-v003/chsgen/* /usr/local/etc/golded+/
 cp $CWD/golded.cfm /usr/local/etc/golded+/
 mkdir -p /home/fido
 mkdir -p /home/fido/nodelist

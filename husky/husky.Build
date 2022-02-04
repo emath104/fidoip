@@ -33,7 +33,7 @@ ARCH=${ARCH:-i486}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
 
 CWD=`pwd`
-TMP=${TMP:-/tmp}	# Location to compile the source
+TMP="/tmp"	# Location to compile the source
 PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
 
 HPTVER=hpt-1.4-rc5

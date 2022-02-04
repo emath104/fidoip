@@ -231,8 +231,16 @@ sh golded.Slack64Build+.old
 
 # Add screen's settings for user:
 
-if [ -e $CWD/binkd/doinst.sh ]; then
-  cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
+if [ -e /home/"$VAR_01"/.screenrc ]; then
+C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
+if [ "$C1" = "encodingutf8" ]; then
+echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
+sleep 3
+else
+cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
+fi
+else
+cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
 fi
 
 

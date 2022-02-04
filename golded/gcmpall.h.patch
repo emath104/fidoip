@@ -1,0 +1,12 @@
+--- goldlib/gall/gcmpall.h.orig	2010-03-03 23:15:30 +0300
++++ goldlib/gall/gcmpall.h	2010-03-03 23:12:09 +0300
+@@ -73,6 +73,9 @@
+   #if defined(__OpenBSD__)
+     #define __UNIX__ __OpenBSD__
+   #endif
++  #if defined(__DragonFly__)
++    #define __UNIX__ __DragonFly__
++  #endif
+   #if defined(__BEOS__)
+     #define __UNIX__ __BEOS__
+   #endif

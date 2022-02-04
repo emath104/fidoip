@@ -23,7 +23,7 @@ ARCH=${ARCH:-x86_64}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
 
 CWD=`pwd`
-TMP=${TMP:-/tmp}	# Location to compile the source
+TMP="/tmp"	# Location to compile the source
 PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
 
 # Defining pakage documentation files 
@@ -56,7 +56,7 @@ unzip $CWD/binkd100.zip
 
 
 cd binkd-$VERSION
-cp /tmp/binkd-$VERSION/mkfls/unix/* /tmp/binkd-$VERSION/
+cp $TMP/binkd-$VERSION/mkfls/unix/* $TMP/binkd-$VERSION/
 chmod +x $TMP/binkd-$VERSION/mkinstalldirs
 
 # Classic "./configure && make && make install":

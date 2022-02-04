@@ -6,6 +6,18 @@ USERNAME=`whoami`
 
 T1="root"
 T2="Linux"
+T3="DragonFly"
+Z1=""
+
+if [ "$T2" = "$OSNAME" ]; then
+Z1="LNXLAYOUT"
+fi
+
+if [ "$T3" = "$OSNAME" ]; then
+Z1="LNXLAYOUT"
+fi
+
+
 
 if [ "$T1" = "$USERNAME" ]; then
 echo  ''
@@ -13,10 +25,10 @@ else
 echo 'Please run this script as root' ; exit
 fi
 
-if [ "$T2" = "$OSNAME" ]; then
+if [ "$Z1" = "LNXLAYOUT" ]; then
 echo  ''
 else
-echo 'Please run this script on a Linux' ; exit
+echo 'Please run this script on a Linux or DragonFly BSD' ; exit
 fi
 
 echo
@@ -45,8 +57,6 @@ rm -rf /usr/local/bin/recv
 rm -rf /usr/local/bin/save_arealist.sh
 rm -rf /usr/local/bin/send
 rm -rf /usr/local/bin/stat-binkd.pl
-
-rm -rf /usr/bin/ee
 
 rm -rf /usr/local/doc/binkd-1.0.0
 rm -rf /usr/local/doc/fidoip

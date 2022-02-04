@@ -23,7 +23,7 @@ ARCH=${ARCH:-i486}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
 
 CWD=`pwd`
-TMP="/tmp"	# Location to compile the source
+TMP=${TMP:-/tmp}	# Location to compile the source
 PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
 
 # Defining pakage documentation files 
@@ -54,38 +54,37 @@ rm -rf binkd-$VERSION
 # Correct Binkd zip file name if you are using fresh version. 
 unzip $CWD/binkd100.zip
 
+
 cd binkd-$VERSION
-cp $TMP/binkd-$VERSION/mkfls/unix/* $TMP/binkd-$VERSION/
+cp /tmp/binkd-$VERSION/mkfls/unix/* /tmp/binkd-$VERSION/
 chmod +x $TMP/binkd-$VERSION/mkinstalldirs
 
 # Classic "./configure && make && make install":
 
-CFLAGS="$SLKCFLAGS" \
 sh configure \
   --prefix=/usr/local \
   --sysconfdir=/usr/local/etc \
   --localstatedir=/var/lib \
-  --with-https -with-bwlim --with-perl \
-  $ARCH-slackware-linux
+  --with-https -with-bwlim --with-perl
 make
 #make PREFIX=/usr/local install
 
 mkdir -p /usr/local/sbin
 mkdir -p /usr/local/bin
 mkdir -p /usr/local/etc
-mkdir -p /usr/local/man
+mkdir -p /usr/local/share/man/man8
 mkdir -p /home/fido
 
-/usr/bin/install -c -D binkd /usr/local/sbin/binkd
-/usr/bin/install -c -D -m 644 binkd.8 /usr/local/share/man/man8/binkd.8
-/usr/bin/install -c -D -m644 binkd.conf /usr/local/etc/binkd.conf-dist
+install -c -m755 binkd /usr/local/sbin
+install -c -m644 binkd.8 /usr/local/share/man/man8
+install -c -m644 binkd.conf /usr/local/etc/binkd.conf-dist
 
 # Create package docs:
 # Probably should define the package documentation with
 # a variable ($PDOCS) up top and replace the names with it
 
 mkdir -p /usr/local/doc/$PNAME-$VERSION
-cp -a $PDOC /usr/local/doc/$PNAME-$VERSION/
+cp  $PDOC /usr/local/doc/$PNAME-$VERSION/
 mkdir -p /usr/local/doc/fidoip
 cat $CWD/documentation.txt > /usr/local/doc/fidoip/documentation.txt
 chmod 644 /usr/local/doc/$PNAME-$VERSION/*

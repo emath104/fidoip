@@ -1,0 +1,11 @@
+--- compiler.h.orig	2010-03-04 15:41:00 +0300
++++ compiler.h	2010-03-04 15:59:35 +0300
+@@ -579,7 +579,7 @@
+ #  endif
+ #endif
+ 
+-#if defined(__linux__) || defined(__Linux__) || defined(linux) || defined(__linux) || defined(LINUX)
++#if defined(__linux__) || defined(__Linux__) || defined(__DragonFly__) || defined(linux) || defined(__linux) || defined(LINUX)
+ #  if !defined(__LINUX__)
+ #    define __LINUX__
+ #  endif

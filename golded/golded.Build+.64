@@ -24,10 +24,10 @@ BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
 ZIPNAME=gps90710.tb2
 
 CWD=`pwd`
-TMP=${TMP:-/tmp}	# Location to compile the source
+TMP="/tmp"	# Location to compile the source
 PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
 
-PDOC="/tmp/golded+/docs/*"
+PDOC="$TMP/golded+/docs/*"
 
 date=`date +%Y%m%d`
 shortdate=`echo ${date} | sed s/^...//`

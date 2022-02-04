@@ -1,14 +1,15 @@
 #!/bin/sh
 # Usage:  set_perm.sh login
 CWD=`pwd`
-OSNAME=`uname`
+OSNAME=`uname -s`
 USERNAME=`whoami`
 date=`date +%Y%m%d%m%s`
 shortdate=`echo ${date} | sed s/^...//`
 shortname=fidoip_configs_${shortdate}.tar
 
 T1="root"
-T2="FreeBSD"
+T2="Linux"
+
 
 if [ ! -z "$2" ]; then
 echo "Use 1 argument only. Usage: set_perm.sh login" ; exit
@@ -45,7 +46,18 @@ echo "Setting ownship and permission...                    "
 echo '-----------------------------------------------------'
 echo ''
 
-cp $CWD/binkd/.screenrc /home/$VAR_01/
+if [ -e /home/"$VAR_01"/.screenrc ]; then
+C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
+if [ "$C1" = "encodingutf8" ]; then
+echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
+sleep 3
+else
+cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
+fi
+else
+cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
+fi
+
 mkdir -p /var/run/binkd                                                            
 chown -R "$VAR_01":  /var/run/binkd
 
@@ -71,10 +83,7 @@ echo "Ownship and permission for user "$VAR_01" are setted!"
 echo '-----------------------------------------------------'
 echo ''
 
-
 if [ "$T2" = "$OSNAME" ]; then
-echo  ''
-else
 echo ''
 
 if [ -e /etc/rc.d ]; then
