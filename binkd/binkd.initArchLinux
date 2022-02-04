@@ -3,7 +3,7 @@
 OPTS=" -DCq /usr/local/etc/binkd.cfg"
 PIDFILE=/var/run/binkd/binkd.pid
 DAEMON=/usr/local/sbin/binkd
-USERNAME=sokolskym
+USERNAME=username2change
 
 test -f $DAEMON || exit 0
 

@@ -4,7 +4,7 @@
 # NOTES:
 #
 ########################
-# Golded+ Fido Editor 
+# Golded+ Fido Editor pakage for Slamd64 
 # Download latest verison of and remame in bottom in unzip
 # You could do it automatically if uncomment this line:  
 # wget -c http://superb-east.dl.sourceforge.net/sourceforge/golded-plus/gps70503.tb2
@@ -19,7 +19,7 @@ NAME=golded+			# Program name
 PNAME=golded+			# Package name (Useful for changing case, removing "-"s, etc.)
 VERSION=1.1.5-b		# Program version
 PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
-ARCH=${ARCH:-i486}	# Package architecture
+ARCH=${ARCH:-x86_64}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
 ZIPNAME=gps70503.tb2
 
@@ -49,7 +49,14 @@ elif [ "$ARCH" = "x86_64" ]; then
 fi
 
 rm -rf $PKG		# Get rid of any leftovers
-mkdir -p $PKG		# Make sure $PKG and $TMP (-p switch) exist
+mkdir -p $PKG
+mkdir -p $PKG/usr
+mkdir -p $PKG/usr/local		# Make sure $PKG and $TMP (-p switch) exist
+mkdir -p $PKG/usr/local/bin
+mkdir -p $PKG/usr/local/sbin
+mkdir -p $PKG/usr/local/etc
+mkdir -p $PKG/usr/local/etc/golded+
+mkdir -p $PKG/usr/local/etc/fidoip
 
 cd $TMP
 rm -rf $TMP/golded+
@@ -59,7 +66,6 @@ tar -xjpf $CWD/$ZIPNAME
 
 rm $ZIPNAME
 cd $TMP/golded+
-
 
 echo '-------------------------------------------------------------------'
 echo "Now I am preparing to patch GoldEd+..."
@@ -113,111 +119,112 @@ sh dist-gpl.sh
 # Probably should define the package documentation with
 # a variable ($PDOCS) up top and replace the names with it
 
-mkdir -p /usr/local/doc/$PNAME-$VERSION
-cp -a $PDOC /usr/local/doc/$PNAME-$VERSION/ 
+mkdir -p $PKG/usr/local/doc/$PNAME-$VERSION
+cp -a $PDOC $PKG/usr/local/doc/$PNAME-$VERSION/ 
  
 
-chmod 644 /usr/local/doc/$PNAME-$VERSION/*
+chmod 644 $PKG/usr/local/doc/$PNAME-$VERSION/*
 
 # Add package description:
 
-#if [ -e $CWD/slack-desc ]; then
-#  mkdir -p /install
-#  cat $CWD/slack-desc > /install/slack-desc
-#fi
+if [ -e $CWD/slack-desc ]; then
+  mkdir -p $PKG/install
+  cat $CWD/slack-desc > $PKG/install/slack-desc
+fi
 
 if [ -e $CWD/decode.txt ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  mkdir -p /usr/local/etc/fidoip
-  cat $CWD/decode.txt > /usr/local/etc/fidoip/decode.txt.template
-  cat $CWD/decode.txt > /usr/local/etc/golded+/golded.cfg
+  cat $CWD/decode.txt > $PKG/usr/local/etc/fidoip/decode.txt.template
+  cat $CWD/decode.txt > $PKG/usr/local/etc/golded+/golded.cfg
 fi
 
 if [ -e $CWD/goldhelp.cfg ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/goldhelp.cfg > /usr/local/etc/golded+/goldhelp.cfg
+  mkdir -p $PKG/usr/local/etc
+  mkdir -p $PKG/usr/local/etc/golded+
+  cat $CWD/goldhelp.cfg > $PKG/usr/local/etc/golded+/goldhelp.cfg
 fi
 
 if [ -e $CWD/goldkeys.cfg ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/goldkeys.cfg > /usr/local/etc/golded+/goldkeys.cfg
+  mkdir -p $PKG/usr/local/etc
+  mkdir -p $PKG/usr/local/etc/golded+
+  cat $CWD/goldkeys.cfg > $PKG/usr/local/etc/golded+/goldkeys.cfg
 fi
 
 if [ -e $CWD/goldlang.cfg ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/goldlang.cfg > /usr/local/etc/golded+/goldlang.cfg
+  mkdir -p $PKG/usr/local/etc
+  mkdir -p $PKG/usr/local/etc/golded+
+  cat $CWD/goldlang.cfg > $PKG/usr/local/etc/golded+/goldlang.cfg
 fi
 
 if [ -e $CWD/gedcolor.cfg ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/gedcolor.cfg > /usr/local/etc/golded+/gedcolor.cfg
+  mkdir -p $PKG/usr/local/etc
+  mkdir -p $PKG/usr/local/etc/golded+
+  cat $CWD/gedcolor.cfg > $PKG/usr/local/etc/golded+/gedcolor.cfg
 fi
 
 if [ -e $CWD/golded.tpl ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/golded.tpl > /usr/local/etc/golded+/golded.tpl
+  mkdir -p $PKG/usr/local/etc
+  mkdir -p $PKG/usr/local/etc/golded+
+  cat $CWD/golded.tpl > $PKG/usr/local/etc/golded+/golded.tpl
 fi
 
-if [ -e $CWD/golded.cfm ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/golded.cfm > /usr/local/etc/golded+/golded.cfm
+# Add log for golded+:
+
+if [ -e /home/fido/golded.log ]; then
+  echo ' ' 	
+ else 
+    mkdir -p $PKG/home/fido
+  if [ -e $CWD/golded.log ]; then
+  cat $CWD/golded.log > $PKG/home/fido/golded.log
+ fi
 fi
 
 
 if [ -e $CWD/ge ]; then
-  mkdir -p /usr/local/bin
-   cp -p $CWD/ge /usr/local/bin/
+  mkdir -p $PKG/usr/local/bin
+   cp -p $CWD/ge $PKG/usr/local/bin/
 fi
 
 if [ -e $CWD/g ]; then
-  mkdir -p /usr/local/bin
-   cp -p $CWD/g /usr/local/bin/
+  mkdir -p $PKG/usr/local/bin
+   cp -p $CWD/g $PKG/usr/local/bin/
 fi
 
 if [ -e $CWD/gl ]; then
-  mkdir -p /usr/local/bin
-   cp -p $CWD/gl /usr/local/bin/
+  mkdir -p $PKG/usr/local/bin
+   cp -p $CWD/gl $PKG/usr/local/bin/
 fi
 
-mkdir -p /usr/local/etc/golded+
-mkdir -p /usr/local/sbin/
-cp -a $TMP/golded+/cfgs /usr/local/etc/golded+/
-cp -a $TMP/golded+/bin/* /usr/local/sbin/
-cp -a $TMP/golded+/chsgen/* /usr/local/etc/golded+/
+mkdir -p $PKG/usr/local/etc/golded+ 
+cp -a $TMP/golded+/cfgs $PKG/usr/local/etc/golded+/
+cp -a $TMP/golded+/bin/* $PKG/usr/local/sbin/
+cp -a $TMP/golded+/chsgen/* $PKG/usr/local/etc/golded+/
+
 
 if [ -e $CWD/golded.cfm ]; then
-  cp $CWD/golded.cfm /usr/local/etc/golded+/
+  cp $CWD/golded.cfm $PKG/usr/local/etc/golded+/
 fi
 
 if [ -e $CWD/net5020.ndl ]; then
-  mkdir -p /home/fido
-  mkdir -p /home/fido/nodelist
-  cp $CWD/*.ndl /home/fido/nodelist/
+  mkdir -p $PKG/home/fido
+  mkdir -p $PKG/home/fido/nodelist
+  cp $CWD/*.ndl $PKG/home/fido/nodelist/
 fi
 if [ -e $CWD/nodelist.sh ]; then
-cat $CWD/nodelist.sh > /usr/local/bin/nodelist.sh
-chmod +x /usr/local/bin/nodelist.sh
+cat $CWD/nodelist.sh > $PKG/usr/local/bin/nodelist.sh
+chmod +x $PKG/usr/local/bin/nodelist.sh
 fi
 
 
 # Add install script:
 
-#if [ -e $CWD/doinst.sh ]; then
-#  cat $CWD/doinst.sh > /install/doinst.sh
-#fi
-
+if [ -e $CWD/doinst.sh ]; then
+  cat $CWD/doinst.sh > $PKG/install/doinst.sh
+fi
 
 # Build the package:
 
-#cd $PKG
-#makepkg -l y -c n $TMP/$PNAME-$VERSION-$ARCH-$BUILD.tgz
+cd $PKG
+makepkg -l y -c n $TMP/$PNAME-$VERSION-$ARCH-$BUILD.tgz
 
 # Clean up the extra stuff:
 

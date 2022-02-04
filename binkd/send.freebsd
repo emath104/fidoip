@@ -9,3 +9,4 @@ fi
 /usr/local/bin/hpt -c /usr/local/etc/fido/config toss
 /usr/local/bin/htick -c /usr/local/etc/fido/config toss
 /usr/local/bin/htick -c /usr/local/etc/fido/config announce
+/usr/local/bin/hpt -c /usr/local/etc/fido/config link

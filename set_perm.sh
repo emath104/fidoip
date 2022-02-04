@@ -97,6 +97,11 @@ if [ -e /etc/init.d ]; then
  echo 'chmod +x /etc/init.d/binkd'
 fi
 
+if [ -e /etc/arch-release ]; then
+ cat $CWD/binkd/binkd.initArchLinux > /etc/rc.d/binkd
+ sed -i "6s/username2change"/"$VAR_01""/" /etc/rc.d/binkd
+fi
+
 echo ''
 
 fi

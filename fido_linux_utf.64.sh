@@ -52,7 +52,7 @@ echo $CWD/$shortname
 echo ''
 echo '-----------------------------------------------------------'
 echo ''
-tar -cf $CWD/$shortname /usr/local/etc/binkd.cfg /usr/local/etc/fido/config /usr/local/etc/g* /usr/local/bin/{recv,send} /usr/local/sbin/{recv,send}  > /dev/null 2>&1
+tar -cf $CWD/$shortname /usr/local/etc /usr/local/bin/{recv,send} > /dev/null 2>&1
 
 if [ -e /usr/local/sbin/recv ]; then
 	rm /usr/local/sbin/recv

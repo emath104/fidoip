@@ -4,6 +4,7 @@
 CWD=`pwd`
 OSNAME=`uname`
 USERNAME=`whoami`
+MACHINE=`uname -m`
 date=`date +%Y%m%d%m%s`
 shortdate=`echo ${date} | sed s/^...//`
 shortname=fidoip_configs_${shortdate}.tar
@@ -13,7 +14,7 @@ T2="Linux"
 T3="FreeBSD"
 
 # Declaration of allowed symbol for user input scrubbing
-declare -r AllowedChars="1234567890/., :abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+declare -r AllowedChars="1234567890/., :-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 if [ "$T1" = "$USERNAME" ]; then
 echo  ''
@@ -368,6 +369,7 @@ sed -i "99s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 sed -i "100s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 sed -i "101s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 sed -i "102s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
+sed -i "103s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 
 sed -i "81s/a828"/"a$nodeaddress""/" /usr/local/etc/golded+/golded.cfg
 sed -i "82s/a828"/"a$nodeaddress""/" /usr/local/etc/golded+/golded.cfg
@@ -399,6 +401,13 @@ sed -i "33s/temnenkov.dyndns.org"/$uplinkdnsaddress"/" /usr/local/etc/binkd.cfg
 sed -i "33s/12345678"/$uplinkpassword"/" /usr/local/etc/binkd.cfg
 sed -i "82s/12345678"/"$uplinkpassword""/" /usr/local/etc/golded+/golded.cfg
 sed -i "12s/12345678"/$uplinkpassword"/" /usr/local/etc/fido/config
+
+# Fixing netmailarea scanning bug for hpt x86_64  
+if [ "$MACHINE" = "x86_64" ]; then
+sed -i "31s/netmailarea\ -b\ msg"/netmail\ -b\ squish"/" /usr/local/etc/fido/config
+sed -i "95s/netmailarea"/"netmail""/" /usr/local/etc/golded+/golded.cfg
+fi
+
 
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
@@ -469,8 +478,10 @@ sed "67s/Vasiliy\ Pampasov"/"$fullname1""/" /tmp/config14 > /tmp/config15
 sed "70s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/config15 > /tmp/config16
 sed "71s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/config16 > /tmp/config17
 
+sed "103s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg17 > /tmp/golded.cfg18
+
 cat /tmp/config17 > /usr/local/etc/fido/config
-cat /tmp/golded.cfg17 > /usr/local/etc/golded+/golded.cfg
+cat /tmp/golded.cfg18 > /usr/local/etc/golded+/golded.cfg
 cat /tmp/binkd.cfg8 > /usr/local/etc/binkd.cfg
 cat /tmp/recv1 > /usr/local/bin/recv
 cat /tmp/send1 > /usr/local/bin/send

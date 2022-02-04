@@ -1,28 +1,30 @@
-﻿                         Описание файлов архива fidoip-1.0.1 
+                            Описание файлов архива fidoip-1.0.4
 
-После того как Вы раскроете архив с fidoip-1.0.1, вы увидите следующие файлы и каталоги: 
-
-ChangeLog                  - описание изменений и улучшений fidoip;
-UPDATING	           - описание обновления fidoip до версии fidoip-1.0.1;
-UPDATING.UTF	           - описание обновления fidoip до версии fidoip-1.0.1 в кодировке UTF-8;
-README	                   - описание файлов архива fidoip-1.0.1;
-README.UTF	           - описание файлов архива fidoip-1.0.1 в кодировке UTF-8; 
-arch.abs.tar.bz2	   - архив с abs-скриптами для сборки пакетов для Arch Linux;
-binkd                      - каталог со скриптами и исходниками binkd;
-bsd_ports.tar.gz           - архив с обновлённых портов FreeBSD husky hpt и GoldEd+;
-fido_slack.sh              - скрипт для сборки  пакетов fidoip для Slackware Linux;
-fidoip_win32.zip           -  установочный комплект fidoip для Windows, архив включает исполняемые файлы,  конфигуратор, шаблоны и структуру каталогов);
-fido.rus.koi               -  документация fidoip в кодировке KOI8-R 
-fido.rus.utf               -  документация fidoip в кодировке UTF-8
-fido.rus.win.txt           -  документация fidoip в кодировке CP1251
-fido_freebsd.sh            -  скрипт для сборки и установки пакетов на OC FreeBSD; 
-fido_linux_koi.sh          -  скрипт для сборки и установки fidoip для Linux, русская кодировка в которых KOI8-R;            
-fido_linux_koi.64.sh       -  скрипт для сборки и установки fidoip для 64-х разрядных дистрибутивов Linux, русская кодировка в которых KOI8-R;
-fido_linux_utf.sh          - скрипт для сборки и установки fidoip для Linux, русская кодировка в которых UTF-8;        
-fido_linux_utf.64.sh       -  скрипт для сборки и установки fidoip для 64-х разрядных дистрибутивов Linux, русская кодировка в которых UTF-8;
-golded		           -  каталог со скриптами и исходниками golded+;
-husky		           -  каталог со скриптами и исходниками husky-hpt;
+После того как Вы раскроете архив с fidoip-1.0.4, вы увидите следующие файлы и каталоги:
+ChangeLog - описание изменений и улучшений fidoip;
+UPDATING - описание обновления fidoip до версии fidoip-1.0.4;
+UPDATING.UTF - описание обновления fidoip до версии fidoip-1.0.4 в кодировке UTF-8;
+README - описание файлов архива fidoip-1.0.4;
+README.UTF - описание файлов архива fidoip-1.0.4 в кодировке UTF-8;
+arch.abs.tar.bz2 - архив с abs-скриптами для сборки пакетов для Arch Linux;
+binkd - каталог со скриптами и исходниками binkd;
+bsd_ports.tar.gz - архив с обновлённых портов FreeBSD husky hpt и GoldEd+;
+fido_slack.sh - скрипт для сборки пакетов fidoip для Slackware Linux;
+fido_slamd64.sh - - скрипт для сборки пакетов fidoip для Slamd64 Linux;
+fidoip_win32.zip - установочный комплект fidoip для Windows, архив включает исполняемые файлы, конфигуратор, шаблоны и структуру каталогов);
+fido.rus.koi - документация fidoip в кодировке KOI8-R
+fido.rus.utf - документация fidoip в кодировке UTF-8
+fido.rus.win.txt - документация fidoip в кодировке CP1251
+fido_arch.sh - скрипт для сборки и установки пакетов на Arch Linux;
+fido_freebsd.sh - скрипт для сборки и установки пакетов на OC FreeBSD;
+fido_linux_koi.sh - скрипт для сборки и установки fidoip для Linux, русская кодировка в которых KOI8-R;
+fido_linux_koi.64.sh - скрипт для сборки и установки fidoip для 64-х разрядных дистрибутивов Linux, русская кодировка в которых KOI8-R;
+fido_linux_utf.sh - скрипт для сборки и установки fidoip для Linux, русская кодировка в которых UTF-8;
+fido_linux_utf.64.sh - скрипт для сборки и установки fidoip для 64-х разрядных дистрибутивов Linux, русская кодировка в которых UTF-8;
+golded - каталог со скриптами и исходниками golded+;
+husky - каталог со скриптами и исходниками husky-hpt;
 libiconv-1.12-i486-1as.tgz - пакет c библиотекой libiconv для Slackware Linux с кодировкой UTF-8;
-relinkapps.sh              - служебный скрипт для перелинковки исполняемых файлов и библиотек fidoip;
-set_perm.sh                - скрипт для установки прав на каталоги и файлы fidoip;
-setup_config.bash          - конфигуратор fidoip для Linux и FreeBSD.
+multi-configs.bash - скрипт для установки несколько конфигураций fidoip для нескольких пользователей на одном компьютере.
+relinkapps.sh - служебный скрипт для перелинковки исполняемых файлов и библиотек fidoip;
+set_perm.sh - скрипт для установки прав на каталоги и файлы fidoip;
+setup_config.bash - конфигуратор fidoip для Linux и FreeBSD.

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+########################
+# NOTES:
+# 
+########################
+# Binkd Fido Mailer pakage for Arch Linux install script
+########################
+
+# Set initial variables:
+
+CWD=`pwd`
+cp $CWD/{binkd099.zip,binkd.cfg,binkd.log,binkd_monthly_stat.sh,binkd_weekly_stat.sh,binkd_yesterday_stat.sh,binkdstat.pl,fido.rus.koi,fido.rus.utf,recv,send,stat-binkd.pl} /var/abs/local/binkd/
+
+cd  /var/abs/local/binkd/ 
+makepkg --asroot -i -f 

@@ -145,6 +145,7 @@ find . -perm 400 -exec chmod 644 {} \;
 
 make clean
 make all
+sleep 10
 make PREFIX=/usr/local install
 
 cd ../fidoconf
@@ -166,6 +167,7 @@ find . -perm 400 -exec chmod 644 {} \;
 
 make clean
 make all
+sleep 10
 make PREFIX=/usr/local install
 
 cd ../hpt
@@ -187,6 +189,7 @@ find . -perm 400 -exec chmod 644 {} \;
 
 make clean
 make all
+sleep 10
 make PREFIX=/usr/local install
 
 # Additional husky programm compily

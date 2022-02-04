@@ -1,0 +1,63 @@
+#!/bin/sh
+
+########################
+# NOTES:
+#
+########################
+# Husky Fido Project http://husky.sourceforge.net/index.html
+########################
+
+# Set initial variables:
+
+CWD=`pwd`
+FIDOCONFVER=fidoconf-1.4-rc5
+HASKYBASEVER=huskybase-1.4-tar.gz
+SMAPIVER=smapi-2.4-rc5
+
+#Additional husky program
+HPTKILLVER=hptkill-1.12-rc5.tar.gz
+HPTSQFIXVER=hptsqfix-1.4-rc5-1.tar.gz
+HPUCODEVER=hpucode-1.4-rc5-tar.gz
+HTICKVER=htick-1.4-rc5.tar.gz
+NLTOOLVER=nltools-1.4-rc5.tar.gz
+SQPACKVER=sqpack-1.4-rc5.tar.gz
+BSOPACKVER=bsopack-1.4.0-rc5.tar.gz
+EEVER=ee-1.4.6.src.tgz
+
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-bsopack/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-fidoconf/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-hpt/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-hptkill/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-hptsqfix/
+
+cp config *.pl *.log *.sh *.gz huskymak.cfg /var/abs/local/husky-hpucode/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-htick/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-nltools/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-smapi/
+
+cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-sqpack/
+
+cp libiconv-1.12.tar.gz /var/abs/local/libiconv/
+cp $EEVER /var/abs/local/ee/ 
+
+cd /var/abs/local/libiconv/ ; makepkg --asroot -i -f
+cd /var/abs/local/ee ;  makepkg --asroot -i -f 
+cd /var/abs/local/husky-smapi ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-fidoconf ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-hpt ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-hptkill ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-hptsqfix ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-hpucode ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-htick ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-nltools ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-sqpack ;  makepkg --asroot -i -f
+cd /var/abs/local/husky-bsopack ;  makepkg --asroot -i -f
+

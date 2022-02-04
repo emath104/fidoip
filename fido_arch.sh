@@ -1,5 +1,6 @@
 #!/bin/sh
-# Usage:  fido_slack.sh login
+# fidoip pakaging and install srtipt for Arch Linux
+# Usage:  fido_arch.sh login
 CWD=`pwd`
 OSNAME=`uname`
 USERNAME=`whoami`
@@ -12,14 +13,14 @@ T2="Linux"
 
 
 if [ ! -z "$2" ]; then
-echo "Use 1 argument only. Usage: fido_slack.sh login" ; exit
+echo "Use 1 argument only. Usage: fido_arch.sh login" ; exit
 fi
 
 if [ ! -z "$1" ]
 then
 VAR_01=$1
 else
-  echo " To setup fidoip you need type you login name as argument. Usage: fido_slack.sh login" ; exit
+  echo " To setup fidoip you need type you login name as argument. Usage: fido_arch.sh login" ; exit
 fi
 
 echo ""
@@ -72,10 +73,8 @@ then
     echo "unzip extractor found: $unziploc"
 else
     echo "WARNING: unzip not found."
-    echo "So it will not be possible to extract fidoip on this machine."
-    echo " You should take steps to get unzip installed,"
-    echo " as described in fidoip.rus.* files."
-    exit
+    echo "Trying to install it from repository"
+    pacman -S unzip
 fi
 echo ""
 echo "-----------------------------------"
@@ -88,10 +87,8 @@ then
     echo "zip packer found: $ziploc"
 else
     echo "WARNING: zip not found."
-    echo "So it will not be possible to pack fido packets on this machine."
-    echo " You should take steps to get zip installed,"
-    echo " as described in fidoip.rus.* files."
-    exit
+    echo "Trying to install it from repository"
+    pacman -S zip
 fi
 echo ""
 echo "-----------------------------------"
@@ -104,10 +101,8 @@ then
     echo "bzip2 packer found: $bzip2loc"
 else
     echo "WARNING: bzip2 not found."
-    echo "So it will not be possible extract fidoip sources on this machine."
-    echo " You should take steps to get bzip2 installed,"
-    echo " as described in fidoip.rus.* files."
-    exit
+    echo "Trying to install it from repository"
+    pacman -S bzip2
 fi
 echo ""
 echo "-----------------------------------"
@@ -121,10 +116,8 @@ then
     echo "C compiler found: $gccloc"
 else
     echo "WARNING: gcc not found."
-    echo "So it will not be possible to compily fidoip on this machine."
-    echo " You should take steps to get gcc installed,"
-    echo " as described in fidoip.rus.* files."
-    exit
+    echo "Trying to install it from repository"
+    pacman -S gcc
 fi
 
 echo ""
@@ -176,8 +169,8 @@ then
     echo "Screen package found: $scrloc"
 else
     echo "Information: Screen package not found."
-    echo "You may need install it later,"
-    echo "as described in fidoip.rus.* files."
+    echo "Trying to install it from repository"
+    pacman -S screen
     sleep 5
 fi
 
@@ -190,9 +183,8 @@ if [ -e /usr/share/gettext ]
 then
     echo "Gettext found: /usr/share/gettext"
 else
-    echo "Information: Gettext package not found."
-    echo "You may need install it later,"
-    echo "as described in fidoip.rus.* files."
+    echo "Trying to install it from repository"
+    pacman -S gettext
     sleep 5
 fi
 echo ""
@@ -208,29 +200,63 @@ echo '----------------------------------------------------------------------'
 echo ''
 sleep 10
 
-cd binkd
-sh binkd.SlackBuild
-cd ../husky
-sh husky.SlackBuild
-cd ../golded
-sh golded.SlackBuild+
+
+if [ -e /var/abs/local/binkd ]; then
+rm -rf /var/abs/local/{binkd,husky-bsopack,husky-hptkill,husky-htick,husky-sqpack,ee,husky-fidoconf,husky-hptsqfix,husky-nltools,libiconv,golded,husky-hpt,husky-hpucode,husky-smapi}
+fi
+
+cp arch.abs.tar.bz2 / ; cd / ; tar -xjpf arch.abs.tar.bz2 ; rm /arch.abs.tar.bz2
+
+ 
+cd $CWD/binkd
+sh binkd.ArchBuild
+cd $CWD/husky
+sh husky.ArchBuild
+cd $CWD/golded
+sh golded.ArchBuild+
 
 # Add screen's settings for user:
 
-if [ -e $CWD/binkd/doinst.sh ]; then
+if [ -e $CWD/binkd/.screenrc ]; then
   cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
 fi
 
 
-echo ''
-echo '------------------------------------------------------------------------------'
-echo "   Done! Creation of packages BinkD, Husky HPT and GoldEd+ are finished."
-echo '   Install *.tgz packages from /tmp directory, then edit    '
-echo '   configuration files files as it decribed in fido.rus.koi file.      '
-echo '   Visit http://sourceforge.net/projects/fidoip/ for info and updates.  '
-echo '------------------------------------------------------------------------------'
+sleep 3
+
+if [ -e /usr/local/sbin/binkd-0.9.9  ]; then
+
+echo
+if [ -e /usr/local/sbin/hpt  ]; then
+
+echo
+if [ -e /usr/local/sbin/gedlnx  ]; then
+
+echo "------------------------------------------------------------------------"
+echo "   Done! Installation fidoip for user $VAR_01 are finished successully."
+echo "   Edit config files as it decribed in fido.rus.koi file.      "
+echo "   Visit http://sourceforge.net/projects/fidoip/ for info and updates.  "
+echo "------------------------------------------------------------------------"
+
+else
+echo " Installation of fidoip failed!"
+echo " Read documentation fido.rus.koi file,"
+echo " fix the problem and try to run this script again.  "
+fi
+
+else
+echo " Installation of fidoip failed!"
+echo " Read documentation fido.rus.koi file,"
+echo " fix the problem and try to run this script again.  "
+fi
+
+else
+echo " Installation of fidoip failed!"
+echo " Read documentation fido.rus.koi file,"
+echo " fix the problem and try to run this script again. "
+fi
 
 
-} 
+}
 f1 "${VAR_01}"
-#End of fido_slack.sh
+#End of fido_arch.sh

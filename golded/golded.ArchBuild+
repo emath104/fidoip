@@ -1,0 +1,17 @@
+#!/bin/sh
+
+########################
+# NOTES:
+#
+########################
+# GoldEd Project http://golded-plus.sourceforge.net/
+########################
+
+# Set initial variables:
+
+CWD=`pwd`
+
+cp * /var/abs/local/golded/
+cd /var/abs/local/golded/ ; makepkg --asroot -i -f
+
+

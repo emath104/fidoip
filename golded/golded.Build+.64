@@ -67,6 +67,24 @@ echo '-------------------------------------------------------------------'
 sleep 2
 echo ""
 
+# Patching for GCC 4.3 support 
+
+cat $CWD/1patch-golded3-golded.h | patch -p0
+cat $CWD/1patch-goldlib-gall-gdbgerr.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gespell.h | patch -p0
+cat $CWD/1patch-goldlib-gall-gfilutl1.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gfilutl2.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gftnnl.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gftnnlfd.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gftnnlge.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gmemdbg.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gstrutil.cpp | patch -p0
+cat $CWD/1patch-goldlib-gall-gutlgrp.cpp | patch -p0
+cat $CWD/1patch-goldlib-gallgdbgtrk.cpp | patch -p0
+cat $CWD/1patch-rddt-rddt.cpp | patch -p0
+
+sleep 10
+
 # Patching GoldEd for amd64:
 
 cat $CWD/patch-goldlib-gall-gmemdbg.cpp | patch -p0

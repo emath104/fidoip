@@ -1,5 +1,5 @@
 #!/bin/sh
-# Usage:  fido_slack.sh login
+# Usage:  fido_slamd64.sh login
 CWD=`pwd`
 OSNAME=`uname`
 USERNAME=`whoami`
@@ -12,14 +12,14 @@ T2="Linux"
 
 
 if [ ! -z "$2" ]; then
-echo "Use 1 argument only. Usage: fido_slack.sh login" ; exit
+echo "Use 1 argument only. Usage: fido_slamd64.sh login" ; exit
 fi
 
 if [ ! -z "$1" ]
 then
 VAR_01=$1
 else
-  echo " To setup fidoip you need type you login name as argument. Usage: fido_slack.sh login" ; exit
+  echo " To setup fidoip you need type you login name as argument. Usage: fido_slamd64.sh login" ; exit
 fi
 
 echo ""
@@ -209,11 +209,11 @@ echo ''
 sleep 10
 
 cd binkd
-sh binkd.SlackBuild
+sh binkd.Slamd64Build
 cd ../husky
-sh husky.SlackBuild
+sh husky.Slamd64Build
 cd ../golded
-sh golded.SlackBuild+
+sh golded.Slamd64Build+
 
 # Add screen's settings for user:
 
