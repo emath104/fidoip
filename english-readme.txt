@@ -24,7 +24,7 @@ If you need install IP-node please refer to '''"[http://sf.net/projects/fidoip/f
 
 fidoip – (fido software installation package of binkd, husky hpt and GoldEd-NSF ) consists of:
 
- Contents of archive fidoip-1.0.5_5.tar:
+ Contents of archive fidoip-1.0.5_5-1.tar:
     * ChangeLog - changelog on Russian;
     * crontask.sh – script for installing polling tasks for crond daemot and other system tasks(only for IP-node); 
     * clear_fidoip_files.sh - Script for deinsatlling and clean up fidoip from your computer(do not delete bases);
@@ -36,7 +36,7 @@ fidoip – (fido software installation package of binkd, husky hpt and GoldEd-NSF 
     * fido_dragonflybsd.sh - script for starting creation and installation packages of binkd, husky hpt and Golded-NSF on DragonFly BSD;
     * fido_linux.sh – script for installing of binkd, husky hpt and GoldEd-NSF on any 32-bit Linux distros. This script do not create packages as this done mentioned above scripts;
     * fido_linux.64.sh – the same as previous but run it only on 64-bit Linux distros;
-    * fidoip_win-1.0.5_5.zip – already compiled and prepared for installation archive with binkd, husky hpt and GoldED binaries and scripts for 32-bit and 64-bit Windows both for FIDONet client installation(IP-points) and FIDONet IP-nodes(IP-nodes);
+    * fidoip_win-1.0.5_5-1.zip – already compiled and prepared for installation archive with binkd, husky hpt and GoldED binaries and scripts for 32-bit and 64-bit Windows both for FIDONet client installation(IP-points) and FIDONet IP-nodes(IP-nodes);
     * setup_config.bash - script for creation IP-point  configuration of binkd, husky hpt and golded for you on Unix-like OS;
     * setup_node.bash - script for creation IP-node configuration of binkd, husky hpt and golded for you on Unix-like OS;
     * setup-fido-node-on-windows.pdf - English and Russian presentation describe fidoip node setup on Windows;
@@ -99,7 +99,7 @@ Also if you are going to become sysop of FIDONet and create you own FIDONet node
 2. As root extract fidoip from tarball:
 
  su
- tar -xpf fidoip-1.0.5_5.tar
+ tar -xpf fidoip-1.0.5_5-1.tar
  cd fidoip-1.0.5
 
 3. Connect to Internet, then run script fido_freebsd.sh:
@@ -139,7 +139,7 @@ Login as your login and use recv script for reciving, send script for senting an
 
 2. As root extract fidoip from tarball:
 
- tar -xpf fidoip-1.0.5_5.tar
+ tar -xpf fidoip-1.0.5_5-1.tar
  cd fidoip-1.0.5
 
 3. Connect to Internet, then run script fido_dragonflybsd.sh:
@@ -176,7 +176,7 @@ Login as your login and use recv script for reciving, send script for senting an
 
 
  su
- tar -xpf fidoip-1.0.5_5.tar
+ tar -xpf fidoip-1.0.5_5-1.tar
  cd fidoip-1.0.5
 
 
@@ -233,7 +233,7 @@ Login as your login and use recv script for receiving, send script for sending a
 1. As root extract fidoip from tarball:
 
  su
- tar -xpf fidoip-1.0.5_5.tar
+ tar -xpf fidoip-1.0.5_5-1.tar
  cd fidoip-1.0.5
 
 2. As root run script
@@ -354,7 +354,7 @@ to send messages.
 1. As root extract fidoip from tarball:
 
  su
- tar -xpf fidoip-1.0.5_5.tar
+ tar -xpf fidoip-1.0.5_5-1.tar
  cd fidoip-1.0.5
 
 2. Connect to Internet and install all software packages that required for installation of fidoip and using of binkd, husky hpt and Golded-NSF:
@@ -403,7 +403,7 @@ If you Ubuntu user use sudo for this and all below script.
 
 Also if you are using Debian/Ubuntu instead of scripts fido_linux.sh and fido_linux.64.sh you could use packages:
 
-How to get packages see in file packages/README.txt inside fidoip-1.0.5_5.tar tarboll.
+How to get packages see in file packages/README.txt inside fidoip-1.0.5_5-1.tar tarboll.
    
 
 3. After finishing compiling and installation run ./relinkapps.sh for relinking of links and libraries:
@@ -450,12 +450,12 @@ http://code.google.com/p/fidoslax/wiki/MainPageEnglish
 == Installation on Windows ==
 
 
-1. Extract archive fidoip_win-1.0.5_5.zip in root directory of any logical disk.
+1. Extract archive fidoip_win-1.0.5_5-1.zip in root directory of any logical disk.
 After extraction 2 directories will be created:
 \usr – for binaries and scripts
 \home – for fido messages bases
 
-For example if you place fidoip_win-1.0.5_5.zip to root directory D: drive and extract. Then fidoip will be installed in d:\usr and d:\home directories. Or if you place fidoip_win32.zip to root directory of C: drive and extract then fidoip will be installed in c:\usr and c:\home directories.
+For example if you place fidoip_win-1.0.5_5-1.zip to root directory D: drive and extract. Then fidoip will be installed in d:\usr and d:\home directories. Or if you place fidoip_win32.zip to root directory of C: drive and extract then fidoip will be installed in c:\usr and c:\home directories.
 
 2. Open with Notepad editor file \usr\setup_config.vbs. Change follow 8 rows:
 

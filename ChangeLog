@@ -1,3 +1,7 @@
+04.02.14 - fidoip-1.0.5_5-1.tar
+
+В fidoip для Windows fidoip_win-1.0.5_5-1.zip по-умолчанию binkd.exe обновлён до последней версии binkd1.1a49-msvc6-ipv6-static-4gb, собранной Max Vasilyev, Feb 2, 2014, 10:05 AM.
+
 31.01.14 - fidoip-1.0.5_5.tar
 
 1. Новая версия мейлера binkd - поддержка передачи файлов +4Gb;
