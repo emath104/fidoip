@@ -48,26 +48,26 @@ echo ""
 if [ "$reply" = "y" ];
         then 
 
-rm -f fidoip-1.0.5.4-i486-3.tgz
-rm -f fidoip-1.0.5.4-x86_64-3.tgz
+rm -f fidoip-1.0.5.5-x86_64-1.tgz
+rm -f fidoip-1.0.5.5-i486-1.tgz
 
 if [ "$UNAME" = "x86_64" ]; then
 echo  'Extracting binary for x86_64 platform'
 #cp $CWD/lnx-packages/64bit/deb/fidoip_1.0.5-4_amd64.deb /tmp
-wget -c http://falcony.googlecode.com/files/fidoip-1.0.5.4-x86_64-3.tgz
+wget -c http://falcony.googlecode.com/svn/tags/fidoip-1.0.5.5-x86_64-1.tgz
 #ar x fidoip_1.0.5-4_amd64.deb
 #tar -xzpf /tmp/data.tar.gz -C /
 set -e
-tar -xzpf fidoip-1.0.5.4-x86_64-3.tgz -C /
+tar -xzpf fidoip-1.0.5.5-x86_64-1.tgz -C /
 rm -rf /install
 else
 echo  "Extracting binary for "$UNAME" platform"
 #cp $CWD/lnx-packages/32bit/deb/fidoip_1.0.5-4_i386.deb /tmp
 #ar x fidoip_1.0.5-4_i386.deb
 #tar -xzpf /tmp/data.tar.gz -C /
-wget -c http://falcony.googlecode.com/files/fidoip-1.0.5.4-i486-3.tgz
+wget -c http://falcony.googlecode.com/svn/tags/fidoip-1.0.5.5-i486-1.tgz
 set -e
-tar -xzpf fidoip-1.0.5.4-i486-3.tgz -C /
+tar -xzpf fidoip-1.0.5.5-i486-1.tgz -C /
 rm -rf /install
 fi
 

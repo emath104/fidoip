@@ -33,7 +33,7 @@ echo " |               Node runs on:                   |" >> /home/fido/system-d
 echo " #################################################" >> /home/fido/system-dayly.rpt
 uname -a >> /home/fido/system-dayly.rpt
 cat /proc/cpuinfo | head -n12 >>   /home/fido/system-dayly.rpt
-/usr/sbin/lspci -tv >> /home/fido/system-dayly.rpt
+/usr/sbin/lspci >> /home/fido/system-dayly.rpt 2>/dev/null || /sbin/lspci -tv >> /home/fido/system-dayly.rpt
 lsusb -t 2>/dev/null >> /home/fido/system-dayly.rpt
 lsusb  >> /home/fido/system-dayly.rpt
 #dmidecode -t system | grep -v dmidecode | grep -v SMBIOS | grep -v Handle | head -n10  >> /home/fido/system-dayly.rpt

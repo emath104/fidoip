@@ -1,5 +1,5 @@
 #!/bin/sh
-#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#/* Copyright (C) 2007-2014 Falcony.
 #   This file is part of fidoip. It is free software and it is covered
 #   by the GNU general public license. See the file LICENSE for details. */
 
@@ -90,17 +90,15 @@ if [ "$T2" = "$OSNAME" ]; then
 
 rm -f /usr/local/sbin/golded
 
-if [ "$UNAME" = "x86_64" ]; then
+cp golded/goldkeys.cfg /usr/local/etc/golded+/
 
-cp golded/gedlnx-lin-x64 /usr/local/sbin/gedlnx
-cp golded/gnlnx-lin-x64 /usr/local/sbin/gnlnx
-cp golded/rddtlnx-lin-x64 /usr/local/sbin/rddtlnx
-
-chmod +x  /usr/local/sbin/gedlnx
-chmod +x /usr/local/sbin/gnlnx
-chmod +x /usr/local/sbin/rddtlnx
-
-fi
+sed -i "s|DispHdrFGHIUrl|;DispHdrFGHIUrl|g" /usr/local/etc/golded+/golded.cfg
+sed -i "s|FGHIGetHandler|;FGHIGetHandler|g" /usr/local/etc/golded+/golded.cfg
+sed -i "s|FGHIReverseSearch|;DispHdrFGHIUrl|g" /usr/local/etc/golded+/golded.cfg
+sed -i "s|MsgListFirstFGHI|;MsgListFirstFGHI|g" /usr/local/etc/golded+/golded.cfg
+sed -i "s|URLBrackets|;URLBrackets|g" /usr/local/etc/golded+/golded.cfg
+sed -i "s|/     READfindURLs|;/     READfindURLs|g" /usr/local/etc/golded+/goldkeys.cfg
+sed -i "s|\\\     READgotofirstURL|;\\\     READgotofirstURL|g" /usr/local/etc/golded+/goldkeys.cfg
 
 if [ -e /usr/local/bin/poll ];then
 chmod 755 /usr/local/bin/poll

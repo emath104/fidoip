@@ -389,6 +389,9 @@ cp -p /usr/local/etc/fidoip/decode.txt.template /usr/local/etc/golded+/golded.cf
 cp -p /usr/local/etc/fidoip/recv.template /usr/local/bin/recv
 cp -p /usr/local/etc/fidoip/send.template /usr/local/bin/send
 
+if [ "$OSNAME" = "$T2" ]; then
+fghichoice="y"
+fi
 
 if [ "$fghichoice" = "y" ]
 then

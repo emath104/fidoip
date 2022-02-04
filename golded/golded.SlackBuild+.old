@@ -66,8 +66,9 @@ tar -xjpf $CWD/$ZIPNAME
 
 cd $TMP/golded+
 
-sh dist-gpl.sh
-sh dist-gpl.sh
+./dist-gpl.sh
+./dist-gpl.sh
+
 # Correct general permissions/ownership:
 
 # Create package docs:

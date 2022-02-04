@@ -248,7 +248,7 @@ exit
 fi
 fi
 
-cp $CWD/golded/gps90710.tb2 /usr/ports/distfiles/
+cp $CWD/golded/gps90711.tb2 /usr/ports/distfiles/
 
 echo ""
 if [ -e /usr/local/bin/golded  ]; then

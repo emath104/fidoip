@@ -1,3 +1,14 @@
+31.01.14 - fidoip-1.0.5_5.tar
+
+1. Новая версия мейлера binkd - поддержка передачи файлов +4Gb;
+2. В fidoip для Windows встроен Perl, дополнительная установка ActiveState Perl или Strawberry Perl теперь необязательна;
+3. Для Linux GoldEd-NSF заменён на Golded+;
+4. Изменены под текущую версию Arch  Linux PKGBUILD'ы для автоматической сборки пакетов;
+5. Собраны бинарные пакеты для Ubuntu/Debian и Slackware; 
+6. Новый скрипт fidoip-cvs-update.sh автоматически обновляет исходники fidoip для binkd и golded+ и контрольные суммы для Arch ABS и FreeBSD ports. Требует установленного cvs;
+7. Обновлена документация.
+
+
 11.02.13 - fidoip-1.0.5_4-1.tar
 
 Релиз с исправленим мелких ошибок - bug fix release: 

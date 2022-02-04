@@ -21,7 +21,7 @@ VERSION=1.1.5-b		# Program version
 PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
 ARCH=${ARCH:-i486}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
-ZIPNAME=golded-nsf-v003.tar.bz2
+ZIPNAME=gps90711.tb2
 
 CWD=`pwd`
 TMP=${TMP:-/tmp}	# Location to compile the source
@@ -43,18 +43,18 @@ mkdir -p /usr/local/etc/golded+
 mkdir -p /usr/local/etc/fidoip
 
 cd $TMP
-rm -rf $TMP/golded-nsf-v003
+rm -rf $TMP/golded+
 
 # Correct GoldEd+ zip file name if you are using fresh version. 
 tar -xjpf $CWD/$ZIPNAME
 
-bzcat $CWD/golded_fghi_v003.diff.bz2 | patch -p0
-cd $TMP/golded-nsf-v003
+#zcat $CWD/golded_fghi_v003.diff.bz2 | patch -p0
+cd $TMP/golded+
 
 cat $CWD/golded3.cpp.patch | patch -p0
 cat $CWD/gcmpall.h.patch | patch -p0
 
-sh dist-gpl.sh
+./dist-gpl.sh
 gmake
 
 
