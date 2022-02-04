@@ -82,7 +82,7 @@ sh configure \
   --prefix=/usr/local \
   --sysconfdir=/usr/local/etc \
   --localstatedir=/var/lib \
-  --with-https -with-bwlim --with-perl \
+  --with-proxy -with-bwlim --with-perl \
   $ARCH-slackware-linux
 make
 #make PREFIX=$PKG/usr/local install

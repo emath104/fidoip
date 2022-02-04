@@ -1,0 +1,32 @@
+PKTINFO(1)             Husky - Portable Fidonet Software            PKTINFO(1)
+
+NAME
+       pktinfo - Gives some Info about a Packet
+
+SYNOPSIS
+       pktinfo [-h] [-t] <pktNames>
+
+DESCRIPTION
+       pktinfo gives some Info about the Packets.
+
+       This  manual  page  was  written  for the Debian GNU/Linux distribution
+       because the original program does not have a manual page.
+
+OPTIONS
+       -h display msg header information (from/to/subject)
+       -t display msg text
+       <pktNames> Packets to process
+
+NOTES
+       All Husky-Software is  written  by  various  developers.  For  detailed
+       information     about     the     Husky-Team    take    a    look    at
+       http://husky.physcip.uni-stuttgart.de/team.html.
+
+
+
+AUTHOR
+       This   manual   page   was    written    by    Joerg    Jaspert    (JJ)
+       <joerg@goliathbbs.dnsalias.net>,  for  the Debian GNU/Linux system (but
+       may be used by others).
+
+05 April 2001                       pktinfo                         PKTINFO(1)

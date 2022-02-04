@@ -1,4 +1,8 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # Usage:  fido_dragonflybsd.sh login
 CWD=`pwd`
 OSNAME=`uname`
@@ -421,20 +425,6 @@ if [ -e $CWD/binkd/binkd.log ]; then
  fi
 fi
 
-# Add screen's settings for user:
-
-if [ -e /home/"$VAR_01"/.screenrc ]; then
-C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
-if [ "$C1" = "encodingutf8" ]; then
-echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
-sleep 3
-else
-cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
-fi
-else
-cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
-fi
-
 
 # Add logs for hpt:
 
@@ -477,50 +467,6 @@ fi
 #ln -sf /usr/local/lib/libsmapi.so.2.4 /lib/libsmapi.so.2.4
 #ln -sf /usr/local/lib/libfidoconfig.so /lib/libfidoconfig.so.1.4
 
-echo ''
-echo '-----------------------------------------------------'
-echo "Setting ownship and permission...                    "
-echo '-----------------------------------------------------'
-echo ''
-
-mkdir -p /var/run/binkd                                                            
-chown -R "$VAR_01":  /var/run/binkd
-
-chmod -R +x /home/fido
-chmod -R +x /usr/local/etc/golded+
-chmod -R +x /usr/local/etc/fido
-chmod -R +x /usr/local/etc/fidoip
-chmod -R +x /usr/local/bin/recv
-chmod -R +x /usr/local/bin/send
-
-
-chown "$VAR_01" /usr/local/bin/recv
-chown "$VAR_01" /usr/local/bin/send
-chown "$VAR_01": /usr/local/etc/binkd.cfg
-chown -R "$VAR_01": /home/fido
-chown -R "$VAR_01": /usr/local/etc/fidoip
-chown "$VAR_01": /home/$VAR_01/.screenrc
-chown -R "$VAR_01": /usr/local/etc/fido
-chown -R "$VAR_01": /usr/local/etc/golded+
-
-echo ''
-echo '-----------------------------------------------------'
-echo "Ownship and permission for user "$VAR_01" are setted!"
-echo '-----------------------------------------------------'
-echo ''
-
-sed "6s/username2change"/"$VAR_01""/" $CWD/binkd/binkd.initbsd-style > /etc/rc.d/binkd 
-echo 'daemon copied to /etc/rc.d If you would like to'
-echo 'acivate binkd daemon set permission before:'
-echo 'chmod +x /etc/rc.d/binkd'
-echo 'And add /etc/rc.d/binkd start to /etc/rc.local to start it at boot time:'
-echo "echo '/etc/rc.d/binkd start' >> /etc/rc.local"
-echo "chmod +x /etc/rc.local"
-echo "Also add /etc/rc.d/binkd stop to /etc/rc.shutdown.local to stop it at shutdown time:"
-echo "echo '/etc/rc.d/binkd stop' >> /etc/rc.shutdown.local"
-echo "chmod +x /etc/rc.shutdown.local"
-echo ''
-sleep 5
 
 echo '------------------------------------------------------------------'
 echo 'Checking installation of additional Husky programms...'

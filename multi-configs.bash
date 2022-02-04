@@ -1,4 +1,8 @@
 #!/bin/bash
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # usage: bash ./multi-configs.bash login install_number
 # Script which allow change default fidoip /home/fido/ directory to /home/your_login/fido
 # or make multiply fidoip's configurations for multiply users to work at one PC.

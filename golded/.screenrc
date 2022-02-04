@@ -1,0 +1,3 @@
+startup_message off                                                     
+defencoding koi8-r                                                                    
+screen /bin/sh -c "LANG=ru_RU.KOI8-R /usr/local/bin/ge"

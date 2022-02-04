@@ -1,0 +1,17 @@
+#/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
+if [ -e /home/fido/fidohelp.hlp ] ; then
+
+if [ -e /usr/local/bin/binkdsrv ] ; then
+FIDOUSER=`grep USERNAME /usr/local/bin/binkdsrv | head -n1 | sed "s|USERNAME=||"`
+cat /home/fido/fidohelp.hlp | sed "s|USER|$FIDOUSER|"
+else
+cat /home/fido/fidohelp.hlp
+fi
+else
+echo "Help for fidoip NMS not found in /home/fido/fidohelp.hlp"
+echo "Please visit to fidoip site at http://sourceforge.net/apps/mediawiki/fidoip for details"
+fi

@@ -70,3 +70,6 @@ if [ -e $CWD/nodelist.sh ]; then
 fi
 
 cp $CWD/*.eng /usr/local/etc/fidoip/
+cat $CWD/golded.tpl.fghi.disable-template > /usr/local/etc/fidoip/golded.tpl.fghi.disable-template
+cat $CWD/golded.tpl > /usr/local/etc/fidoip/golded.tpl
+cp $CWD/.screenrc /usr/local/etc/golded+/

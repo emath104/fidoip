@@ -1,4 +1,8 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # fidoip pakaging and install srtipt for Arch Linux
 # Usage:  fido_arch.sh login
 CWD=`pwd`
@@ -228,20 +232,6 @@ cd $CWD/husky
 sh husky.ArchBuild
 cd $CWD/golded
 sh golded.ArchBuild+
-
-# Add screen's settings for user:
-
-if [ -e /home/"$VAR_01"/.screenrc ]; then
-C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
-if [ "$C1" = "encodingutf8" ]; then
-echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
-sleep 3
-else
-cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
-fi
-else
-cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
-fi
 
 
 sleep 3

@@ -170,6 +170,9 @@ fi
 mkdir -p $PKG/home/fido/fghigetdir
 
 cp $CWD/*.eng $PKG/usr/local/etc/fidoip/
+cat $CWD/golded.tpl.fghi.disable-template > $PKG/usr/local/etc/fidoip/golded.tpl.fghi.disable-template
+cat $CWD/golded.tpl > $PKG/usr/local/etc/fidoip/golded.tpl
+cp $CWD/.screenrc $PKG/usr/local/etc/golded+/
 
 # Removing dump staff
 rm -f $PKG/usr/local/sbin/*.Diz

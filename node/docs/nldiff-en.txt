@@ -1,0 +1,44 @@
+NLDIFF(1)              Husky - Portable Fidonet Software             NLDIFF(1)
+
+NAME
+       nldiff - Applies a Nodediff file to a given Nodelist
+
+SYNOPSIS
+       nldiff [-d] [-n] /path/to/nodelist /path/to/nodediff
+
+DESCRIPTION
+       nldiff applies a Nodediff file to a given Nodelist.  It has no intelli-
+       gence as to determining which of multiple Nodediff files is the correct
+       one (you have to use other tools for this), but it expects the Nodelist
+       filename and the Nodediff filename as explicit arguments with the  cor-
+       rect day file name extension.
+
+       This  manual  page  was  written  for the Debian GNU/Linux distribution
+       because the original program does not have a manual page  (but  a  good
+       README).
+
+OPTIONS
+       [-d] Delete the Nodediff after the process succeeds.
+       [-n] Delete the old Nodelist after the process succeeds.
+       /path/to/nodelist The Nodelist to patch.
+       /path/to/nodediff The Nodediff to be used.
+
+EXAMPLES
+       nldiff NODELIST.260 NODEDIFF.267
+       Builds NODELIST.267 from NODELIST.260 and NODEDIFF.267
+
+       nldiff -d -n NODELIST.260 NODEDIFF.267
+       Same  as  above,  but  will  delete old Nodelist and the Nodediff after
+       process succeeds.
+
+NOTES
+       All Husky-Software is  written  by  various  developers.  For  detailed
+       information     about     the     Husky-Team    take    a    look    at
+       http://husky.sf.net/team.html.
+
+AUTHOR
+       This   manual   page   was    written    by    Joerg    Jaspert    (JJ)
+       <joerg@goliathbbs.dnsalias.net>,  for  the Debian GNU/Linux system (but
+       may be used by others).
+
+04 April 2001                       nldiff                           NLDIFF(1)

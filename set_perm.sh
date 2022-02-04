@@ -1,4 +1,8 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # Usage:  set_perm.sh login
 CWD=`pwd`
 OSNAME=`uname -s`
@@ -26,7 +30,11 @@ echo ""
 if [ -e /home/$VAR_01  ]; then
 echo  "Found /home/"$VAR_01" home directory of user "$VAR_01""
 else
+if [ -e /$VAR_01  ]; then
+echo
+else
 echo "Home directory of user "$VAR_01" doesn't exist. If your login is "$VAR_01" then your home directory should be in /home/"$VAR_01"." ; exit
+fi
 fi
 
 if [ "$T1" = "$USERNAME" ]; then
@@ -39,6 +47,12 @@ f1()
 
 {
 
+if [ -e /usr/local/bin/toss ]; then
+
+echo "Tossing welcome and test messages"
+/usr/local/bin/toss 
+
+fi
 
 echo ''
 echo '-----------------------------------------------------'
@@ -46,36 +60,60 @@ echo "Setting ownship and permission...                    "
 echo '-----------------------------------------------------'
 echo ''
 
-if [ -e /home/"$VAR_01"/.screenrc ]; then
-C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
-if [ "$C1" = "encodingutf8" ]; then
-echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
-sleep 3
-else
-cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
-fi
-else
-cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
-fi
-
 mkdir -p /var/run/binkd                                                            
 chown -R "$VAR_01":  /var/run/binkd
 
-chmod -R +x /home/fido
-chmod -R +x /usr/local/etc/fidoip
-chmod -R +x /usr/local/etc/golded+
-chmod -R +x /usr/local/etc/fido
-chmod +x /usr/local/bin/recv
-chmod +x /usr/local/bin/send
+chmod -R 755 /home/fido
+chmod -R 755 /usr/local/etc/fidoip
+chmod -R 755 /usr/local/etc/golded+
+chmod -R 755 /usr/local/etc/fido
+chmod 755 /usr/local/bin/recv
+chmod 755 /usr/local/bin/send
 
 chown "$VAR_01": /usr/local/etc/binkd.cfg
 chown -R "$VAR_01": /home/fido
 chown -R "$VAR_01": /usr/local/etc/fidoip
-chown "$VAR_01": /home/$VAR_01/.screenrc
 chown "$VAR_01": /usr/local/bin/recv
 chown "$VAR_01": /usr/local/bin/send
 chown -R "$VAR_01": /usr/local/etc/fido
 chown -R "$VAR_01": /usr/local/etc/golded+
+
+if [ -e /usr/local/bin/toss ]; then
+chown "$VAR_01": /usr/local/bin/toss
+fi
+
+chmod 755 /usr/local/bin/rs
+chown "$VAR_01": /usr/local/bin/rs
+
+if [ "$T2" = "$OSNAME" ]; then
+
+if [ -e /usr/local/bin/poll ];then
+chmod 755 /usr/local/bin/poll
+chown "$VAR_01": /usr/local/bin/poll
+chmod 755 /usr/local/bin/hptlogstat.pl
+chown "$VAR_01": /usr/local/bin/hptlogstat.pl
+chmod 755 /usr/local/bin/st_htick.pl
+chown "$VAR_01": /usr/local/bin/st_htick.pl
+chmod 755 /usr/local/bin/hptlogstat.pl
+chown "$VAR_01": /usr/local/bin/hptlogstat.pl
+chmod 755 /usr/local/bin/st_htick.pl
+chown "$VAR_01": /usr/local/bin/st_htick.pl
+chmod 755  /usr/local/bin/clean_outb
+chown "$VAR_01":  /usr/local/bin/clean_outb
+chmod 755 /usr/local/bin/fidohelp
+fi
+
+echo ''
+if [ -e /usr/local/bin/binkdsrv ]; then
+echo 
+echo "Starting command to up binkd service:"
+echo "/usr/local/bin/binkdsrv start"
+echo
+sed -i "5s/username2change"/"$VAR_01""/" /usr/local/bin/binkdsrv
+/usr/local/bin/binkdsrv restart 2>/dev/null
+echo
+fi
+fi
 
 echo ''
 echo '-----------------------------------------------------'
@@ -83,37 +121,29 @@ echo "Ownship and permission for user "$VAR_01" are setted!"
 echo '-----------------------------------------------------'
 echo ''
 
-if [ "$T2" = "$OSNAME" ]; then
+echo ''
+echo "============================================================================="
+echo "Installation fidoip for user "$VAR_01" is ready!"
+echo "============================================================================="
+echo ''
+echo "Login as your login "$VAR_01" and use "recv" script for receiving, "send" "
+echo "script for sending FIDONet messages. To read, write new messages or reply you"
+echo "need run Golded Editor under same login run "ge" script if you use KOI8-R" 
+echo "encoding or if you are use UTF-8 terminals with translation of enconding."
+echo "For UTF-8 terminals you may use "g" or "gl" scripts as you preferance." 
+echo "All these scripts are in /usr/local/bin/ directory." 
 echo ''
 
-if [ -e /etc/rc.d ]; then
- cat $CWD/binkd/binkd.initbsd-style > /etc/rc.d/binkd
- sed -i "6s/username2change"/"$VAR_01""/" /etc/rc.d/binkd
- echo 'Found BSD style init-scripts. Script for staring binkd'
- echo 'daemon copied to /etc/rc.d/binkd. If you would like to'
- echo 'acivate binkd daemon set permission before:'
- echo 'chmod +x /etc/rc.d/binkd'
+if [ -e /usr/local/bin/binkdsrv ];then
+chmod 755 /usr/local/bin/fidohelp
+fidohelp
+else
+cp -p node/fidohelp /usr/local/bin/
+chmod 755 /usr/local/bin/fidohelp
+cat golded/fidohelp.hlp | sed "s/User/$VAR_01/" > /home/fido/fidohelp.hlp
+fidohelp
 fi
 
-echo ''
-
-if [ -e /etc/init.d ]; then
- cat $CWD/binkd/binkd.initatt-style > /etc/init.d/binkd
- sed -i "6s/username2change"/"$VAR_01""/" /etc/init.d/binkd
- echo 'Found AT&T style init-scripts. Script for staring binkd'
- echo 'daemon copied to /etc/init.d/binkd. If you would like to'
- echo 'acivate binkd daemon set permission before:'
- echo 'chmod +x /etc/init.d/binkd'
-fi
-
-if [ -e /etc/arch-release ]; then
- cat $CWD/binkd/binkd.initArchLinux > /etc/rc.d/binkd
- sed -i "6s/username2change"/"$VAR_01""/" /etc/rc.d/binkd
-fi
-
-echo ''
-
-fi
 
 } 
 f1 "${VAR_01}"

@@ -12,6 +12,8 @@
 CWD=`pwd`
 
 cp * /var/abs/local/golded/
+cp .screenrc /var/abs/local/golded/
+rm -f /usr/local/etc/golded+/.screenrc
 cd /var/abs/local/golded/ ; makepkg --asroot -i -f
 
 

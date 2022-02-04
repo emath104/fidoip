@@ -1,6 +1,12 @@
 #!/bin/bash
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
 # Usage:  bash ./setup_config.bash
 # Bash only!!! Do not use sh interpretator
+
+# Script for creation FIDONet IP point configuration
+
 CWD=`pwd`
 OSNAME=`uname`
 USERNAME=`whoami`
@@ -25,7 +31,7 @@ fi
 
 
 # Declaration of allowed symbol for user input scrubbing
-declare -r AllowedChars="1234567890/., :-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+declare -r AllowedChars="-1234567890/., :-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 if [ "$T1" = "$USERNAME" ]; then
 echo  ''
@@ -311,7 +317,23 @@ echo -n '               '
 exit
 fi
 
+echo "Whould you like to disable FGHI URLs in headers of messages?(y/N)"
+echo -n "Safe choice is not disable, press n or Enter:" 
+read fghichoice
+if [ -z "$fghichoice" ]
+then
+fghichoice="n"
+fi
 
+if [ "$fghichoice" = "n" ]
+then
+FGHI="Enabled"
+fi
+
+if [ "$fghichoice" = "y" ]
+then
+FGHI="Disabled"
+fi
 
 echo ""
 echo "--------------------------------------------------------------------"
@@ -333,6 +355,8 @@ echo -n "Uplink server name or IP-address is: "
 echo $uplinkdnsaddress
 echo -n "Your password is: "
 echo $uplinkpassword
+echo -n "FGHI support for headers is: "
+echo $FGHI
 
 echo ""
 echo "--------------------------------------------------------------------"
@@ -359,13 +383,19 @@ tar -cf $CWD/$shortname /usr/local/etc/binkd.cfg /usr/local/etc/golded+/g* /usr/
 sleep 3 
 fi
 
-mkdir -p /usr/local/etc/fidoip/
 cp -p /usr/local/etc/fidoip/binkd.cfg.template /usr/local/etc/binkd.cfg
 cp -p /usr/local/etc/fidoip/config.template  /usr/local/etc/fido/config
 cp -p /usr/local/etc/fidoip/decode.txt.template /usr/local/etc/golded+/golded.cfg
 cp -p /usr/local/etc/fidoip/recv.template /usr/local/bin/recv
 cp -p /usr/local/etc/fidoip/send.template /usr/local/bin/send
 
+
+if [ "$fghichoice" = "y" ]
+then
+cp /usr/local/etc/fidoip/golded.tpl.fghi.disable-template /usr/local/etc/golded+/golded.tpl
+else
+cp /usr/local/etc/fidoip/golded.tpl /usr/local/etc/golded+/golded.tpl
+fi
 
 if [ "$T2" = "$OSNAME" ]; then
 echo ''
@@ -388,12 +418,13 @@ sed -i "7s/$locationname1"/"$locationname2""/" /usr/local/etc/binkd.cfg
 
 sed -i "5s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/binkd.cfg
 
-sed -i "2s|outbound\ 2|outbound\ "$zonenumber"|" /usr/local/etc/binkd.cfg
+sed -i "2s|ZONE-NUMBER|"$zonenumber"|" /usr/local/etc/binkd.cfg
 
 sed -i "6s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
 sed -i "11s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
 sed -i "70s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
 sed -i "71s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
+sed -i "78s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
 sed -i "3s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 sed -i "67s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 sed -i "95s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
@@ -406,8 +437,6 @@ sed -i "101s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cf
 sed -i "102s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 sed -i "103s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 
-sed -i "81s/a828"/"a$nodeaddress""/" /usr/local/etc/golded+/golded.cfg
-sed -i "82s/a828"/"a$nodeaddress""/" /usr/local/etc/golded+/golded.cfg
 sed -i "96s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/golded+/golded.cfg
 sed -i "96s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/golded+/golded.cfg
 
@@ -424,32 +453,42 @@ sed -i "42s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/fido/config
 sed -i "43s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/fido/config
 sed -i "44s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/fido/config
 
+sed -i "68s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cfg
+
 sed -i "69s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/golded+/golded.cfg
+
+sed -i "80s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/golded+/golded.cfg
+sed -i "81s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/golded+/golded.cfg
+
 sed -i "82s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/golded+/golded.cfg
+sed -i "83s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/golded+/golded.cfg
 
 sed -i "6s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/bin/recv
 sed -i "8s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/bin/send
 
-
 sed -i "33s/temnenkov.dyndns.org"/$uplinkdnsaddress"/" /usr/local/etc/binkd.cfg
 
 sed -i "33s/12345678"/$uplinkpassword"/" /usr/local/etc/binkd.cfg
+
+sed -i "80s/12345678"/"$uplinkpassword""/" /usr/local/etc/golded+/golded.cfg
+sed -i "81s/12345678"/"$uplinkpassword""/" /usr/local/etc/golded+/golded.cfg
+
 sed -i "82s/12345678"/"$uplinkpassword""/" /usr/local/etc/golded+/golded.cfg
+sed -i "83s/12345678"/"$uplinkpassword""/" /usr/local/etc/golded+/golded.cfg
+
 sed -i "12s/12345678"/$uplinkpassword"/" /usr/local/etc/fido/config
 sed -i "40s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/fido/config
 sed -i "40s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/fido/config
-sed -i "34s|defnode\ \-nr\ \*|\#for\ default\ node\ use\#\ defnode\ \-nr\ \-nd\ \-md\ \-|" /usr/local/etc/binkd.cfg
-
-# Fixing netmailarea scanning bug for hpt x86_64  
-if [ "$MACHINE" = "x86_64" ]; then
-sed -i "31s/netmailarea\ -b\ msg"/netmail\ -b\ squish"/" /usr/local/etc/fido/config
-sed -i "95s/netmailarea"/"netmail""/" /usr/local/etc/golded+/golded.cfg
-fi
 
 # Set codepage of URL for ru_RU.KOI8-R  
 if [ "$LANG" = "ru_RU.KOI8-R" ]; then
 sed -i "s|t\ UTF-8|t\ KOI8R|" /usr/local/etc/golded+/golded.cfg
 fi
+
+cp node/toss /usr/local/bin/toss 
+chmod 755 /usr/local/bin/toss
+
+rm -f /usr/local/bin/binkdsrv
 
 FIREFOXINST=`ls -A1 /usr/bin/firefox  2>/dev/null`
 if [ "$FIREFOXINST" = "" ];
@@ -460,10 +499,6 @@ echo "in GoldEd-NSF and hypertext support. If you using another browser define"
 echo "it in the URLHANDLER in /usr/local/etc/golded+/golded.cfg"
 sleep 5
 fi
-
-sed -i "s|luit\ -encoding|luit\ -x\ -encoding|" /usr/local/bin/gl
-sed -i "s|null\ \&|null\ 2\>\&1\ \&|" /usr/local/etc/golded+/golded.cfg
-sed -i "s|EditCompletion|UseSoftCRxlat\ Yes\ \;EditCompletion|" /usr/local/etc/golded+/golded.cfg
 
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
@@ -500,10 +535,10 @@ sed "100s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg8 > /tmp/golded.cfg9
 sed "101s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg9 > /tmp/golded.cfg10
 sed "102s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg10 > /tmp/golded.cfg11
 
-sed "81s/a828"/"a$nodeaddress""/" /tmp/golded.cfg11 > /tmp/golded.cfg12
-sed "82s/a828"/"a$nodeaddress""/" /tmp/golded.cfg12 > /tmp/golded.cfg13
-sed "96s/828\.local"/"$nodeaddress"\.local"/" /tmp/golded.cfg13 > /tmp/golded.cfg14
+sed "80s/12345678"/"$uplinkpassword""/" /tmp/golded.cfg11 > /tmp/golded.cfg12
+sed "81s/12345678"/"$uplinkpassword""/" /tmp/golded.cfg12 > /tmp/golded.cfg13
 
+sed "96s/828\.local"/"$nodeaddress"\.local"/" /tmp/golded.cfg13 > /tmp/golded.cfg14
 
 sed "9s/Kirill\ Temnenkov"/"$uplinkname1""/" /tmp/config5 > /tmp/config6
 sed "8s/Kirill_Temnenkov"/"$fullname2""/" /tmp/binkd.cfg4 > /tmp/binkd.cfg5
@@ -518,7 +553,9 @@ sed "42s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/config10 > /tmp/config11
 sed "43s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/config11 > /tmp/config12
 sed "44s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/config12 > /tmp/config13
 
-sed "69s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/golded.cfg14 > /tmp/golded.cfg15
+sed "67s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg14 > /tmp/golded.cfg14-1
+sed "69s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/golded.cfg14-1 > /tmp/golded.cfg15
+
 sed "82s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/golded.cfg15 > /tmp/golded.cfg16
 
 sed "6s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/bin/recv > /tmp/recv1
@@ -536,11 +573,10 @@ sed "71s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/config16 > /tmp/config17
 sed "40s/828\.local"/"$nodeaddress"\.local"/" /tmp/config17 > /tmp/config18
 sed "40s/828\.local"/"$nodeaddress"\.local"/" /tmp/config18 > /tmp/config19
 sed "3s/Moscow"/"$locationname4""/" /tmp/config19 > /tmp/config20
+sed "78s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/config20 > /tmp/config21
 
 sed "103s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg17 > /tmp/golded.cfg18
 sed "96s/828\.local"/"$nodeaddress"\.local"/" /tmp/golded.cfg18 > /tmp/golded.cfg19
-
-cat /tmp/config20 > /usr/local/etc/fido/config
 
 # Set codepage of URL for ru_RU.KOI8-R  
 if [ "$LANG" = "ru_RU.KOI8-R" ]; then
@@ -549,58 +585,64 @@ rm -rf /tmp/golded.cfg19
 cp /tmp/golded.cfg20 /tmp/golded.cfg19 
 fi
 
-# Set Firefox3 browser for URLHANDLER  
+# Set Firefox browser for URLHANDLER  
 
-sed "s|usr/bin/firefox|usr/local/bin/firefox3|" /tmp/golded.cfg19 > /tmp/golded.cfg20
-rm -rf /tmp/golded.cfg19
-cp /tmp/golded.cfg20 /tmp/golded.cfg19 
+sed "s|usr/bin/firefox|usr/local/bin/firefox|" /tmp/golded.cfg19 > /tmp/golded.cfg20
 
-FIREFOXINST=`which firefox3  2>/dev/null`
+
+FIREFOXINST=`which firefox  2>/dev/null`
 if [ "$FIREFOXINST" = "" ];
 then
-echo "Firefox3 not found."
-echo "It is highly recommended install firefox3 port if you would like to use URL"
+echo "Firefox not found."
+echo "It is highly recommended install firefox port if you would like to use URL"
 echo "in GoldEd-NSF and hypertext support.If you using another browser define"
 echo "it in the URLHANDLER in /usr/local/etc/golded+/golded.cfg"
 sleep 5
 fi
 
-# Fixing netmailarea scanning bug for hpt x86_64
-if [ "$MACHINE" = "amd64" ]; then
-sed "31s/netmailarea\ -b\ msg"/netmail\ -b\ squish"/" /tmp/config20 > /tmp/config21
-sed "95s/netmailarea"/"netmail""/" /tmp/golded.cfg19 > /tmp/golded.cfg20
-rm -rf /tmp/config20
-rm -rf /tmp/golded.cfg19
-cp /tmp/config21 /tmp/config20
-cp /tmp/golded.cfg20 /tmp/golded.cfg19 
-fi
 
-sed "s|null\ \&|null\ 2\>\&1\ \&|" /tmp/golded.cfg19 > /tmp/golded.cfg20 
-
-sed "2s|outbound\ 2|outbound\ "$zonenumber"|" /tmp/binkd.cfg8  > /tmp/binkd.cfg9
-sed "34s|defnode\ \-nr\ \*|\#for\ default\ node\ use\#\ defnode\ \-nr\ \-nd\ \-md\ \-|" /tmp/binkd.cfg9 > /tmp/binkd.cfg10
+sed "2s|ZONE-NUMBER|"$zonenumber"|" /tmp/binkd.cfg8  > /tmp/binkd.cfg9
+cat /tmp/binkd.cfg9 > /tmp/binkd.cfg10
 
 cat /tmp/recv1 > /usr/local/bin/recv
 cat /tmp/send1 > /usr/local/bin/send
 
-sed "s|luit\ -encoding|luit\ -x\ -encoding|" /usr/local/bin/gl > /tmp/gl1
+cat /usr/local/bin/gl > /tmp/gl1
+
+cp node/toss.freebsd /usr/local/bin/toss
+chmod +x /usr/local/bin/toss
 
 if [ "$Z2" = "PKGSRC" ]; then
-sed "s|\/usr\/local\/bin\/unzip|\/usr\/pkg\/bin\/unzip|" /tmp/config20 > /tmp/config22
-rm -rf /tmp/config20
-cat /tmp/config22 > /tmp/config20
-sed "s|\/usr\/local\/bin\/firefox3|\/usr\/pkg\/bin\/firefox3|" /tmp/golded.cfg20 > /tmp/golded.cfg21
+
+sed "s|\/usr\/local\/bin\/unzip|\/usr\/pkg\/bin\/unzip|" /tmp/config21 > /tmp/config22
+rm -rf /tmp/config21
+cat /tmp/config22 > /tmp/config21
+sed "s|\/usr\/local\/bin\/firefox|\/usr\/pkg\/bin\/firefox|" /tmp/golded.cfg20 > /tmp/golded.cfg21
 rm -rf /tmp/golded.cfg20
 cat /tmp/golded.cfg21 > /tmp/golded.cfg20
 sed "s|\/usr\/bin\/luit|\/usr\/pkg\/bin\/luit|" /tmp/gl1 > /tmp/gl2
 rm -rf /tmp/gl1
 cat /tmp/gl2 > /tmp/gl1 
+
+cp node/toss /usr/local/bin/toss
+chmod +x /usr/local/bin/toss
+
 fi
 
+sed "80s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/golded.cfg20 > /tmp/golded.cfg21
+sed "81s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/golded.cfg21 > /tmp/golded.cfg22
+sed "82s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/golded.cfg22 > /tmp/golded.cfg23
+sed "83s/12345678"/"$uplinkpassword""/" /tmp/golded.cfg23 > /tmp/golded.cfg24
+
 cat /tmp/binkd.cfg10 > /usr/local/etc/binkd.cfg
-cat /tmp/config20 > /usr/local/etc/fido/config
-sed "s|EditCompletion|UseSoftCRxlat\ Yes\ \;EditCompletion|" /tmp/golded.cfg20 > /usr/local/etc/golded+/golded.cfg
+cat /tmp/config21 > /usr/local/etc/fido/config
+cat /tmp/golded.cfg24 > /usr/local/etc/golded+/golded.cfg
 cat /tmp/gl1 > /usr/local/bin/gl
+
+if [ "$OSNAME" = "$T3" ]; then
+cp golded/gl.freebsd /usr/local/bin/gl
+chmod +x /usr/local/bin/gl
+fi
 
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
@@ -619,6 +661,29 @@ if [ -e /tmp/binkd.cfg1 ]; then
 	rm /tmp/golded.cfg*
         rm /tmp/gl1
 fi
+
+cp golded/.screenrc /usr/local/etc/golded+/
+cp /usr/local/bin/send /usr/local/bin/rs
+chmod 755 /usr/local/bin/rs
+chmod 755 /usr/local/bin/toss
+
+
+sed "s|Vasiliy\ Pampasov|$fullname1|" $CWD/golded/welcome.tpl.template > /tmp/welcome.tpl1
+sed "s|2:5020\/XXX|$uplinkftnaddress1|" /tmp/welcome.tpl1 > /tmp/welcome.tpl2
+sed "s|Kirill\ Temnenkov|$uplinkname1|" /tmp/welcome.tpl2 > /tmp/welcome.tpl3
+sed "s|2:5020\/YYY.ZZZ|$ftnaddress1|" /tmp/welcome.tpl3 > /tmp/welcome.tpl
+
+echo
+echo "Generating welcome message"
+echo ""
+export FIDOCONFIG=/usr/local/etc/fido/config
+
+txt2pkt -nf "Developer of fidoip"  -xf "$ftnaddress"  -xt "$ftnaddress" -nt "$fullname" -t "Powered by fidoip package" -o "http://sourceforge.net/apps/mediawiki/fidoip" -s "Welcome, new point!" -e "welcome.fido" -d /home/fido/localinb /tmp/welcome.tpl
+
+if [ -e /tmp/welcome.tpl ]; then
+	rm -f /tmp/welcome.tpl*
+fi
+
 
 
 elif [ "$reply" = "n" ];

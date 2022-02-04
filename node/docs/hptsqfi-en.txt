@@ -1,0 +1,36 @@
+HPTSQFIX(1)            Husky - Portable Fidonet Software           HPTSQFIX(1)
+
+NAME
+       hptsqfix  -  program  to  rebuild index and some info in squish message
+       bases
+
+SYNOPSIS
+       hptsqfix [options] areafilename ...
+
+DESCRIPTION
+       hptsqfix is a program that found and correct errors in  squish  message
+       bases.   It  read  broken msgbase file <areafilename>.sqd and build new
+       msgbase files: <areafilename>.tmd and <areafilename>.tmi.
+       After repair you must backup old <areafilename>.sq*  files  and  rename
+       <areafilename>.tm* to <areafilename>.sq*
+
+OPTIONS
+       -f     try to find next header after broken msg.
+
+       -e     areafilename has extension, strip it.
+
+       -u     undelete (restore deleted messages).
+
+       -s     sort messages by date written.
+
+
+NOTES
+       All  Husky-Software  is  written  by  various  developers. For detailed
+       information about the Husky-Team take a  look  at  http://husky.source-
+       forge.net/team.html.
+
+AUTHOR
+       This  manual page was written by Pavel Andreew <pavel@collage.etel.ru>,
+       for the Debian GNU/Linux system (but may be used by others).
+
+20 September 2002                  hptsqfix                        HPTSQFIX(1)

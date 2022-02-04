@@ -417,28 +417,28 @@ mkdir -p $PKG/usr/local/doc/$PNAME-$VERSION/bsopack
 mkdir -p $PKG/usr/local/doc/ee
 
 cd ../hpt
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/ 
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/ 2>/dev/null
 cd ../smapi
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/smapi/ 
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/smapi/ 2>/dev/null
 cd ../fidoconf
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/fidoconf/ 
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/fidoconf/ 2>/dev/null
 cd ../huskybse
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION 2>/dev/null
 
 
 #Additional husky documentation copy
 cd ../hptkill
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/hptkill/ 
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/hptkill/ 2>/dev/null
 cd ../hptsqfix
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/hptsqfix/ 
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/hptsqfix/ 2>/dev/null
 cd ../sqpack
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/sqpack/
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/sqpack/ 2>/dev/null
 cd ../bsopack
-cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/bsopack/
+cp -a $PDOC1 $PDOC2 $PDOC3/* $PKG/usr/local/doc/$PNAME-$VERSION/hpt/bsopack/ 2>/dev/null
 
 # Ease Editor ee documenetaton copy
 cd ../easyedit-1.4.6
-cp README.ee Artistic ee.msg ee.i18n.guide Changes $PKG/usr/local/doc/ee/
+cp README.ee Artistic ee.msg ee.i18n.guide Changes $PKG/usr/local/doc/ee/ 2>/dev/null
 
 #Creating configuration directory 
    

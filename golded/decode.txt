@@ -15,9 +15,9 @@ CTRLINFONET   TEARLINE, ORIGIN
 CTRLINFOECHO  TEARLINE, ORIGIN
 CTRLINFOLOCAL TEARLINE, ORIGIN
 
-TEARLINE -А вы бы искусством занялись. Поэзией, что ли?
+TEARLINE -Пиши, старик, пиши! Мы тебя не покинем.
 
-ORIGIN "Муравьиным спиртом советую натереть"
+ORIGIN "Неужели опять: яйца всмятку, котлеты, цыплята?"
 
 COLOR MENU   UNREAD     YELLOW  ON BLACK
 HighlightUnread Yes
@@ -27,7 +27,7 @@ AreaFile FidoConfig  /usr/local/etc/fido/config
 LOADLANGUAGE         /usr/local/etc/golded+/goldlang.cfg
 AREASCAN *
 EditSoftCrXLat H
-EditCompletion "Н"  "H"
+UseSoftCRxlat Yes            ;  EditCompletion "Н"  "H"
 DispSoftCr Yes
 
 TAGLINESUPPORT Yes
@@ -67,21 +67,21 @@ NODELIST        pnt5020.ndl		; PointList @FidoNet 5020
 ;Nodelist net5020.* 2:5020/828.555
 ;Nodelist pnt5020.* 2:5020/828.555
 ;Nodelist 5020828.pnt 2:5020/828
-
-
 ; Не приветвовать роботов
-RobotName AreaFix
-RobotName AllFix
-RobotName T-fix
-RobotName FAQServer
-
+ROBOTNAME AreaFix
+ROBOTNAME AllFix
+ROBOTNAME FileFix
+ROBOTNAME "DM Tic"
+ROBOTNAME SqaFix
+ROBOTNAME Dumb-robot
+ROBOTNAME Dump-robot
 LogFile /home/fido/golded.log
-
-; Макрос, автоматически вбивающий пароль, при наборе в поле адреса
-; сокращения a828. Измените сокращение, адрес AreaFix'а и password   
-AddressMacro a828,AreaFix,2:5020/828,"12345678",K/S,Dir
-
-; Добавление всех адресатов, которым пишите во всех областях в алресную
+; Макрос, автоматически вбивающий пароль, после наборе в поле адреса имени AreaFix(или af) и FileFix(или ff) просто нажмите Enter и адрес и пароль будут подставлены автоматически.
+AddressMacro AreaFix, AreaFix, 2:5020/828, "12345678", K/S, Dir
+AddressMacro FileFix, FileFix, 2:5020/828, "12345678", K/S, Dir
+AddressMacro af, AreaFix, 2:5020/828, "12345678", K/S, Dir
+AddressMacro ff, FileFix, 2:5020/828, "12345678", K/S, Dir
+; Добавление всех адресатов, которым пишите во всех областях в адресную
 ; книгу /usr/local/etc/golded+/golduser.lst
 AddressBookAdd  Always
 
@@ -92,24 +92,23 @@ AddressBookAdd  Always
 @F10    READUserBase
 
 ; Описания арий
-AreaDef Netmail "Почта" Q Net Opus /home/fido/netmailarea 2:5020/828.555
-AreaDef 828.local "Тут локалка у нас простая"   0 Local Squish /home/fido/msgbasedir/828.local 2:5020/828.555
-AreaDef dupes "Дупли у нас вторые" 0 Local Squish /home/fido/dupearea 
-2:5020/828.555
+AreaDef Netmail "Почта" 0 Net Squish /home/fido/netmail 2:5020/828.555
+;AreaDef 828.local "Тут локалка у нас простая"   0 Local Squish /home/fido/msgbasedir/828.local 2:5020/828.555
+AreaDef dupes "Дупли у нас вторые" 0 Local Squish /home/fido/dupearea 2:5020/828.555
 AreaDef bad "А косяки - кривые" 0 Local Squish /home/fido/badarea 2:5020/828.555
 AreaDef carbonarea "Карбонка не пустая" 0 Local Squish /home/fido/carbonarea 2:5020/828.555
-AreaDef ru.linux.chainik "Линукс, чайники" 0 Local Squish /home/fido/msgbasedir/ru.linux.chainik 2:5020/828.555
-AreaDef ru.linux "Линуксоиды"  0 Local Squish /home/fido/msgbasedir/ru.linux 2:5020/828.555
-AreaDef ru.unix.bsd "БэЭсДэшники"   0 Local Squish /home/fido/msgbasedir/ru.unix.bsd 2:5020/828.555
+;AreaDef ru.linux.chainik "Линукс, чайники" 0 Local Squish /home/fido/msgbasedir/ru.linux.chainik 2:5020/828.555
+;AreaDef ru.linux "Линуксоиды"  0 Local Squish /home/fido/msgbasedir/ru.linux 2:5020/828.555
+;AreaDef ru.unix.bsd "БэЭсДэшники"   0 Local Squish /home/fido/msgbasedir/ru.unix.bsd 2:5020/828.555
 
 ConfirmFile golded.cfm
 ConfirmResponse  Ask  ; Спросить пользователя
 
-AREALISTGROUPID YES
-AREALISTSORT YUG
+;AREALISTGROUPID YES
+;AREALISTSORT YUG
 
 PeekURLOptions FromTop
-URLHANDLER -NoPause -NoKeepCtrl -Wipe /usr/bin/firefox `echo "@url" | /usr/bin/iconv -f CP866 -t UTF-8` > /dev/null &
+URLHANDLER -NoPause -NoKeepCtrl -Wipe /usr/bin/firefox `echo "@url" | /usr/bin/iconv -f CP866 -t UTF-8` > /dev/null 2>&1 &
 DispHdrLocation Yes
 DispHdrFGHIUrl  SHORT
 MsgListHeader   1
@@ -120,3 +119,15 @@ FGHIReverseSearch YES
 MsgListFirstFGHI NO
 
 KeybExt         Yes
+
+AREALISTGROUPID NO
+;AREALISTSORT YTU-E
+AREASEP !NET "Netmail              ------------  Почта" 0 Net
+AREASEP !LOCAL "Auxiliary Areas      ------------  служебные области" 0 Local
+AREASEP !ECHO "Other FIDONet Echoes ------------  другие конференции Фидонет" 0 Echo
+AREALISTFORMAT "AM D CPUN E G "
+AREALISTTYPE New
+AREALISTECHOMAX 0
+AREALISTGROUPORDER TE
+AREATYPEORDER Net Local Echo
+AREALISTPAGEBAR YES

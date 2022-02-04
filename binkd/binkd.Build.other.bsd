@@ -65,7 +65,7 @@ sh configure \
   --prefix=/usr/local \
   --sysconfdir=/usr/local/etc \
   --localstatedir=/var/lib \
-  --with-https -with-bwlim --with-perl
+  --with-proxy -with-bwlim --with-perl
 make
 #make PREFIX=/usr/local install
 

@@ -1,0 +1,1871 @@
+<html lang="en">
+<head>
+<title>HTICK 1.4 - Husky Ticker</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="HTICK 1.4 - Husky Ticker">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">HTICK 1.4 - Husky Ticker</h1>
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Overview">Overview</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">HTICK</h2>
+
+<p>Этот документ описывает HTICK 1.4, фидошный файлэхо-процессор
+под OS/2, Windows, BeOS и клоны Unix.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Overview">Overview</a>:                     Что такое HTICK. 
+<li><a accesskey="2" href="#Installation">Installation</a>:                 Установка. <em>Прочтите это!</em>
+<li><a accesskey="3" href="#Command-Line">Command Line</a>:                 ОПЦИИ и КЛЮЧИ командной строки. 
+<li><a accesskey="4" href="#Configuration-Reference">Configuration Reference</a>:      Пояснения к конфигурационному файлу. 
+<li><a accesskey="5" href="#Support">Support</a>:                      Информация о поддержке. 
+<li><a accesskey="6" href="#Keyword-Index">Keyword Index</a>:                Спискок ключевых слов конфигурационного файла. 
+</ul>
+
+<div class="node">
+<a name="Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Installation">Installation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Что такое HTICK</h2>
+
+<p>HTICK - это фидошный тоссер файлэх, включающий filefix. В настоящее
+время проект поддерживается Husky Development Team (см. 
+<a href="http://husk.sf.net/team.html">http://husk.sf.net/team.html</a>).
+
+   <p>Фичи HTICK:
+     <ol type=1 start=1>
+<li>Тоссинг файлэх. 
+<li>Filefix (на лету, из командной строки, ограничение областей...) 
+<li>Автосоздание на лету. 
+<li>Автоматическая подписка на отсутствующую арию у аплинка. 
+<li>Перевод арий в пассивный (только посылка) и обратно в активный режимы. 
+<li>Повторная посылка файлов из passthrough и не-passthrough файлэх. 
+<li>Группы и уровни для личного и общего доступа к файлэхам. 
+<li>Проверка безопастности tossgroup. 
+<!-- @item проверка дупов. -->
+<li>Установки линков по умолчанию. 
+<li>Постинг в нетмейловые и эхообласти. 
+<li>Гибкая настройка анонсов в эхообласти или нетмейл. 
+Поддержка масок имен файлэх позволяет легко настроить несколько областей для
+анонсов из разных групп файлэх. 
+<li>Сохраняя анонсы на диск, вы защищаете себя от их потери из-за
+аварийного завершения HTICK (недостаточно свободного места
+на диске, нажато ^Break, отключение питания и т.д.) 
+<li>И многое, многое другое :)
+        </ol>
+
+   <p>Преимущества HTICK:
+
+     <ol type=1 start=1>
+<li>Открытые исходники (GPL)
+<li>Множество поддерживаемых платформ и операционных систем
+<li>Быстрое исправление багов
+        </ol>
+
+<div class="node">
+<a name="Installation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Download">Download</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Процедуры установки и замечания разработчиков</h2>
+
+<p>Этот раздел содержит информацию, необходимую для успешных установки и
+использования HTICK.
+
+   <p>Предполагается, что вы уже скомпилировали исполняемые файлы. Если нет, смотрите
+разделы "Скачивание" или "Компилирование исходного кода".
+
+     <ol type=1 start=1>
+<li>Прочитайте документацию на FIDOCONFIG, касающуюся расположения
+конфигурационных файлов
+<li>Отредактируйте конфигурационные файлы в соответствии со своими целями
+<li>Запустите <code>tparser</code> из пакета FIDOCONFIG, чтобы проверить свой конфиг
+(прочитайте о <code>PublicGroup</code> или <code>AccessGrp</code>, если хотите использовать
+группы для <code>FileEchoAreas</code>)
+<li>Это просто, не правда ли? :-)
+        </ol>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Download">Download</a>:   Скачивание исходного кода и исполняемых файлов
+<li><a accesskey="2" href="#Compiling">Compiling</a>:  Как скомпилировать исходный код
+<li><a accesskey="3" href="#Support">Support</a>:    Поддержка, связь с автором, сообщения о багах, поддержка разработки
+</ul>
+
+<div class="node">
+<a name="Download"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Compiling">Compiling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Installation">Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Installation">Installation</a>
+
+</div>
+
+<h3 class="section">2.1 Скачивание исходного кода и исполняемых файлов</h3>
+
+     <dl>
+<dt>Главная страница (релизы, исходный код, последние бета-версии) - <a href="http://husky.sf.net/htick.html">http://husky.sf.net/htick.html</a><br><dt>Прямой линк на исходники 'stable' ветки: <a href="http://husky.sf.net/cvs2/stable/">http://husky.sf.net/cvs2/stable/</a><br><dt>Прямой линк на исходники 'current' (девелоперской) ветки: <a href="http://husky.sf.net/cvs2/current/">http://husky.sf.net/cvs2/current/</a><dd></dl>
+
+<div class="node">
+<a name="Compiling"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Support">Support</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Download">Download</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Installation">Installation</a>
+
+</div>
+
+<h3 class="section">2.2 Компилирование исходного кода</h3>
+
+<p>1. Необходимы пакеты smapi и fidoconf.
+
+   <p>2. Поместите пакеты smapi и fidoconf в директорию, где размещены остальные
+   пакеты fido:
+
+     <dl>
+<dt>/usr/src/packages/<br><dt>-&gt; smapi/<br><dt>-&gt; fidoconfig/<br><dt>-&gt; htick/<br><dt><dd></dl>
+
+   <p>3. Скомпилируйте и установите пакеты smapi и fidoconf. Для компилирования
+   динамических исполняемых файлов используйте "Makefile", для статических -
+   makefile.lnx (или тот, который вам нужен).
+
+   <p>4. Компиляция и установка HTICK:
+     <dl>
+<dt>$ make<br><dt>$ make install<dd></dl>
+   Вы должны использовать _одни и те же_ makefile при компиляции smapi, fidoconf и
+htick.
+
+<div class="node">
+<a name="Support"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Command-Line">Command Line</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Compiling">Compiling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Installation">Installation</a>
+
+</div>
+
+<h3 class="section">2.3 Поддержка</h3>
+
+<p>Существует бессчетное количество причин, по которым вы можете захотеть
+установить контакт с разработчиками.
+
+     <ol type=1 start=1>
+<li>Вы решили постоянно использовать HTICK. В этом случае, пожалуйста,
+пошлите письмо по адресу, указанному ниже.
+
+     <li>У вас есть общие вопросы о том, как сконфигурировать или как использовать
+конкретную фичу HTICK. Другими словами, вам нужна поддержка. В этом
+случае вам лучше всего разместить свой вопрос в одной из следующих эх:
+
+          <dl>
+<dt><code>FIDOSOFT.HUSKY</code><dd>Международная конференция Husky. Предпочтительный язык - английский. 
+<br><dt><code>RU.HUSKY</code><dd>Это русская эха Husky Project. 
+</dl>
+
+     <p>Если у вас есть доступ к Internet, вы, разумеется, можете поместить свой
+вопрос или сообщение о баге в форму на сайте разработчиков husky:
+http://sourceforge.net/projects/husky, идите по ссылке "Bugs", если хотите
+разместить сообщение о баге.
+
+     <p>Если у вас нет доступа ни к этим эхам, ни к Internet, вы, конечно, можете
+связаться с разработчиками через нетмейл или e-mail по адресам, указанным ниже.
+
+     <li>Вы хотите сообщить о баге. Существует два типа багов:
+
+          <ol type=a start=1>
+<li>Обычные баги. 
+Вы думаете, что конкретная функция HTICK работает не так, как ожидается,
+например, выводит мусор или странно себя ведет, или что-то подобное. В таком
+случае, поместите сообщение в эхи, указанные выше, или в bugtrack на сайте или
+свяжитесь с разработчиками нетмейлом. Пожалуйста, укажите всю информацию,
+которая необходима для понимания вашей проблемы.
+
+          <li>Фатальные баги. 
+Фатальный баг случается, если HTICK падает. В зависимости от вашей
+операционной системы, симптомами могут быть падение ядра (core dump), SYS 3175,
+общая ошибка защиты (general protection fault), "повисшая" система, внезапная
+перезагрузка. Мы считаем падение недопустимым. Какие бы глупые вещи вы не
+делали, у вас не должно получиться уронить HTICK.
+
+          <p>Если вы опытный пользователь, и у вас упало ядро, вы можете послать
+разработчикам gdb-репорт. Найдите файл <samp><span class="file">core</span></samp>, который был сгенерирован. 
+Затем запустите $ gdb htick core. HTICK должен быть скомпилирован с
+информацией для отладки (DEBUG=1 в файле <samp><span class="file">huskymak.cfg</span></samp>). После этого
+отошлите сообщение по адресу, указанному ниже.
+
+          <p>Если вы используете любую другую версию исполняемых файлов (например, под
+Windows), вы не получите файл ядра при падении. Запишите как можно больше
+информации, попытайтесь воспроизвести падение и свяжитесь с авторами по адресам,
+указанным ниже. Пожалуйста, прикрепите к письму лог-файл с
+<code>loglevels 1-0A-Za-z</code> (все буквы и цифры).
+          </ol>
+
+     <li>Вы хотите участвовать в разработке HTICK. 
+Если вы программист и самостоятельно исправили ошибку в HTICK,
+пожалуйста, пришлите мне свои изменения. Лучший путь сделать это - прислать
+разработчикам файл изменений в формате GNU diff (с параметром -c). Ваша работа
+будет высоко оценена и отмечена в соответствующем месте. Если вы хотите
+регулярно работать над HTICK, у нас также есть онлайновый CVS сервер, к
+которому вы сможете получить доступ.
+
+     <p>Если вы хотите добавить в HTICK новую фичу, пожалуйста, свяжитесь
+сначала с разработчиками - чтобы не делать лишнюю работу. Мы оценим все ваши
+усилия. Пожалуйста, примите во внимание, что для написания расширений
+HTICK вы должны быть знакомы с C. Кроме того, HTICK использует
+специальный стиль кода, и мы бы хотели, чтобы вы его придерживались.
+        </ol>
+
+   <p>Итак, вот адреса разработчиков, если вы хотите связаться с нами:
+
+     <ul>
+<li>Fidonet:
+Max Chernogor @ 2:464/108
+<li>e-mail:
+mche@ua.fm
+</ul>
+
+     <ul>
+<li>Fidonet:
+Stas Degteff @ 2:5080/102
+<li>e-mail:
+stas_degteff@users.sf.net
+</ul>
+
+<div class="node">
+<a name="Command-Line"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Configuration-Reference">Configuration Reference</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Support">Support</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 ОПЦИИ и КЛЮЧИ командной строки HTICK 1.4</h2>
+
+<p>Чтобы получить спискок опций командной строки, запустите HTICK без
+параметров.
+
+     <dl>
+<dt>Синтаксис:<dd><samp><span class="command">htick [options] &lt;command&gt;</span></samp>
+<br><dt>где <code>&lt;command&gt;</code>:<dd>
+          <dl>
+<dt>toss<dd>Обработать *.tic и протоссить файлы
+<br><dt>scan<dt>ffix<dd>Искать в Netmail области писем к filefix и обработать команды filefix
+<br><dt>ffix &lt;FTN address&gt; &lt;filefix command&gt;<dd>Обработать команду filefix <code>command</code> из командной строки
+<br><dt>ffix! &lt;FTN address&gt; &lt;filefix command&gt;<dd>Выполнить то же, что 'ffix' и послать письмо с подпиской/отпиской линку, который
+был подписан/отписан вручную командой filefix вида:
+htick ffix! 2:464/910 -910.TEST
+Эта команда отписывает файлэхолинка 2:464/910 от 910.TEST и создает письмо к
+2:464/910, содержащее "-910.TEST"
+<br><dt>clean<dd>Очистить passthrough директорию (удалить посланные файлы) и удалить старые файлы
+в файлэхах
+<br><dt>announce<dd>Создать анонс о новых файлах, описанный операторами конфига Ann*
+(см. See <a href="#Announce-System">Announce System</a>.) 
+<br><dt>hatch &lt;file&gt; &lt;area&gt; [replace [&lt;filemask&gt;]] [desc [&lt;desc&gt;] [&lt;ldesc&gt;]]<dd>Хатчить файл в Area, используя Description файла; если указано "replace",
+заполнить поле Replace в TIC; если &lt;filemask&gt; не указана, поместить в это поле
+&lt;file&gt;. 
+Параметры desc могут быть:
+               <dl>
+<dt><code>@BBS</code><dd>взять описание из files.bbs
+<br><dt><code>@DIZ</code><dd>взять описание из находящегося в архиве File_Id.Diz
+<br><dt><code>@&lt;file&gt;</code><dd>взять описание из &lt;file&gt;
+<br><dt><code>@@BBS</code><dd>взять первую строку из Files.Bbs
+<br><dt><code>@@DIZ</code><dd>взять первую строку из находящегося в архиве File_Id.Diz
+<br><dt><code>@@&lt;file&gt;</code><dd>взять первую строку из &lt;file&gt;
+</dl>
+
+          <br><dt>send &lt;file&gt; &lt;filearea&gt; &lt;address&gt;<dd>Послать файл из filearea на address
+<br><dt>filelist &lt;file&gt; [&lt;dirlist&gt;]<dd>Создать файл-лист, содержащий все файлы в базе
+
+               <ul>
+<li><code>&lt;file&gt;</code>
+Имя файла, в который записывать вывод
+<li><code>&lt;dirlist&gt;</code>
+Список директорий, которые должны быть включены в файл-лист. 
+</ul>
+          </dl>
+     </dl>
+
+<div class="node">
+<a name="Configuration-Reference"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Keywords">Keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Command-Line">Command Line</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Справка по конфигурации HTICK 1.4</h2>
+
+<p>HTICK основан на библиотеке FIDOCONFIG, поэтому прочитайте в
+документации на FIDOCONFIG о расположении конфигурационного файла и идеологии
+ключевых слов.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Keywords">Keywords</a>:                Этот раздел описывает ключевые слова
+<li><a accesskey="2" href="#Common-husky-keywords">Common husky keywords</a>:   Список ключевых слов, используемых многими программами
+                           husky
+<li><a accesskey="3" href="#Link-Keywords">Link Keywords</a>:           Ключевые слова, которые могут быть использованы для
+                           разных линков
+<li><a accesskey="4" href="#FileArea-Definition">FileArea Definition</a>:     Определение файлобластей
+<li><a accesskey="5" href="#Announce-System">Announce System</a>:         Определение анонсов
+</ul>
+
+<div class="node">
+<a name="Keywords"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileAreaBaseDir">FileAreaBaseDir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Configuration-Reference">Configuration Reference</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Configuration-Reference">Configuration Reference</a>
+
+</div>
+
+<h3 class="section">4.1 Ключевые слова</h3>
+
+<ul class="menu">
+<li><a accesskey="1" href="#FileAreaBaseDir">FileAreaBaseDir</a>:       Базовая директория файлобластей. 
+<li><a accesskey="2" href="#PassFileAreaDir">PassFileAreaDir</a>:       В эту директорию будут помещены файлы из passthrough
+                         файлобластей. 
+<li><a accesskey="3" href="#FileDescPos">FileDescPos</a>:           Отступ для длинных описаний в FILES.BSS. 
+<li><a accesskey="4" href="#fileLDescString">fileLDescString</a>:       Префикс для длинных описаний в FILES.BSS. 
+<li><a accesskey="5" href="#FileFixHelp">FileFixHelp</a>:           Файл помощи для FileFix. 
+<li><a accesskey="6" href="#FileArea">FileArea</a>:              Определение файлобласти. 
+<li><a accesskey="7" href="#ExecOnFile">ExecOnFile</a>:            Выполнить команду по приему файла. 
+<li><a accesskey="8" href="#SaveTic">SaveTic</a>:               Сохранять файлы с TIC'ами. 
+<li><a accesskey="9" href="#MaxTicLineLength">MaxTicLineLength</a>:      Установить максимальную длину строки в исходящих TIC'ах. 
+<li><a href="#BusyFileDir">BusyFileDir</a>:           Куда будут сложены TIC'и для линков с флагом busy. 
+<li><a href="#ConvertLongNames">ConvertLongNames</a>:      Что делать с длинными именами при тоссинге и хатчинге. 
+<li><a href="#ConvertShortNames">ConvertShortNames</a>:     Что делать с короткими именами при тоссинге и хатчинге. 
+<li><a href="#addDLC">addDLC</a>:                Добавлять счетчики скачиваний в FILES.BBS. 
+<li><a href="#DLCDigits">DLCDigits</a>:             Количество цифр в DLC. 
+<li><a href="#ticOutbound">ticOutbound</a>:           TIC' хранятся здесь и удаляются после отсылки. 
+<li><a href="#filefixKillRequests">filefixKillRequests</a>:   Удалять запрос к filefix после обработки. 
+<li><a href="#filefixReportsAttr">filefixReportsAttr</a>:    Установить флаг kill/sent на ответы filefix. 
+<li><a href="#BBSarea">BBSarea</a>:               Файлобласть без возможности подписки (для `htick filelist`). 
+<li><a href="#fileDescName">fileDescName</a>:          Если поле LDESC в TIC-файле не заполнено, использовать
+                         для его заполнения файл &lt;name&gt; из архива. 
+<li><a href="#FileAreaCreatePerms">FileAreaCreatePerms</a>:   Установить права на созданную директорию файлобласти. 
+<li><a href="#FileFixFromName">FileFixFromName</a>:       Имя отправителя в ответах filefix. 
+<li><a href="#AutoFileCreateFlag">AutoFileCreateFlag</a>:    Создавать флаг при автосоздании файлобластей. 
+<li><a href="#FileFixNames">FileFixNames</a>:          Список имен, на которые будет откликаться filefix. 
+</ul>
+
+<div class="node">
+<a name="FileAreaBaseDir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#PassFileAreaDir">PassFileAreaDir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Keywords">Keywords</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.1 FileAreaBaseDir</h4>
+
+<p><a name="index-FileAreaBaseDir-1"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileAreaBaseDir &lt;directory&gt;</code>
+<br><dt>Пример:<dd><code>FileAreaBaseDir /var/spool/fido/fileareas</code>
+</dl>
+
+   <p>Где будут созданы директории всех файлобластей при автосоздании. Подобно
+MsgBaseDir.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="PassFileAreaDir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileDescPos">FileDescPos</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileAreaBaseDir">FileAreaBaseDir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.2 PassFileAreaDir</h4>
+
+<p><a name="index-PassFileAreaDir-2"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>PassFileAreaDir &lt;directory&gt;</code>
+<br><dt>Пример:<dd><code>PassFileAreaDir /var/spool/fido/transit</code>
+</dl>
+
+   <p>Куда будут сложены файлы из passthrough файлобластей (и TIC'и, если ticOutbound
+не определен).
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="FileDescPos"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#fileLDescString">fileLDescString</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#PassFileAreaDir">PassFileAreaDir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.3 FileDescPos</h4>
+
+<p><a name="index-FileDescPos-3"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileDescPos &lt;number&gt;</code>
+<br><dt>Пример:<dd><code>FileDescPos 13</code>
+</dl>
+
+   <p>Количество пробелов в отступе длинных описаний в FILES.BBS. 
+Рекомендуется 13 (8.3+пробел).
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="fileLDescString"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileFixHelp">FileFixHelp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileDescPos">FileDescPos</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.4 fileLDescString</h4>
+
+<p><a name="index-fileLDescString-4"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>fileLDescString &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>fileLDescString "&gt;"</code>
+</dl>
+
+   <p>Эта строка помещается перед длинным описанием в FILES.BBS (обычно "&gt;" или "+".). 
+Значение по умолчанию: один пробел.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="FileFixHelp"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ExecOnFile">ExecOnFile</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#fileLDescString">fileLDescString</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.5 FileFixHelp</h4>
+
+<p><a name="index-FileFixHelp-5"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileFixHelp &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>FileFixHelp /usr/local/fido/filefix.hlp</code>
+</dl>
+
+   <p>Файл помощи для FileFix, подобно AreaFixHelp для AreaFix'а HPT.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="ExecOnFile"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#SaveTic">SaveTic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileFixHelp">FileFixHelp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.6 ExecOnFile</h4>
+
+<p><a name="index-ExecOnFile-6"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ExecOnFile &lt;filearea&gt; &lt;filemask&gt; &lt;command&gt;</code>
+<br><dt>Пример:<dd><code>ExecOnFile husky *.diff /usr/local/fido/update_source.sh</code>
+</dl>
+
+   <p>Выполнить некоторую команду по приему файла. 
+Команда получает как параметр полный путь к файлу (пробел и имя файла должны
+быть добавлены к командной строке до выполнения).
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="SaveTic"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#MaxTicLineLength">MaxTicLineLength</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ExecOnFile">ExecOnFile</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.7 SaveTic</h4>
+
+<p><a name="index-SaveTic-7"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>SaveTic &lt;FileEchoMask&gt; &lt;FileOption&gt; &lt;DirToSaveTic&gt;</code>
+<br><dt>Пример:<dd><code>SaveTic husky -l /usr/local/husky</code>
+</dl>
+
+     <dl>
+<dt>&lt;DirToSaveTic&gt;<dd>куда складывать TIC'и для файлобласти(ей) &lt;FileEchoMask&gt;
+
+     <br><dt>&lt;FileOption&gt;<dd>сохранять файлы с TIC'ами. Может быть:
+
+          <dl>
+<dt>empty<dd>файлы не будут скопированы
+
+     </dl>
+
+          <dl>
+<dt><samp><span class="option">-l</span></samp><dd>линк на файлы из директории файлобласти в &lt;DirToSaveTic&gt;
+
+          <br><dt><samp><span class="option">-c</span></samp><dd>копировать файлы из директории файлобласти в &lt;DirToSaveTic&gt;
+</dl>
+
+     <p>Опции <samp><span class="option">-l</span></samp> и <samp><span class="option">-c</span></samp> работают только с не-passthrough файлэхами. 
+</dl>
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="MaxTicLineLength"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#BusyFileDir">BusyFileDir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#SaveTic">SaveTic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.8 MaxTicLineLength</h4>
+
+<p><a name="index-MaxTicLineLength-8"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>MaxTicLineLength &lt;number&gt;</code>
+<br><dt>Пример:<dd><code>MaxTicLineLength 79</code>
+</dl>
+
+   <p>Установить максимальную длину строки в исходящих TIC'ах в значение &lt;number&gt;.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="BusyFileDir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ConvertLongNames">ConvertLongNames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#MaxTicLineLength">MaxTicLineLength</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.9 BusyFileDir</h4>
+
+<p><a name="index-BusyFileDir-9"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>BusyFileDir &lt;directory&gt;</code>
+<br><dt>Пример:<dd><code>BusyFileDir /var/spool/fido/htick.busy/</code>
+</dl>
+
+   <p>Куда будут складываться TIC'и для линков с флагом busy (по умолчанию
+&lt;outbound&gt;/busy.htk).
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="ConvertLongNames"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ConvertShortNames">ConvertShortNames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#BusyFileDir">BusyFileDir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.10 ConvertLongNames</h4>
+
+<p><a name="index-ConvertLongNames-10"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ConvertLongNames &lt;Upper|Lower|DontTouch&gt;</code>
+<br><dt>Пример:<dd><code>ConvertLongNames DontTouch</code>
+</dl>
+
+   <p>Что делать с длинными именами при тоссинге и хатчинге. 
+Под "длинным" мы имеем в виду имя со смешанным регистром или имя длиннее 8.3
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="ConvertShortNames"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#addDLC">addDLC</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ConvertLongNames">ConvertLongNames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.11 ConvertShortNames</h4>
+
+<p><a name="index-ConvertShortNames-11"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ConvertShortNames &lt;Upper|Lower|DontTouch&gt;</code>
+<br><dt>Пример:<dd><code>ConvertShortNames DontTouch</code>
+</dl>
+
+   <p>Что делать с короткими именами при тоссинге и хатчинге. 
+Под "коротким" мы имеем в виду имя DOS-типа: 8.3, одного регистра.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="addDLC"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#DLCDigits">DLCDigits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ConvertShortNames">ConvertShortNames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.12 addDLC</h4>
+
+<p><a name="index-addDLC-12"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>addDLC &lt;bool&gt;</code>
+<br><dt>Пример:<dd><code>addDLC yes</code>
+</dl>
+
+   <p>Добавлять счетчики скачиваний ([000]) в files.bbs. Используйте только с
+DLCDigits!
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="DLCDigits"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ticOutbound">ticOutbound</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#addDLC">addDLC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.13 DLCDigits</h4>
+
+<p><a name="index-DLCDigits-13"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>DLCDigits &lt;number&gt;</code>
+<br><dt>Пример:<dd><code>DLCDigits 4</code>
+</dl>
+
+   <p>Установить количество цифр в DLC. DLC имеет вид [000].
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="ticOutbound"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#filefixKillRequests">filefixKillRequests</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#DLCDigits">DLCDigits</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.14 ticOutbound</h4>
+
+<p><a name="index-ticOutbound-14"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ticOutbound &lt;directory&gt;</code>
+<br><dt>Пример:<dd><code>ticOutbound /var/spool/fido/ticOub</code>
+</dl>
+
+   <p>TIC'и хранятся здесь и удаляются после отправки. По умолчанию: использовать
+значение PassFileAreaDir.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="filefixKillRequests"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#filefixReportsAttr">filefixReportsAttr</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ticOutbound">ticOutbound</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.15 filefixKillRequests</h4>
+
+<p><a name="index-filefixKillRequests-15"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>filefixKillRequests &lt;bool&gt;</code>
+<br><dt>Пример:<dd><code>filefixKillRequests yes</code>
+</dl>
+
+   <p>Удалять запросы к filefix после обработки.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="filefixReportsAttr"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#BBSarea">BBSarea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#filefixKillRequests">filefixKillRequests</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.16 filefixReportsAttr</h4>
+
+<p><a name="index-filefixReportsAttr-16"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>filefixReportsAttr &lt;attr&gt;</code>
+<br><dt>Пример:<dd><code>filefixReportsAttr pvt,kill,loc</code>
+</dl>
+
+   <p>Установить флаги на ответы filefix.
+
+   <p>Допустимые флаги:
+     <dl>
+<dt>pvt<br><dt>crash<br><dt>read<br><dt>sent<br><dt>att<br><dt>fwd<br><dt>orphan<br><dt>k/s<br><dt>loc<br><dt>fwd<br><dt>xx2<br><dt>frq<br><dt>rrq<br><dt>cpt<br><dt>arq<br><dt>urq<br><dt>kfs<br><dt>tfs<br><dt>dir<br><dt>imm<br><dt>cfm<br><dt>npd<dd></dl>
+
+   <p>По умолчанию "pvt loc k/s npd".
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="BBSarea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#fileDescName">fileDescName</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#filefixReportsAttr">filefixReportsAttr</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.17 BBSarea</h4>
+
+<p><a name="index-BBSarea-17"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>BBSarea &lt;name&gt; &lt;bbsareapath&gt;</code>
+<br><dt>Пример:<dd><code>bbsarea bbs /var/spool/fido/bbsareas/bbs</code>
+</dl>
+
+   <p>Файлобласть без возможности подписки, не показывается в ответах filefix. 
+Используется только для генерации файл-листа (команда `htick filelist`).
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="fileDescName"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileAreaCreatePerms">FileAreaCreatePerms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#BBSarea">BBSarea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.18 fileDescName</h4>
+
+<p><a name="index-fileDescName-18"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>fileDescName &lt;name&gt;</code>
+<br><dt>Пример:<dd><code>fileDescName file_id.diz</code>
+</dl>
+
+   <p>Если поле LDESC в TIC-файле не заполнено, использовать для его заполнения файл
+&lt;name&gt; из архива (обычно file_id.diz).
+
+   <p>Этот оператор может повторяться.
+
+<h4 class="subsection">4.1.19 Замечание</h4>
+
+<p>Параметр <code>unpack</code> должен быть определен для архива и содержать <samp><span class="option">$f</span></samp>
+(<samp><span class="option">$f</span></samp> заменяется на имя файла в процессе распаковки).
+
+   <p>Примеры:
+<pre class="example">     Unpack  "/path/to/unrar e -y -c- -o+ -inul $a $p $f"   0 52617221 # *.rar
+     Unpack  "d:\path\unrar  e -y -c- -o+ -inul $a $p $f"  28 52534658 # rar-sfx/DOS
+     Unpack "\path\pkzipc -ext -dir=none -over=all -nozip -silent $a $p $f" 0 504b0304
+     Unpack "unzip -joLqq $a -d $p" 0 504b0304
+     Unpack "pkunzip -njCL $a -d $p $f" 0 504b0304
+     Unpack "pkzip25 -ext -silent -over=all -nofix -nozip $a $p $f" 0
+</pre>
+   <div class="node">
+<a name="FileAreaCreatePerms"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileFixFromName">FileFixFromName</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#fileDescName">fileDescName</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.20 FileAreaCreatePerms</h4>
+
+<p><a name="index-FileAreaCreatePerms-19"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileAreaCreatePerms &lt;mode&gt;</code>
+<br><dt>Пример:<dd><code>FileAreaCreatePerms 644</code>
+</dl>
+
+   <p>Определить права на созданные директории файлобластей (только для UNIX).
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="FileFixFromName"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AutoFileCreateFlag">AutoFileCreateFlag</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileAreaCreatePerms">FileAreaCreatePerms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.21 FileFixFromName</h4>
+
+<p><a name="index-FileFixFromName-20"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileFixFromName &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>FileFixFromName FileFix</code>
+</dl>
+
+   <p>Имя отправителя в ответах filefix.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="AutoFileCreateFlag"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileFixNames">FileFixNames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileFixFromName">FileFixFromName</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.22 AutoFileCreateFlag</h4>
+
+<p><a name="index-AutoFileCreateFlag-21"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AutoFileCreateFlag &lt;file&gt;</code>
+<br><dt>Пример:<dd><code>AutoFileCreateFlag /usr/local/fido/flags/new_filearea</code>
+</dl>
+
+   <p>Создавать флаг при автосоздании файобластей.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="FileFixNames"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Link-Keywords">Link Keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AutoFileCreateFlag">AutoFileCreateFlag</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.1.23 FileFixNames</h4>
+
+<p><a name="index-FileFixNames-22"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileFixNames &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>FileFixNames allfix filefix htick</code>
+</dl>
+
+   <p>Список имен, разделенных пробелами, на которые будет откликаться filefix.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="Link-Keywords"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#fileEchoFlavour">fileEchoFlavour</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileFixNames">FileFixNames</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Configuration-Reference">Configuration Reference</a>
+
+</div>
+
+<h3 class="section">4.2 Ключевые слова линков</h3>
+
+<ul class="menu">
+<li><a accesskey="1" href="#fileEchoFlavour">fileEchoFlavour</a>:          Этот оператор устанавливает флавор, который получают
+                            исходящие на этого линка файлы из файлэх. 
+<li><a accesskey="2" href="#fileAreaDefaults">fileAreaDefaults</a>:         Установить умолчания для последующих определений
+                            файлобластей. 
+<li><a accesskey="3" href="#RemoteFileRobotName">RemoteFileRobotName</a>:      Имя удаленного робота filefix (нужно для
+                            FileForwardRequest). 
+<li><a accesskey="4" href="#FileFix">FileFix</a>:                  Доступ к filefix для этого линка. 
+<li><a accesskey="5" href="#FileFixEchoLimit">FileFixEchoLimit</a>:         Лимит подписки на файлэхи. 
+<li><a accesskey="6" href="#noTIC">noTIC</a>:                    Отключить создание файлов TIC. 
+<li><a accesskey="7" href="#autoFileCreate">autoFileCreate</a>:           Разрешить или запретить автосоздание файлэх,
+                            полученных от этого линка. 
+<li><a accesskey="8" href="#AutoFileCreateFile">AutoFileCreateFile</a>:       Указывает файл, в который будет помещено описание
+                            новой файлобласти. 
+<li><a accesskey="9" href="#AutoFileCreateDefaults">AutoFileCreateDefaults</a>:   Определяет умолчания новой файлобласти. 
+<li><a href="#AutoFileCreateSubdirs">AutoFileCreateSubdirs</a>:    Автосоздавать арии как /fils/gfd.app.edit (off)
+                            или как /files/gfd/app/edit (on). 
+<li><a href="#delNotReceivedTIC">delNotReceivedTIC</a>:        Если файл не получен, удалять TIC. 
+<li><a href="#FileFixFSC87Subset">FileFixFSC87Subset</a>:       Этот булевый переключатель определяет, как будут
+                            обрабатываться TIC'и. 
+<li><a href="#TickerPackToBox">TickerPackToBox</a>:          Если для линка определен файлбокс - тоссить файлы
+                            и TIC'и в нем. 
+<li><a href="#LinkFileBaseDir">LinkFileBaseDir</a>:          Куда будут помещены автосозданные файлобласти. 
+<li><a href="#ForwardFileRequests">ForwardFileRequests</a>:      Разрешить форвард на линка запросов подписки на
+                            файлобласти. 
+<li><a href="#ForwardFilePriority">ForwardFilePriority</a>:      Приоритет аплинка при форвард-реквестах подписок на
+                            файлобласти. 
+<li><a href="#ForwardFileRequestFile">ForwardFileRequestFile</a>:   Список доступных у этого линка файлобластей. 
+</ul>
+
+<div class="node">
+<a name="fileEchoFlavour"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#fileAreaDefaults">fileAreaDefaults</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Link-Keywords">Link Keywords</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.1 fileEchoFlavour</h4>
+
+<p><a name="index-fileEchoFlavour-23"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>fileEchoFlavour &lt;hold|normal|crash|direct|immediate&gt;</code>
+<br><dt>Пример:<dd><code>fileEchoFlavour direct</code>
+</dl>
+
+   <p>Этот оператор устанавливает флавор, который получают исходящие на этого линка
+файлы из файлэх. 
+Например, установите <code>fileEchoFlavour</code> в hold для пойнтов и в crash для
+аплинков.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="fileAreaDefaults"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#RemoteFileRobotName">RemoteFileRobotName</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#fileEchoFlavour">fileEchoFlavour</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.2 fileAreaDefaults</h4>
+
+<p><a name="index-fileAreaDefaults-24"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>fileAreaDefaults &lt;options&gt; [links]</code>
+<br><dt>Пример:<dd><code>fileAreaDefaults -lw 100 -g Z 2:5097/31.1</code>
+</dl>
+
+   <p>Установить умолчания для последующих определений файлобластей. Допустимы любые
+опции, кроме ареатага и пути. 
+Установки в определении файлобласти приоритетнее, чем <code>fileAreaDefaults</code>. 
+Также см. See <a href="hpt.html#echoAreaDefaults">echoAreaDefaults</a>. Умолчания выключаются с помощью
+пустого <code>fileAreaDefaults</code>.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="RemoteFileRobotName"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#noTIC">noTIC</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#fileAreaDefaults">fileAreaDefaults</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.3 RemoteFileRobotName</h4>
+
+<p><a name="index-RemoteFileRobotName-25"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>RemoteFileRobotName &lt;name&gt;</code>
+<br><dt>Пример:<dd><code>RemoteFileRobotName allfix</code>
+</dl>
+
+   <p>Имя удаленного робота filefix (нужно для FileForwardRequest).
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="noTIC"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#autoFileCreate">autoFileCreate</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#RemoteFileRobotName">RemoteFileRobotName</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.4 noTIC</h4>
+
+<p><a name="index-noTIC-26"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>noTIC &lt;bool&gt;</code>
+<br><dt>Пример:<dd><code>noTIC yes</code>
+</dl>
+
+   <p>Отключить создание файлов TIC.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="autoFileCreate"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AutoFileCreateFile">AutoFileCreateFile</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#noTIC">noTIC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.5 autoFileCreate</h4>
+
+<p><a name="index-autoFileCreate-27"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>autoFileCreate &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>autoFileCreate on</code>
+</dl>
+
+   <p>Разрешить или запретить автосоздание файлэх, полученных от этого линка.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="AutoFileCreateFile"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AutoFileCreateDefaults">AutoFileCreateDefaults</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#autoFileCreate">autoFileCreate</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.6 AutoFileCreateFile</h4>
+
+<p><a name="index-AutoFileCreateFile-28"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AutoFileCreateFile &lt;file&gt;</code>
+<br><dt>Пример:<dd><code>AutoFileCreateFile /usr/local/fido/hpt/config.filefix</code>
+</dl>
+
+   <p>Указывает файл, в который будет помещено описание новой файлобласти.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="AutoFileCreateDefaults"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AutoFileCreateSubdirs">AutoFileCreateSubdirs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AutoFileCreateFile">AutoFileCreateFile</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.7 AutoFileCreateDefaults</h4>
+
+<p><a name="index-AutoFileCreateDefaults-29"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AutoFileCreateDefaults &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>AutoFileCreateDefaults -lw 100 -g Z</code>
+</dl>
+
+   <p>Определяет умолчания новой файлобласти при автокриейте. 
+Не стоит использовать здесь указания каких-либо
+путей или passthrough - для этого существует отдельный токен - LinkFileBaseDir. 
+See <a href="#LinkFileBaseDir">LinkFileBaseDir</a>.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="AutoFileCreateSubdirs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#delNotReceivedTIC">delNotReceivedTIC</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AutoFileCreateDefaults">AutoFileCreateDefaults</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.8 AutoFileCreateSubdirs</h4>
+
+<p><a name="index-AutoFileCreateSubdirs-30"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AutoFileCreateSubdirs &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>AutoFileCreateSubdirs on</code>
+</dl>
+
+   <p>Автосоздавать арии как /filebase/gfd.app.edit (off) или как
+/filebase/gfd/app/edit (on). 
+Если вы хотите установить эту опцию глобально, а не для каждого линка по
+отдельности, установите ее в секции deflink. Также см. 'AutoAreaCreateSubdirs'
+в документации на hpt.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="delNotReceivedTIC"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileFixFSC87Subset">FileFixFSC87Subset</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AutoFileCreateSubdirs">AutoFileCreateSubdirs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.9 delNotReceivedTIC</h4>
+
+<p><a name="index-delNotReceivedTIC-31"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>delNotReceivedTIC &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>delNotReceivedTIC on</code>
+</dl>
+
+   <p>Удалять TIC, если файл не был принят.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="FileFixFSC87Subset"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#TickerPackToBox">TickerPackToBox</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#delNotReceivedTIC">delNotReceivedTIC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.10 FileFixFSC87Subset</h4>
+
+<p><a name="index-FileFixFSC87Subset-32"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileFixFSC87Subset &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>FileFixFSC87Subset on</code>
+</dl>
+
+   <p>Этот булевый переключатель определяет, как будут обрабатываться файлы TIC для
+каждого линка. Значение по умолчанию ON. В процессе обработки файлов TIC htick
+будет реагировать только на совместимые с FSC87 ключевые слова и игнорировать
+неизвестные. Если переключатель установлен в OFF, будут использованы все
+поддерживаемые ключевые слова, что может привести (а при работе с некоторыми
+файл-процессорами, ПРИВЕДЕТ) к серьезным проблемам. Неизвестные ключевые слова,
+найденные в TIC, вынудят htick прекратить обработку этого файла. Если вы не
+представляете, что все это значит, установите <code>FileFixFSC87Subset</code> в ON для
+всех линков. Это не повредит.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="TickerPackToBox"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#LinkFileBaseDir">LinkFileBaseDir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileFixFSC87Subset">FileFixFSC87Subset</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.11 TickerPackToBox</h4>
+
+<p><a name="index-TickerPackToBox-33"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>TickerPackToBox &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>TickerPackToBox on</code>
+</dl>
+
+   <p>Если для линка определен файлбокс - тоссить файлы и TIC'и в нем.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="LinkFileBaseDir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ForwardFileRequests">ForwardFileRequests</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#TickerPackToBox">TickerPackToBox</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.12 LinkFileBaseDir</h4>
+
+<p><a name="index-LinkFileBaseDir-34"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>LinkFileBaseDir &lt;directory&gt;</code>
+<br><dt>Пример:<dd><code>LinkFileBaseDir /usr/local/fido/fileareas/2.5097.64.0</code>
+</dl>
+
+   <p>Куда будут помещены автосозданные файлобласти (может быть "passthrough").
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="ForwardFileRequests"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ForwardFilePriority">ForwardFilePriority</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#LinkFileBaseDir">LinkFileBaseDir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.13 ForwardFileRequests</h4>
+
+<p><a name="index-ForwardFileRequests-35"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ForwardFileRequests &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>ForwardFileRequests on</code>
+</dl>
+
+   <p>Разрешить форвард-реквесты файлобластей на этого линка.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="ForwardFilePriority"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ForwardFileRequestFile">ForwardFileRequestFile</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ForwardFileRequests">ForwardFileRequests</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.14 ForwardFilePriority</h4>
+
+<p><a name="index-ForwardFilePriority-36"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ForwardFilePriority &lt;number&gt;</code>
+<br><dt>Пример:<dd><code>ForwardFilePriority 1</code>
+</dl>
+
+   <p>Приоритет аплинка при форвард-реквестах подписок на файлобласти.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="ForwardFileRequestFile"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileFix">FileFix</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ForwardFilePriority">ForwardFilePriority</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.15 ForwardFileRequestFile</h4>
+
+<p><a name="index-ForwardFileRequestFile-37"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>ForwardFileRequestFile &lt;file&gt;</code>
+<br><dt>Пример:<dd><code>ForwardFileRequestFile /usr/local/fido/hpt/uplink1.lst</code>
+</dl>
+
+   <p>Список доступных у этого линка файлобластей.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="FileFix"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileFixEchoLimit">FileFixEchoLimit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ForwardFileRequestFile">ForwardFileRequestFile</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.16 FileFix</h4>
+
+<p><a name="index-FileFixEcho-38"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>filefix &lt;bool&gt;</code>
+<br><dt>Пример:<dd><code>filefix off</code>
+</dl>
+
+   <p>По умолчанию filefix включен (on). Вы можете отключить использование этим линком
+filefix'а.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="FileFixEchoLimit"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileArea-Definition">FileArea Definition</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileFix">FileFix</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Link-Keywords">Link Keywords</a>
+
+</div>
+
+<h4 class="subsection">4.2.17 FileFixEchoLimit</h4>
+
+<p><a name="index-FileFixEchoLimit-39"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileFixEchoLimit &lt;number&gt;</code>
+<br><dt>Пример:<dd><code>FileFixEchoLimit 10</code>
+</dl>
+
+   <p>Лимит подписки на области (максимальное количество файлобластей, на которое этот
+линк может подписаться).
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="FileArea-Definition"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#FileArea">FileArea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileFixEchoLimit">FileFixEchoLimit</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Configuration-Reference">Configuration Reference</a>
+
+</div>
+
+<h3 class="section">4.3 Определение файлобласти.</h3>
+
+<ul class="menu">
+<li><a accesskey="1" href="#FileArea">FileArea</a>:                      Определение файлобласти. 
+</ul>
+
+<div class="node">
+<a name="FileArea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Announce-System">Announce System</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileArea-Definition">FileArea Definition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#FileArea-Definition">FileArea Definition</a>
+
+</div>
+
+<h4 class="subsection">4.3.1 FileArea</h4>
+
+<p><a name="index-FileArea-40"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>FileArea &lt;name&gt; &lt;fileareapath&gt; [options] &lt;uplink&gt; &lt;downlinks&gt;</code>
+<br><dt>Пример:<dd><code>FileArea husky /var/spool/fido/fileareas/husky -a 2:5097/31 -p 28 -g Z -d "HUSKY fileecho" 2:5097/64 2:5097/303</code>
+</dl>
+
+   <p>Подобно EchoArea, доступно большинство опций:
+
+     <dl>
+<dt>-a &lt;address&gt;<dd>Наш адрес в этой области.
+
+     <br><dt>-d "&lt;string&gt;"<dd>Описание этой области.
+
+     <br><dt>-g &lt;group&gt;<dd>Группа этой области.
+
+     <br><dt>-hide<dd>Спрятать область (не показывать по %LIST и в анонсах).
+
+     <br><dt>-nohide<dd>Показывать область по %LIST и в анонсах, если fileareadefaults установлено в
+<code>-hide</code>.
+
+     <br><dt>-lr &lt;number&gt;<dd>"Уровень для чтения": минимальный уровень линка, необходимый для того, чтобы
+посылать ему файлы из этой области. 
+Должен быть неотрицательным.
+
+     <br><dt>-lw &lt;number&gt;<dd>"Уровень для записи": минимальный уровень линка, необходимый для того, чтобы
+постить в область файлы, полученные от него. 
+Должен быть неотрицательным.
+
+     <br><dt>-mandatory<dd>Запретить удаленную отписку (отключить соответствующую команду filefix).
+
+     <br><dt>-nomandatory<dd>Разрешить удаленную отписку (включить соответствующую команду filefix), если
+fileareadefaults установлено в <code>-mandatory</code>.
+
+     <br><dt>-manual<dd>Запретить удаленную подписку (отключить соответствующую команду filefix).
+
+     <br><dt>-nomanual<dd>Разрешить удаленную подписку (включить соответствующую команду filefix), если
+fileareadefaults установлено в <code>-manual</code>.
+
+     <br><dt>-noCRC<dd>Отключить проверку CRC входящих файлов.
+
+     <br><dt>-CRC<dd>Включить проверку CRC входящих файлов, если fileareadefaults установлено в
+<code>-noCRC</code>.
+
+     <br><dt>-nodiz<dd>Не пытаться получить описание файла из &lt;fileDescName&gt; (для архивных файлов).
+
+     <br><dt>-diz<dd>Попытаться получить описание файла из &lt;fileDescName&gt; (для архивных файлов), если
+fileareadefaults установлено в <code>-nodiz</code>.
+
+     <br><dt>-pause<dd>Эффект %PAUSE для этой области.
+
+     <br><dt>-nopause<dd>Отключить эффект %PAUSE для этой области, если fileareadefaults установлено в
+<code>-pause</code>.
+
+     <br><dt>-noreplace<dd>Не заменять существующие в этой области файлы.
+
+     <br><dt>-replace<dd>Заменять существующие в этой области файлы, если fileareadefaults установлено в
+<code>-noreplace</code>.
+
+     <br><dt>-p &lt;integer&gt;<dd>Пуржить каждые n дней. Установка в 0 (значение по умолчанию) отключает пуржинг.
+
+     <br><dt>-sendorig<dd>Посылать файлы из PassFileAreaDir для не-passthrough областей.
+
+     <br><dt>-nosendorig<dd>Посылать файлы из директории файлобласти для не-passthrough областей, если
+fileareadefaults установлено в <code>-sendorig</code>.
+
+   </dl>
+
+<div class="node">
+<a name="Announce-System"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnounceSpool">AnnounceSpool</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#FileArea">FileArea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Configuration-Reference">Configuration Reference</a>
+
+</div>
+
+<h3 class="section">4.4 Система анонсов</h3>
+
+<p>htick имеет гибкую систему анонсов, которые могут различаться для разных
+файлобластей. 
+Токен <code>AnnAreaTag</code> начинает новую секцию определения анонса, другие токены
+определяют списки файлобластей, включенных в анонс, и описывают формат анонса.
+
+   <p>Запустите <code>htick announce</code>, чтобы постить анонсы.
+
+   <p>Вы можете отключить анонсы - просто удалите <code>AnnounceSpool</code> из своего
+конфига.
+
+<ul class="menu">
+<li><a accesskey="1" href="#AnnounceSpool">AnnounceSpool</a>:          Директория для накапливания информации для анонсов. 
+<li><a accesskey="2" href="#AnnAreaTag">AnnAreaTag</a>:             Имя области или файла, куда будет помещен анонс. 
+<li><a accesskey="3" href="#AnnInclude">AnnInclude</a>:             Массив масок файлэх, которые будут анонсированы в
+                          этом annAreaTag. 
+<li><a accesskey="4" href="#AnnExclude">AnnExclude</a>:             Массив масок файлэх, которые не будут анонсированы в
+                          этом annAreaTag. 
+<li><a accesskey="5" href="#AnnTo">AnnTo</a>:                  Имя получателя в письме с анонсом. 
+<li><a accesskey="6" href="#AnnFrom">AnnFrom</a>:                Имя отправителя в письме с анонсом. 
+<li><a accesskey="7" href="#AnnSubj">AnnSubj</a>:                Тема в письме с анонсом. 
+<li><a accesskey="8" href="#AnnAddrTo">AnnAddrTo</a>:              Адрес получателя в письме с анонсом (используйте
+                          только для нетмейловых областей). 
+<li><a accesskey="9" href="#AnnAddrFrom">AnnAddrFrom</a>:            Адрес отправителя в письме с анонсом. 
+<li><a href="#AnnOrigin">AnnOrigin</a>:              Origin в письме с анонсом. 
+<li><a href="#AnnMessFlags">AnnMessFlags</a>:           Атрибуты письма с анонсом (k/s loc hld ...). 
+<li><a href="#AnnFileRFrom">AnnFileRFrom</a>:           Указывать в анонсе: адрес системы, от которой был
+                          получен файл. 
+<li><a href="#AnnFileOrigin">AnnFileOrigin</a>:          Указывать в анонсе: адрес системы, которая захатчила
+                          файл. 
+<li><a href="#Announcements-example">Announcements example</a>:  Пример для понимания анонсов (из действующего конфига).
+
+   </ul>
+
+<div class="node">
+<a name="AnnounceSpool"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnAreaTag">AnnAreaTag</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Announce-System">Announce System</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.1 AnnounceSpool</h4>
+
+<p><a name="index-AnnounceSpool-41"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnounceSpool &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>AnnounceSpool /var/spool/fido/announce</code>
+</dl>
+
+   <p>Директория для накапливания информации для анонсов.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="AnnAreaTag"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnInclude">AnnInclude</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnounceSpool">AnnounceSpool</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.2 AnnAreaTag</h4>
+
+<p><a name="index-AnnAreaTag-42"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnAreaTag &lt;AREATAG|@filename&gt;</code>
+<br><dt>Пример:<dd><code>AnnAreaTag local.announce</code>
+</dl>
+
+   <p>Начинает новую секцию определения анонса. &lt;AREATAG&gt; - имя области, в которую
+будет помещен анонс; &lt;@filename&gt; - имя файла с префиксом '@', в который будет
+помещен анонс.
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="AnnInclude"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnExclude">AnnExclude</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnAreaTag">AnnAreaTag</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.3 AnnInclude</h4>
+
+<p><a name="index-AnnInclude-43"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnInclude &lt;fileecho mask list&gt;</code>
+<br><dt>Пример:<dd><code>AnnInclude *</code>
+</dl>
+
+   <p>Массив имен|масок файлобластей, которые будут анонсированы в этом annAreaTag. 
+По умолчанию: все файлобласти.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnExclude"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnTo">AnnTo</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnInclude">AnnInclude</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.4 AnnExclude</h4>
+
+<p><a name="index-AnnExclude-44"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnExclude &lt;fileecho mask list&gt;</code>
+<br><dt>Пример:<dd><code>AnnExclude aftnged</code>
+</dl>
+
+   <p>Массив имен|масок файлобластей, которые не будут анонсированы в этом annAreaTag.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnTo"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnFrom">AnnFrom</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnExclude">AnnExclude</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.5 AnnTo</h4>
+
+<p><a name="index-AnnTo-45"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnTo &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>AnnTo All</code>
+</dl>
+
+   <p>Имя получателя в письме с анонсом.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnFrom"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnSubj">AnnSubj</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnTo">AnnTo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.6 AnnFrom</h4>
+
+<p><a name="index-AnnFrom-46"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnFrom &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>AnnFrom Announce Robot</code>
+</dl>
+
+   <p>Имя отправителя в письме с анонсом.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnSubj"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnAddrTo">AnnAddrTo</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnFrom">AnnFrom</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.7 AnnSubj</h4>
+
+<p><a name="index-AnnSubj-47"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnSubj &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>AnnSubj New files arrived</code>
+</dl>
+
+   <p>Тема в письме с анонсом.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnAddrTo"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnAddrFrom">AnnAddrFrom</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnSubj">AnnSubj</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.8 AnnAddrTo</h4>
+
+<p><a name="index-AnnAddrTo-48"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnAddrTo &lt;address&gt;</code>
+<br><dt>Пример:<dd><code>AnnAddrTo 2:5097/31.1</code>
+</dl>
+
+   <p>Адрес получателя в письме с анонсом (используйте для нетмейловых областей).
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnAddrFrom"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnOrigin">AnnOrigin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnAddrTo">AnnAddrTo</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.9 AnnAddrFrom</h4>
+
+<p><a name="index-AnnAddrFrom-49"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnAddrFrom &lt;address&gt;</code>
+<br><dt>Пример:<dd><code>AnnAddrFrom 2:5097/31</code>
+</dl>
+
+   <p>Адрес отправителя в письме с анонсом.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnOrigin"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnMessFlags">AnnMessFlags</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnAddrFrom">AnnAddrFrom</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.10 AnnOrigin</h4>
+
+<p><a name="index-AnnOrigin-50"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnOrigin &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>AnnOrigin New files!</code>
+</dl>
+
+   <p>Origin в письме с анонсом.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnMessFlags"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnFileRFrom">AnnFileRFrom</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnOrigin">AnnOrigin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.11 AnnMessFlags</h4>
+
+<p><a name="index-AnnMessFlags-51"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnMessFlags &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>AnnMessFlags loc hld</code>
+</dl>
+
+   <p>Флаги письма с анонсом (k/s loc hld ...).
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnFileRFrom"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#AnnFileOrigin">AnnFileOrigin</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnMessFlags">AnnMessFlags</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.12 AnnFileRFrom</h4>
+
+<p><a name="index-AnnFileRFrom-52"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnFileRFrom &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>AnnFileRFrom on</code>
+</dl>
+
+   <p>Указывать в анонсе: адрес системы, от которой был получен файл.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="AnnFileOrigin"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Announcements-example">Announcements example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnFileRFrom">AnnFileRFrom</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.13 AnnFileOrigin</h4>
+
+<p><a name="index-AnnFileOrigin-53"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>AnnFileOrigin &lt;on|off&gt;</code>
+<br><dt>Пример:<dd><code>AnnFileOrigin on</code>
+</dl>
+
+   <p>Указывать в анонсе: адрес системы, которая захатчила файл.
+
+   <p>Этот оператор может повторяться только для разных AnnAreaTag.
+
+<div class="node">
+<a name="Announcements-example"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Common-husky-keywords">Common husky keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#AnnFileOrigin">AnnFileOrigin</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Announce-System">Announce System</a>
+
+</div>
+
+<h4 class="subsection">4.4.14 Пример анонсов</h4>
+
+<p><a name="index-g_t_00f0_00d2_00c9_00cd_00c5_00d2-_00c1_00ce_00cf_00ce_00d3_00cf_00d7-54"></a>
+Следующий текст взят из действующего конфигурационного файла.
+
+<pre class="example">     #= Определения анонсов =====================================
+     AnnounceSpool   E:\FIDO\EXCH\report
+     
+     # сообщать обо всех пришедших файлах в файл e:\fido\rep.txt
+     AnnAreaTag      @e:\fido\rep.txt
+     AnnFileOrigin   on
+     
+     # сообщать в область 'seumbieky.news' о файлах, захатченных
+     # в группу файлэх 'union.*'
+     AnnAreaTag      seumbieky.news
+     AnnInclude      union.*
+     AnnSubj         New mp3's arrives
+     AnnTo           United mp3 fans
+     AnnFrom         Fullfeed Distribution Site
+     AnnOrigin       *** seumbieky forever ***
+     AnnFileOrigin   on
+     AnnFileRfrom    on
+     
+     # сообщать о файлах в группе файлэх 'uue.*' в область
+     # 'seumbieky.news'
+     AnnAreaTag      seumbieky.news
+     AnnInclude      uue.*
+     
+     # сообщать в область 'seumbieky.news' о файлах во всех
+     # группах, кроме 'uue.*' и 'union.*'
+     AnnAreaTag      seumbieky.news
+     AnnExclude      uue.* union.*
+     
+     # сообщать нетмейлом на заданный адрес
+     AnnAreaTag      netmail
+     AnnInclude      union.*
+     AnnSubj         New mp3's arrives
+     AnnTo           Max Inda Houze
+     Annaddrto       2:464/108
+     AnnFrom         Fullfeed Distribution Site
+     Annaddrfrom     2:464/910.108
+     AnnOrigin       *** seumbieky forever ***
+     AnnMessFlags    k/s loc hld
+     AnnFileOrigin   on
+     AnnFileRfrom    on
+     #= Конец определений анонсов ===============================
+</pre>
+   <div class="node">
+<a name="Common-husky-keywords"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Keyword-Index">Keyword Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Announcements-example">Announcements example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Configuration-Reference">Configuration Reference</a>
+
+</div>
+
+<h4 class="subsection">4.4.15 Общие ключевые слова husky</h4>
+
+<p><a name="index-g_t_00ef_00c2_00dd_00c9_00c5-_00cb_00cc_00c0_00de_00c5_00d7_00d9_00c5-_00d3_00cc_00cf_00d7_00c1-husky-55"></a>
+Список ключевых слов, используемых многими программами husky. Подробнее см. в
+документации на fidoconfig.
+
+     <dl>
+<dt><code>BBSArea</code><br><dt><code>LogLevels</code><dd>... 
+</dl>
+
+<div class="node">
+<a name="Keyword-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Common-husky-keywords">Common husky keywords</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A Список ключевых слов конфигурационного файла</h2>
+
+<ul class="index-fn" compact>
+<li><a href="#index-addDLC-12"><code>addDLC</code></a>: <a href="#addDLC">addDLC</a></li>
+<li><a href="#index-AnnAddrFrom-49"><code>AnnAddrFrom</code></a>: <a href="#AnnAddrFrom">AnnAddrFrom</a></li>
+<li><a href="#index-AnnAddrTo-48"><code>AnnAddrTo</code></a>: <a href="#AnnAddrTo">AnnAddrTo</a></li>
+<li><a href="#index-AnnAreaTag-42"><code>AnnAreaTag</code></a>: <a href="#AnnAreaTag">AnnAreaTag</a></li>
+<li><a href="#index-AnnExclude-44"><code>AnnExclude</code></a>: <a href="#AnnExclude">AnnExclude</a></li>
+<li><a href="#index-AnnFileOrigin-53"><code>AnnFileOrigin</code></a>: <a href="#AnnFileOrigin">AnnFileOrigin</a></li>
+<li><a href="#index-AnnFileRFrom-52"><code>AnnFileRFrom</code></a>: <a href="#AnnFileRFrom">AnnFileRFrom</a></li>
+<li><a href="#index-AnnFrom-46"><code>AnnFrom</code></a>: <a href="#AnnFrom">AnnFrom</a></li>
+<li><a href="#index-AnnInclude-43"><code>AnnInclude</code></a>: <a href="#AnnInclude">AnnInclude</a></li>
+<li><a href="#index-AnnMessFlags-51"><code>AnnMessFlags</code></a>: <a href="#AnnMessFlags">AnnMessFlags</a></li>
+<li><a href="#index-AnnOrigin-50"><code>AnnOrigin</code></a>: <a href="#AnnOrigin">AnnOrigin</a></li>
+<li><a href="#index-AnnounceSpool-41"><code>AnnounceSpool</code></a>: <a href="#AnnounceSpool">AnnounceSpool</a></li>
+<li><a href="#index-AnnSubj-47"><code>AnnSubj</code></a>: <a href="#AnnSubj">AnnSubj</a></li>
+<li><a href="#index-AnnTo-45"><code>AnnTo</code></a>: <a href="#AnnTo">AnnTo</a></li>
+<li><a href="#index-autoFileCreate-27"><code>autoFileCreate</code></a>: <a href="#autoFileCreate">autoFileCreate</a></li>
+<li><a href="#index-AutoFileCreateDefaults-29"><code>AutoFileCreateDefaults</code></a>: <a href="#AutoFileCreateDefaults">AutoFileCreateDefaults</a></li>
+<li><a href="#index-AutoFileCreateFile-28"><code>AutoFileCreateFile</code></a>: <a href="#AutoFileCreateFile">AutoFileCreateFile</a></li>
+<li><a href="#index-AutoFileCreateFlag-21"><code>AutoFileCreateFlag</code></a>: <a href="#AutoFileCreateFlag">AutoFileCreateFlag</a></li>
+<li><a href="#index-AutoFileCreateSubdirs-30"><code>AutoFileCreateSubdirs</code></a>: <a href="#AutoFileCreateSubdirs">AutoFileCreateSubdirs</a></li>
+<li><a href="#index-BBSarea-17"><code>BBSarea</code></a>: <a href="#BBSarea">BBSarea</a></li>
+<li><a href="#index-BusyFileDir-9"><code>BusyFileDir</code></a>: <a href="#BusyFileDir">BusyFileDir</a></li>
+<li><a href="#index-ConvertLongNames-10"><code>ConvertLongNames</code></a>: <a href="#ConvertLongNames">ConvertLongNames</a></li>
+<li><a href="#index-ConvertShortNames-11"><code>ConvertShortNames</code></a>: <a href="#ConvertShortNames">ConvertShortNames</a></li>
+<li><a href="#index-delNotReceivedTIC-31"><code>delNotReceivedTIC</code></a>: <a href="#delNotReceivedTIC">delNotReceivedTIC</a></li>
+<li><a href="#index-DLCDigits-13"><code>DLCDigits</code></a>: <a href="#DLCDigits">DLCDigits</a></li>
+<li><a href="#index-ExecOnFile-6"><code>ExecOnFile</code></a>: <a href="#ExecOnFile">ExecOnFile</a></li>
+<li><a href="#index-FileArea-40"><code>FileArea</code></a>: <a href="#FileArea">FileArea</a></li>
+<li><a href="#index-FileAreaBaseDir-1"><code>FileAreaBaseDir</code></a>: <a href="#FileAreaBaseDir">FileAreaBaseDir</a></li>
+<li><a href="#index-FileAreaCreatePerms-19"><code>FileAreaCreatePerms</code></a>: <a href="#FileAreaCreatePerms">FileAreaCreatePerms</a></li>
+<li><a href="#index-fileAreaDefaults-24"><code>fileAreaDefaults</code></a>: <a href="#fileAreaDefaults">fileAreaDefaults</a></li>
+<li><a href="#index-fileDescName-18"><code>fileDescName</code></a>: <a href="#fileDescName">fileDescName</a></li>
+<li><a href="#index-FileDescPos-3"><code>FileDescPos</code></a>: <a href="#FileDescPos">FileDescPos</a></li>
+<li><a href="#index-fileEchoFlavour-23"><code>fileEchoFlavour</code></a>: <a href="#fileEchoFlavour">fileEchoFlavour</a></li>
+<li><a href="#index-FileFixEcho-38"><code>FileFixEcho</code></a>: <a href="#FileFix">FileFix</a></li>
+<li><a href="#index-FileFixEchoLimit-39"><code>FileFixEchoLimit</code></a>: <a href="#FileFixEchoLimit">FileFixEchoLimit</a></li>
+<li><a href="#index-FileFixFromName-20"><code>FileFixFromName</code></a>: <a href="#FileFixFromName">FileFixFromName</a></li>
+<li><a href="#index-FileFixFSC87Subset-32"><code>FileFixFSC87Subset</code></a>: <a href="#FileFixFSC87Subset">FileFixFSC87Subset</a></li>
+<li><a href="#index-FileFixHelp-5"><code>FileFixHelp</code></a>: <a href="#FileFixHelp">FileFixHelp</a></li>
+<li><a href="#index-filefixKillRequests-15"><code>filefixKillRequests</code></a>: <a href="#filefixKillRequests">filefixKillRequests</a></li>
+<li><a href="#index-FileFixNames-22"><code>FileFixNames</code></a>: <a href="#FileFixNames">FileFixNames</a></li>
+<li><a href="#index-filefixReportsAttr-16"><code>filefixReportsAttr</code></a>: <a href="#filefixReportsAttr">filefixReportsAttr</a></li>
+<li><a href="#index-fileLDescString-4"><code>fileLDescString</code></a>: <a href="#fileLDescString">fileLDescString</a></li>
+<li><a href="#index-ForwardFilePriority-36"><code>ForwardFilePriority</code></a>: <a href="#ForwardFilePriority">ForwardFilePriority</a></li>
+<li><a href="#index-ForwardFileRequestFile-37"><code>ForwardFileRequestFile</code></a>: <a href="#ForwardFileRequestFile">ForwardFileRequestFile</a></li>
+<li><a href="#index-ForwardFileRequests-35"><code>ForwardFileRequests</code></a>: <a href="#ForwardFileRequests">ForwardFileRequests</a></li>
+<li><a href="#index-LinkFileBaseDir-34"><code>LinkFileBaseDir</code></a>: <a href="#LinkFileBaseDir">LinkFileBaseDir</a></li>
+<li><a href="#index-MaxTicLineLength-8"><code>MaxTicLineLength</code></a>: <a href="#MaxTicLineLength">MaxTicLineLength</a></li>
+<li><a href="#index-noTIC-26"><code>noTIC</code></a>: <a href="#noTIC">noTIC</a></li>
+<li><a href="#index-PassFileAreaDir-2"><code>PassFileAreaDir</code></a>: <a href="#PassFileAreaDir">PassFileAreaDir</a></li>
+<li><a href="#index-RemoteFileRobotName-25"><code>RemoteFileRobotName</code></a>: <a href="#RemoteFileRobotName">RemoteFileRobotName</a></li>
+<li><a href="#index-SaveTic-7"><code>SaveTic</code></a>: <a href="#SaveTic">SaveTic</a></li>
+<li><a href="#index-TickerPackToBox-33"><code>TickerPackToBox</code></a>: <a href="#TickerPackToBox">TickerPackToBox</a></li>
+<li><a href="#index-ticOutbound-14"><code>ticOutbound</code></a>: <a href="#ticOutbound">ticOutbound</a></li>
+<li><a href="#index-g_t_00ef_00c2_00dd_00c9_00c5-_00cb_00cc_00c0_00de_00c5_00d7_00d9_00c5-_00d3_00cc_00cf_00d7_00c1-husky-55"><code>Общие ключевые слова husky</code></a>: <a href="#Common-husky-keywords">Common husky keywords</a></li>
+<li><a href="#index-g_t_00f0_00d2_00c9_00cd_00c5_00d2-_00c1_00ce_00cf_00ce_00d3_00cf_00d7-54"><code>Пример анонсов</code></a>: <a href="#Announcements-example">Announcements example</a></li>
+</ul></body></html>
+

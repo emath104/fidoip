@@ -1,0 +1,26 @@
+SQPACK(1)                                                            SQPACK(1)
+
+NAME
+       sqpack - purges squish msgbases taken from fidoconfig
+
+SYNTAX
+       Purge areas
+
+       sqpack <areamask>
+
+       from script: sqpack "*"
+
+DESCRIPTION
+       sqPack  takes  the information about squish and jam msgbases from fido-
+       config and purges the msgbases according to the -m and  -p  statements.
+       See fidoconfig.
+AUTHOR
+       Matthias Tichy (mtt@tichy.de).
+
+                                 sqpack (v1.4)                       SQPACK(1)
+
+BUGS
+       hint:  if there is a core files after first tries to run sqpack - don't
+       worry!  Just edit /etc/fido/config. 99% of troubles comes from a  wrong
+       config file.  After that  please call tparser of the fidonet package to
+       check your config.

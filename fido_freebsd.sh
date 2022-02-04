@@ -1,4 +1,8 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # Usage:  fido_freebsd.sh login
 CWD=`pwd`
 OSNAME=`uname`
@@ -130,6 +134,33 @@ echo 'Error. Install this package manually, then rerun this script'
 exit
 fi
 fi
+
+
+echo ""
+if [ -e /usr/local/bin/screen  ]; then
+echo  'Found screen package.'
+else
+echo 'Screen package is not installed!'
+echo 'Trying to install it from ports'
+if [ -e /usr/ports/sysutils/screen/Makefile ]; then
+echo '-----------------------------------------------------------------------'
+echo 'using port /usr/ports/sysutils/screen/, begin compilation'
+sleep 5
+cd /usr/ports/sysutils/screen ; make install clean
+if [ -e /usr/local/bin/screen  ]; then
+echo '-------------------------------------------------------------------------'
+echo  'Wow! Found screen package now.'
+sleep 3
+else
+fi
+else
+echo '-----------------------------------------------------------------------'
+echo 'Sreen package is still not installed!                       '  
+echo 'Install this package manually, you may do it later'
+fi
+fi
+
+
 
 echo ""
 if [ -e /usr/local/bin/bash  ]; then
@@ -303,7 +334,7 @@ fi
 
 
 echo ""
-if [ -e /usr/local/lib/libsmapi.so.2  ]; then
+if [ -e /usr/local/lib/libsmapi.so  ]; then
 echo  'Found Husky HPT Smapi library.'
 else
 echo 'Husky HPT Smapi library is not installed!'
@@ -661,19 +692,6 @@ sh husky.freebsdBuild
 cd ../golded
 sh golded.freebsdBuild+
 
-# Add screen's settings for user:
-
-if [ -e /home/"$VAR_01"/.screenrc ]; then
-C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
-if [ "$C1" = "encodingutf8" ]; then
-echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
-sleep 3
-else
-cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
-fi
-else
-cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
-fi
 
 # Add logs for hpt:
 
@@ -708,38 +726,6 @@ else
   cat $CWD/golded/golded.log > /home/fido/golded.log
 fi
 fi
-
-
-echo ''
-echo '-----------------------------------------------------'
-echo "  Setting ownship and permission...                    "
-echo '-----------------------------------------------------'
-echo ''
-
-mkdir -p /var/run/binkd                                                            
-chown -R "$VAR_01":  /var/run/binkd
-
-chmod -R +x /home/fido
-chmod -R +x /usr/local/etc/golded+
-chmod -R +x /usr/local/etc/fido
-chmod -R +x /usr/local/bin/recv
-chmod -R +x /usr/local/bin/send
-
-chown "$VAR_01" /usr/local/bin/recv
-chown "$VAR_01" /usr/local/bin/send
-chown "$VAR_01": /usr/local/etc/binkd.cfg
-chown -R "$VAR_01": /home/fido
-chown -R "$VAR_01": /usr/local/etc/fidoip
-chown "$VAR_01": /home/$VAR_01/.screenrc
-chown -R "$VAR_01": /usr/local/etc/fido
-chown -R "$VAR_01": /usr/local/etc/golded+
-
-
-echo ''
-echo '--------------------------------------------------------'
-echo "  Ownship and permission for user "$VAR_01" are setted!"
-echo '--------------------------------------------------------'
-echo ''
 
 echo '-------------------------------------------------------'
 echo 'Checking installation of additional Husky programms...'

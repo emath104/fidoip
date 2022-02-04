@@ -1,14 +1,25 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # Usage:  relinkapps.sh
 CWD=`pwd`
 OSNAME=`uname`
 USERNAME=`whoami`
 
 T1="root"
+T2="Linux"
 if [ "$T1" = "$USERNAME" ]; then
 echo  ''
 else
 echo 'Please run this script as root' ; exit
+fi
+
+if [ "$OSNAME" = "$T2" ]; then
+echo ''
+else
+exit
 fi
 
 f1()

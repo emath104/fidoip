@@ -1,4 +1,8 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 #! This script will setup fidoip binaries without compiliation for you computer
 CWD=`pwd`
 OSNAME=`uname`
@@ -21,15 +25,15 @@ echo 'This script is intended to run only on Linux' ; exit
 fi
 
 ##  make sure libarchve archiver available
-bsdloc=`which ar`
+bsdloc=`which wget`
 
 if [ -x "$bsdloc" ]
 then
-    echo "ar decompressor utility found: $bsdloc"
+    echo "wget utility found: $bsdloc"
 else
-    echo "WARNING: ar not found."
-    echo "So it will not be possible to pack fidoip binary on this machine."
-    echo " Please install dpkg package from you repository"
+    echo "WARNING: wget not found."
+    echo "So it will not be possible to download fidoip binary on this machine."
+    echo " Please install wget package from you repository"
     echo " as described in fidoip.rus.* files."
     exit
 fi
@@ -46,26 +50,24 @@ if [ "$reply" = "y" ];
 
 if [ "$UNAME" = "x86_64" ]; then
 echo  'Extracting binary for x86_64 platform'
-set -e
-cp $CWD/lnx-packages/64bit/deb/fidoip_1.0.5-2_amd64.deb /tmp
+#cp $CWD/lnx-packages/64bit/deb/fidoip_1.0.5-4_amd64.deb /tmp
 cd /tmp
-ar x fidoip_1.0.5-2_amd64.deb
-rm -rf /tmp/fidoip_bin
-mkdir -p /tmp/fidoip_bin
-tar -xzpf /tmp/data.tar.gz -C /tmp/fidoip_bin
-cd /tmp/fidoip_bin
-cp -Rp * / > /dev/null 2>&1
+wget -c http://falcony.googlecode.com/files/fidoip-1.0.5.4-x86_64-3.tgz
+#ar x fidoip_1.0.5-4_amd64.deb
+#tar -xzpf /tmp/data.tar.gz -C /
+set -e
+tar -xzpf fidoip-1.0.5-4-x86_64-1.tgz -C /
+rm -rf /install
 else
 echo  "Extracting binary for "$UNAME" platform"
-set -e
-cp $CWD/lnx-packages/32bit/deb/fidoip_1.0.5-2_i386.deb /tmp
+#cp $CWD/lnx-packages/32bit/deb/fidoip_1.0.5-4_i386.deb /tmp
 cd /tmp
-ar x fidoip_1.0.5-2_i386.deb
-rm -rf /tmp/fidoip_bin
-mkdir -p /tmp/fidoip_bin
-tar -xzpf /tmp/data.tar.gz -C /tmp/fidoip_bin
-cd /tmp/fidoip_bin
-cp -Rp * / > /dev/null 2>&1
+#ar x fidoip_1.0.5-4_i386.deb
+#tar -xzpf /tmp/data.tar.gz -C /
+wget -c http://falcony.googlecode.com/files/fidoip-1.0.5.4-i486-3.tgz
+set -e
+tar -xzpf fidoip-1.0.5-4-i486-1.tgz -C /
+rm -rf /install
 fi
 
 

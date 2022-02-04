@@ -1,0 +1,34 @@
+#!/bin/bash                                                                   
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
+# return number days in current month                                         
+DAYS=`cal | grep 31 | sed "s|.*30 ||" | sed "s| ||g"`                         
+                                                                              
+if [ "31" = "$DAYS" ];                                                        
+then                                                                          
+echo "31"                                                                     
+exit                                                                          
+fi                                                                            
+                                                                              
+DAYS=`cal | grep 30 | sed "s|.*29 ||" | sed "s| ||g"`                         
+if [ "30" = "$DAYS" ];                                                        
+then                                                                          
+echo "30"                                                                     
+exit                                                                          
+fi                                                                            
+                                                                              
+DAYS=`cal | grep 29 | sed "s|.*28 ||" | sed "s| ||g"`                         
+if [ "29" = "$DAYS" ];                                                        
+then                                                                          
+echo "29"                                                                     
+exit                                                                          
+fi                                                                            
+                                                                              
+DAYS=`cal | grep 28 | sed "s|.*27 ||" | sed "s| ||g"`                         
+if [ "28" = "$DAYS" ];                                                        
+then                                                                          
+echo "28"                                                                     
+exit                                                                          
+fi 

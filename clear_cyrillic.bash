@@ -1,4 +1,8 @@
 #!/bin/bash
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # Usage:  bash ./clear_cyrillic.bash
 # Bash only!!! Do not use sh interpretator
 CWD=`pwd`

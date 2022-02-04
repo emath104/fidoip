@@ -1,0 +1,2321 @@
+<html lang="en">
+<head>
+<title>FidoConfig Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="FidoConfig Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">FidoConfig Manual</h1>
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">fidoconfig</h2>
+
+<p>Этот документ описывает использование fidoconfig для того, чтобы fido работало
+на вашей любимой платформе.
+
+   <p>Этот документ применим к fidoconfig версии 1.4. 
+<!-- @end ifinfo -->
+
+<ul class="menu">
+<li><a accesskey="1" href="#design-goals">design goals</a>:   чего мы хотим достичь
+<li><a accesskey="2" href="#config-file">config file</a>:    как это выглядит
+<li><a accesskey="3" href="#tparser">tparser</a>:        проверка вашего конфига
+<li><a accesskey="4" href="#converting">converting</a>:     конвертирование fidoconfig в конфиги golded и msged
+<li><a accesskey="5" href="#contact">contact</a>:        как связаться с автором
+</ul>
+
+<div class="node">
+<a name="design-goals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#config-file">config file</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Цели создания</h2>
+
+<p>Целью написания fidoconfig было создание единого конфигурационного файла для
+нескольких разных fido программ: редактора, тоссера и т.д. 
+Дополнительной целью было создание одной библиотеки (fidoconfig), которая может
+быть использована всеми программами. 
+Преимущество в том, что вам придется редактировать один конфигурационный файл,
+так что изменять параметры системы намного проще, чем в обычных программных
+пакетах. Также баги могут прокрасться только в одну библиотеку, а не в тысячи и
+тысячи библиотек. 
+Конфиг может быть использован во всех операционных системах. Библиотека также
+должна быть вполне портируемой.
+
+<div class="node">
+<a name="config-file"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#converting">converting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#design-goals">design goals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Конфигурационный файл</h2>
+
+<!-- this is the proposal info file -->
+<p>Это раздел описывает написание конфигурационного файла fidoconfig, используемые
+ключевые слова и расположение файла.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Location">Location</a>:  Расположение конфигурационного файла
+<li><a accesskey="2" href="#Syntax">Syntax</a>:    Синтаксис
+<li><a accesskey="3" href="#Keywords">Keywords</a>:  Ключевые слова
+<li><a accesskey="4" href="#HPT">HPT</a>:       HPT (Highly Portable Tosser)
+<li><a accesskey="5" href="#HTick">HTick</a>:     HTick (Husky Ticker)
+<li><a accesskey="6" href="#NLTools">NLTools</a>:   NLTools
+<li><a accesskey="7" href="#EmailPkt">EmailPkt</a>:  EmailPkt
+<li><a accesskey="8" href="#BSOpack">BSOpack</a>:   BSOpack
+<li><a accesskey="9" href="#herp">herp</a>:      Husky External Request Processor
+<li><a href="#Example">Example</a>:   Пример конфигурационного файла
+</ul>
+
+<div class="node">
+<a name="Location"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Syntax">Syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#config-file">config file</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.1 Расположение конфигурационного файла</h3>
+
+<p>Библиотека fidoconfig ищет конфигурационный файл в разных местах:
+
+     <dl>
+<dt>linux:<dd>/etc/fido/config
+<br><dt>freebsd:<dd>/usr/local/etc/fido/config
+<br><dt>os2/win32/и т.д.:<dd>в текущей директории
+</dl>
+
+   <p>Если вы собираете библиотеку с помощью huskymak.cfg, расположение может быть
+переопределено параметром CFGDIR.
+
+   <p>Также вы можете установить переменную окружения <code>FIDOCONFIG</code>, указывающую
+на конфигурационный файл:
+
+<pre class="example">     set FIDOCONFIG=e:\bbs\fidoconfig\config
+     
+     FIDOCONFIG=~/fidoconfig/config
+     export FIDOCONFIG
+</pre>
+   <p>Конфигурационный(е) файл(ы) должны быть доступны для чтения. Если вы
+собираетесь использовать возможности автосоздания арий HPT/HTICK/и т.д., файлы
+должны быть доступны для записи.
+
+<div class="node">
+<a name="Syntax"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Keywords">Keywords</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Location">Location</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.2 Синтаксис</h3>
+
+<p>Все символы <strong>не</strong> регистрозависимы.
+
+   <p>{&lt;whiteSpace&gt;} в начале строки игнорируется.
+
+   <p>Все ключевые слова обрабатываются по порядку, первое найденное подходящее слово
+признается действующим. Если допускается несколько ключевых слов одного типа,
+действующим считается <strong>последнее</strong>, подходящее ситуации. Другими словами,
+следующее определение перебивает предыдущее. 
+Если ключевое слово не найдено, используеся значение по умолчанию.
+
+   <p>"#" в начале строки или &lt;whiteSpace&gt;#&lt;whiteSpace&gt; в строке означают начало
+комментария. Комментарий заканчивается с концом строки. Символ комментария "#"
+может быть переопределен с помощью токена <code>commentChar</code>.
+
+   <p>Если первое слово в строке - неизвестно, программа выходит с сообщением об
+ошибке.
+
+   <p>Каждое ключевое слово должно находиться на отдельной строке.
+
+   <p>Параметры ключевых слов:
+     <dl>
+<dt><code>&lt;integer&gt;</code><dd>строка, содержащая целые числа, например: <code>1234567890</code>
+<br><dt><code>&lt;string&gt;</code><dd>текстовая строка
+<br><dt><code>&lt;bool&gt;</code><dd>может быть установлено в "1", "0", "yes", "no", "on", "off", а также без
+параметров (это означает "on"). 
+<br><dt><code>&lt;addr&gt;</code><dd>адресная строка вида zone:net/node[.point][@domain]
+<br><dt><dd>пример: <code>2:5000/117</code>
+<br><dt><code>&lt;file&gt;</code><dd>имя файла. путь может быть опущен. 
+<br><dt><code>&lt;path&gt;</code><dd>только путь. завершающий слэш не обязателен. 
+</dl>
+
+   <p>Замечание! <code>[&lt;parameter&gt;]</code> означает, что параметр может быть опущен.
+
+   <p>Библиотека FIDOCONFIG может устанавливать внутренние переменные:
+<pre class="example">     set basedir=/home/user/fido/
+</pre>
+   <p>Переменная <code>[OS]</code> автоматически устанавливается для следующих ОС:
+     <dl>
+<dt>UNIX<dd>Все unix-like ОС: Linux, *BSD, BeOS, ... 
+<br><dt>OS/2<br><dt>WIN<br><dt>MSDOS<dd>
+</dl>
+
+   <p>Вы можете установить что-то вроде:
+<pre class="example">     if [OS]==UNIX
+     tearline `uptime`
+     endif
+</pre>
+   <p>Некоторые программы могут быть скомпилированы с переменной <strong>module</strong>. Она
+может быть использована для ускорения парсинга конфига:
+
+<pre class="example">     if [module]==htick
+     include /etc/ftn/fileareas
+     endif
+</pre>
+   <p>Если работает <strong>HPT</strong>, файлобласти не парсятся, так как [module]==hpt.
+
+   <p>Доступны следующие modules:
+     <dl>
+<dt>hpt (Highly Portable Tosser)<br><dt>htick (Husky Ticker)<br><dt>hptutil<br><dt>hpucode<dd></dl>
+
+   <p>Также могут быть использованы <strong>внешние</strong> переменные:
+<pre class="example">     autoexec.bat:
+     SET VAR=myvar
+     
+     fidoconfig:
+     if [VAR]==myvar
+     ...
+     else
+     ...
+     endif
+     
+     ifdef UNIX
+     MsgBaseDir  [home]/msgbase
+     endif
+</pre>
+   <p>Вы можете использовать программный вывод через <code>`cmd`</code>. Это доступно
+только для UNIX и OS/2+EMX:
+<pre class="example">     Name Power Station under `uname -mrs`
+</pre>
+   <p>Список доступных команд:
+     <dl>
+set, if, if not, else, elseif, ifdef, ifndef, endif. 
+</dl>
+
+   <p>Вы можете сравнивать с шаблоном, используя =~ и !~ вместо == и !=:
+<pre class="example">     if [VAR] =~ *substr*
+     ...
+     endif
+     if [VAR] !~ bla?bla*
+     ...
+     endif
+</pre>
+   <div class="node">
+<a name="Keywords"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#HPT">HPT</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Syntax">Syntax</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.3 Общие для HUSKY-программ ключевые слова</h3>
+
+<p>Эти ключевые слова могут использоваться несколькими программами. Более
+спицифичные ключевые слова вы найдете в документациях соотвествующих программ.
+
+<ul class="menu">
+<li><a accesskey="1" href="#version">version</a>:                      версия fidoconfig
+<li><a accesskey="2" href="#name">name</a>:                         название вашей системы
+<li><a accesskey="3" href="#location">location</a>:                     ваше местоположение
+<li><a accesskey="4" href="#sysop">sysop</a>:                        ваше имя
+<li><a accesskey="5" href="#include">include</a>:                      включить файл
+<li><a accesskey="6" href="#address">address</a>:                      адрес вашей системы
+<li><a accesskey="7" href="#commentChar">commentChar</a>:                  символ комментария
+
+<li><a accesskey="8" href="#outbound">outbound</a>:                     путь к аутбаунду
+<li><a accesskey="9" href="#inbound">inbound</a>:                      путь к инбаунду
+<li><a href="#tempDir">tempDir</a>:                      путь к временным файлам (допустим виртуальный диск в памяти)
+<li><a href="#logfiledir">logfiledir</a>:                   путь к лог-файлам
+<li><a href="#syslogfacility">syslogfacility</a>:               средство использования syslog
+<li><a href="#loglevels">loglevels</a>:                    уровень вывода лога
+<li><a href="#screenloglevels">screenloglevels</a>:              уровень вывода лога на экран
+
+<li><a href="#seqdir">seqdir</a>:                       путь к msgid-последовательности
+<li><a href="#seqoutrun">seqoutrun</a>:                    макс. отклонение msgid-последовательности от текущего времени
+
+<li><a href="#pack">pack</a>:                         определение упаковщика
+<li><a href="#unpack">unpack</a>:                       определение распаковщика
+
+<li><a href="#link">link</a>:                         добавить линка в конфиг
+<li><a href="#linkdefaults">linkdefaults</a>:                 начало/конец/уничтожение настроек линка по умолчанию
+<li><a href="#aka">aka</a>:                          адрес линка
+<li><a href="#ouraka">ouraka</a>:                       наш aka для линка
+<li><a href="#password">password</a>:                     пароль по умолчанию для линка
+<li><a href="#pktpwd">pktpwd</a>:                       pkt пароль для линка
+<li><a href="#ticpwd">ticpwd</a>:                       ticker пароль для линка
+<li><a href="#areafixpwd">areafixpwd</a>:                   areafix пароль для линка
+<li><a href="#filefixpwd">filefixpwd</a>:                   filefix пароль для линка
+<li><a href="#bbspwd">bbspwd</a>:                       bbs пароль для линка (пользователя BBS)
+<li><a href="#sessionpwd">sessionpwd</a>:                   пароль на сессию для линка
+<li><a href="#handle">handle</a>:                       никнейм или указатель линка
+<li><a href="#packer">packer</a>:                       архиватор по умолчанию для линка
+
+<li><a href="#badarea">badarea</a>:                      описание badarea
+<li><a href="#dupearea">dupearea</a>:                     описание dupearea
+<li><a href="#echoarea">echoarea</a>:                     описание echoarea
+<li><a href="#netmailarea">netmailarea</a>:                  описание netmailarea
+<li><a href="#localarea">localarea</a>:                    описание области сообщений BBS
+<li><a href="#filearea">filearea</a>:                     описание filearea
+<li><a href="#bbsarea">bbsarea</a>:                      описание файловой области BBS
+</ul>
+
+<div class="node">
+<a name="version"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#name">name</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Keywords">Keywords</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.1 version</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>version &lt;integer&gt;.&lt;integer&gt;</code>
+<br><dt>Пример:<dd><code>version 0.13</code>
+</dl>
+
+   <p>Здесь вы указываете, к какой версии fidoconfig относится ваш конфиг. 
+В настоящее время этот оператор ничего не делает.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="name"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#location">location</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#version">version</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.2 name</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>name &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>name Leetebrok BBS</code>
+</dl>
+
+   <p>Здесь вы указываете название вашей системы.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="location"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#sysop">sysop</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#name">name</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.3 location</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>location &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>location Dusseldorf</code>
+</dl>
+
+   <p>Здесь вы указываете свое местоположение.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="sysop"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#include">include</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#location">location</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.4 sysop</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>sysop &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>sysop Matthias Tichy</code>
+</dl>
+
+   <p>С помощью этого ключевого слова вы указываете свое имя.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="include"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#address">address</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#sysop">sysop</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.5 include</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>include &lt;file&gt;</code>
+<br><dt>Пример:<dd><code>include /etc/fido/areas</code>
+</dl>
+
+   <p>Вы можете включать другие файлы в ваш конфигурационный файл. Например, если вы
+хотите иметь меняющиеся части конфига, вы можете включить файл и (через cron
+или вручную) изменять его содержание без изменения остального конфига. Вы также
+можете рзделить конфиг на несколько частей. Таким образом вы сможете иметь
+определения файларий отдельно от эхоарий. Это даст более легкий обзор конфига.
+
+   <p>Этот оператор может повторяться. Но не делайте рекурсивных включений, т.е. 
+включений файла, который включает другой файл, который включает первый. Хотя
+в большинстве случаев это будет обнаружено и исправлено, не исключен случай,
+когда обнаружение не произойдет.
+
+<div class="node">
+<a name="address"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#commentChar">commentChar</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#include">include</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.6 address</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>Address &lt;addr&gt;</code>
+<br><dt>Пример:<dd><code>Address 2:2433/1245</code>
+</dl>
+
+   <p>Эта команда указывает, какие aka имеет ваша система. Это оператор полностью
+5d-совместим, что означает, что вы можете иметь адреса вида
+<code>2:2433/1245.1@fidonet.org</code>. Первый адрес является основным и будет
+использоваться тоссером в различных случаях, например, если номер зоны не может
+быть получен из кладжа @INTL в нетмейловом письме.
+
+   <p>Этот оператор может повторяться. 
+<strong>fidoconfig не полностью поддерживает имя домена</strong>
+
+<div class="node">
+<a name="commentChar"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#outbound">outbound</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#address">address</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.7 commentChar</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>commentChar &lt;char&gt;</code>
+<br><dt>Пример:<dd><code>commentChar ;</code>
+</dl>
+
+   <p>Эта команда определяет символ, используемый для обозначения остатка строки как
+комментария. По умолчанию - '#'.
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="outbound"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#inbound">inbound</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#commentChar">commentChar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.8 outbound</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>outbound &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>outbound /var/spool/fido/out</code>
+</dl>
+
+   <p>Эта команда определяет ваш путь к binkley-style аутбаунду. Такой аутбаунд
+состоит из базового пути и поддиректорий. Каждая поддиректория предоставляет
+место для всех файлов одной зоны. Базовый путь - путь вашей зоны по умолчанию.
+
+   <p>Example:
+
+<pre class="example">
+          <dl>
+<dt>/var/spool/fido/out<dd>Эта директория содержит файлы для вашей базовой зоны. 
+<br><dt>/var/spool/fido/out.003<dd>Эта директория содержит файлы для 3-й зоны. 
+<br><dt>/var/spool/fido/out.00A<dd>Эта директория содержит файлы для 10-й зоны. 
+</dl>
+</pre>
+   <p>Директория зоны содержит flow-файлы для каждого узла. Flow-файл узла имеет имя
+вида NNNNFFFF.?lo
+
+<pre class="example">
+          <dl>
+<dt>NNNN<dd>4-значный номер сети узла в 16-ричном формате. 
+<br><dt>FFFF<dd>4-значный номер узла в 16-ричном формате. 
+<br><dt>?<dd>Здесь может быть выбран flavour почты. <strong>h</strong>-hold, <strong>c</strong>-crash,
+<strong>f</strong>-normal, <strong>d</strong>-direct, <strong>i</strong>-immediate. 
+</dl>
+</pre>
+   <p>Для пойнтов создаются поддиректории с именем flow-файла узла и суффиксом .pnt. 
+В этой директории имена flow-файлов имеют вид PPPPPPPP (8-значные номера пойнтов
+в 16-ричном формате).
+
+   <p>Для более глубокого понимания binkley-style outbound смотрите документацию
+binkley-term и исходные коды.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="inbound"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#tempDir">tempDir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#outbound">outbound</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.9 inbound</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>inbound &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>inbound /var/spool/fido/in</code>
+</dl>
+
+   <p>Эта команда определяет, где хранятся входящие файлы. Эта директория - базовая,
+что означает, что туда попадают файлы в случае непарольной сессии и если
+удаленная система не указана в нод- или пойнт-листах. Из этого инбаунда тоссится
+только нетмейл.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="tempDir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#logfiledir">logfiledir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#inbound">inbound</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.10 tempDir</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>tempDir &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>tempDir /var/tmp</code>
+</dl>
+
+   <p>Эта команда определяет путь, в котором должны храниться временные файлы ваших
+fido-програм. Эта директория может очищаться при загрузке системы. Хорошая идея
+- использовать для этого виртуальный диск в памяти.
+
+   <p>Значение по умолчанию - путь, определенный переменными окружения TEMP, TMP или
+TMPDIR (первой используется TEMP, если она не определена, то TMP, затем TMPDIR). 
+Если эти переменные окружения не определены:
+- win32 версии используют %WINDIR%\TEMP (обычно c:\windows\temp в Win9x/Me и
+  c:\winnt\temp в Windows NT/2000/XP)
+- версии для unix-like ОС используют /tmp
+- остальные версии используют c:\
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="logfiledir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#syslogfacility">syslogfacility</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#tempDir">tempDir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.11 logfiledir</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>logFileDir &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>logFileDir /var/spool/log/fido</code>
+</dl>
+
+   <p>Эта команда определяет путь, где должны храниться лог-файлы fido-программ.
+
+   <p>Этот оператор не может повторяться.
+
+   <p>Некоторые программы используют logFileDir для постоянных временных/рабочих
+файлов.
+
+<div class="node">
+<a name="syslogfacility"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#loglevels">loglevels</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#logfiledir">logfiledir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.12 syslogfacility</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>syslogFacility &lt;facility&gt;</code>
+<br><dt>Пример:<dd><code>syslogFacility local0</code>
+</dl>
+
+   <p>Некоторые программы Husky могут писать логи через syslogd вместо лог-файла. Для
+таких программ это ключевое слово определяет, какое средство использовать для
+записи в syslog. Syslogd будет использовать это средство для определения, в
+какой лог-файл syslog это лог-сообщение будет записано. Общие имена, которые
+могут быть использованы: <code>mail</code>, <code>news</code>, <code>uucp</code>, <code>local0</code>. 
+Точные значения зависят от вашей операционной системы. Более полная
+информация дана в man pages для <samp><span class="file">syslog.conf</span></samp> или
+<samp><span class="file">/usr/include/sys/syslog.h</span></samp>.
+
+   <p>Запись лога через syslogd поддерживается только для платформ UNIX, и в настоящее
+время используется только <samp><span class="file">herp</span></samp> и никакой другой программой Husky. Пишет
+ли программа в лог-файл или через syslog, или обоими способами, зависит только
+от программы, но не от вашего файла fidoconfig. Обращайтесь к собственной
+документации программы.
+
+<div class="node">
+<a name="loglevels"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#screenloglevels">screenloglevels</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#syslogfacility">syslogfacility</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.13 LogLevels</h4>
+
+<p><a name="index-LogLevels-1"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>loglevels &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>loglevels 1345789,A-F Q</code>
+</dl>
+
+   <p>Этот оператор определяет список уровней лога для записи в лог-файл. Тире
+означает диапазон (A-F раскрывается как ABCDEF). 
+Распознаются только чиловые и буквенные уровни лога, остальные игнорируются.
+
+   <p>В примере мы выводим в лог сообщения с уровнями 1,3,4,5,7,8,9,A,B,C,D,E,F,Q.
+
+   <p>Уровни детализации лога:
+
+     <dl>
+<dt>1 - начало, конец программы<br><dt>2 - проверка дупов<br><dt>3 - линковка сообщений<br><dt>4 - сканирование сообщений<br><dt>5 - размещение сообщений<br><dt>6 - строки запуска<br><dt>7 - бандлы, pkt, линки, фреки, роутинг файлов, файл-аттачи, паковка msg<br><dt>8 - areafix, relink, автосоздание арий<br><dt>9 - сообщения об ошибках (критических, обычно с выходом из программы)<br><dt>0 - создание файлов-флагов<br><dt>A - сообщения об обычных ошибках (вывод сообщения и продолжение выполнения)<br><dt>B - предупреждения<br><dt>C - информационные сообщения<br><dt>D - статистика<br><dt>E - суммарная статистика<br><dt>F - вывод названия и версии программы<br><dt>G - отправка/отправленное сообщение<br><dt>H - перекодировка и чтение/запись таблиц перекодировки<br><dt>I - генерация или проверка MSGID<br><dt>J - фаза эхомейла<br><dt>K - фаза файлбоксов<br><dt>L - фаза нетмейла<br><dt>M - создание файла<br><dt>N - удаление файла<br><dt>O - операции с открытым файлом (чтение, запись, поиск, ...)<br><dt>P - операции с директориями (создание, удаление, переименование, ...)<br><dt>Q - парсинг и создание E-mail сообщений<br><dt>R - усечение файла<br><dt>S - отправка/отправленный файл<br><dt>T - тест файлов (существование, права и т.д.)<br><dt>U - вызов функций (вход и выход из функции)<br><dt>V - зарезервировано<br><dt>W - зарезервировано<br><dt>X - создание имен файлов<br><dt>Y - линковка базы сообщений (некоторые фазы hptlink и т.д.)<br><dt>Z - отладочные сообщения: исходные строки (контрольные точки функций)<br><dt>a-z - отладочные сообщения<dd></dl>
+
+   <p>По умолчанию: 1234567890ABCDEF
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="screenloglevels"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#seqdir">seqdir</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#loglevels">loglevels</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.14 ScreenLogLevels</h4>
+
+<p><a name="index-ScreenLogLevels-2"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>screenloglevels &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>screenloglevels 2345789,A-C</code>
+</dl>
+
+   <p>Устанавливает уровни вывода лога на экран. Смотрите loglevels.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="seqdir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#seqoutrun">seqoutrun</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#screenloglevels">screenloglevels</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.15 seqdir</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>seqDir &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>seqDir /var/spool/fido/seq</code>
+</dl>
+
+   <p>Устанавливает путь к текущей msgid-последовательности.
+
+   <p>По умолчанию используется переменная окружения SEQDIR.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="seqoutrun"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#pack">pack</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#seqdir">seqdir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.16 seqoutrun</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>seqOutrun &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>seqOutrun 1m</code>
+</dl>
+
+   <p>Устанавливает максимальное превышение msgid-последоваельностью текущего времени.
+
+   <p>Используются десятичные числа с суффиксом (опционально).
+
+   <p>Суффиксы:
+
+     <dl>
+<dt>y - год (365 дней)<br><dt>m - месяц (31 день)<br><dt>w - неделя (7 дней)<br><dt>d - день<br><dt>h - час<dd></dl>
+
+   <p>Секунды устанавливаются без суффикса.
+
+   <p>По умолчанию используется переменная окружения SEQOUT или 3y, если она не
+определена.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="pack"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#unpack">unpack</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#seqoutrun">seqoutrun</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.17 Pack</h4>
+
+<p><a name="index-Pack-3"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>Pack zip|tgz|rar|arc|arj|..... &lt;call&gt;</code>
+<br><dt>Пример:<dd><code>Pack zip zip -9 -g -q $a $f</code>
+</dl>
+
+   <p>Это оператор определяет командную строку архиватора. 
+Файл будет перемещен в архив, что значит, что он будет удален с жесткого диска. 
+Он останется только в архиве.
+
+   <p>$a заменяется на имя файла архива.
+
+   <p>$f заменяется на имя файла, который должен быть упакован.
+
+   <p>Если какая-либо husky программа скомпилирована с hptzip, можно использовать
+следующее определение:
+<pre class="example">     
+     <code>Pack zip zipInternal</code>
+</pre>
+   <p>Этот оператор может повторяться.
+
+   <p>Смотрите также документацию к hpt и htick.
+
+<h4 class="subsection">2.3.18 Замечание</h4>
+
+<p>На некоторых ОС, если вызванная программа не найдена (не может быть запущена),
+результат команды pack не определен. (Например, DOS. Причина: command.com не
+возвращает код ошибки, если исполняемый файл не найден). 
+Чтобы устранить опасность, пожалуйста, прописывайте архиваторы с полными путями.
+
+<div class="node">
+<a name="unpack"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#link">link</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#pack">pack</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.19 Unpack</h4>
+
+<p><a name="index-Unpack-4"></a>
+     <dl>
+<dt>Синтаксис:<dd><code>Unpack "&lt;call&gt;" &lt;offset&gt; &lt;matchcode&gt;</code>
+<br><dt>Пример для DOS:<dd>
+     <pre class="example">          Unpack  "c:\arc\pkunpak /r $a $p $f"                 0 1a
+          Unpack  "c:\arc\pak e /wn $a $p"                    -2 fe
+          Unpack  "c:\arc\lha e /m $a $p $f"                   2 2d6c68
+          Unpack  "c:\arc\zoo e:O $a $p $f"                    0 5a4f4f
+          Unpack  "c:\arc\jar e -y $a $p $f"                  14 1a4a61721b
+          # *.rar
+          Unpack  "c:\arc\unrar e -y -c- -o+ -inul $a $p $f"   0 52617221
+          # rar-sfx/DOS
+          Unpack  "c:\arc\unrar e -y -c- -o+ -inul $a $p $f"  28 52534658
+          
+</pre>
+     <br><dt>Пример для Linux:<dd>
+     <pre class="example">          Unpack  "/usr/bin/zoo e:O $a $p $f"                    0 5a4f4f
+          Unpack  "/usr/bin/arc eno $a $p'*.*' $f"               0 1a
+          Unpack  "/usr/bin/unzip -joLqq $a -d $p $f"            0 504b0304
+          Unpack  "cd $p &amp;&amp; /usr/bin/unarj e $a $f&gt;/dev/null"    0 60ea
+          Unpack  "/usr/bin/unrar e -y -c- -o+ -inul $a $p $f"   0 52617221
+          Unpack  "/usr/bin/unrar e -y -c- -o+ -inul $a $p $f"  28 52534658
+          Unpack  "/usr/bin/jar e -y $a $p $f"                  14 1a4a61721b
+          Unpack  "cd $p &amp;&amp; /usr/bin/ha eyq -e $a $f"            0 4841
+</pre>
+     </dl>
+
+   <p>Этот оператор определяет вызовы определенных распаковщиков в соответствии с
+идентификатором в архивном файле.
+
+   <p><code>call</code> строка вызова архиватора (заключена в кавычки!);
+
+   <p><code>offset</code> позиция идентификатора в архивном файле;
+
+   <p><code>match code</code> идентификатор в 16-ричном виде, ?? раскрывается как "любой
+байт";
+
+   <p><code>$a</code> заменяется на файл, который должен быть извлечен из архива;
+
+   <p><code>$p</code> заменяется на путь, куда распаковывать файлы (обычно tempoutbound);
+
+   <p><code>$f</code> заменяется именем файла с описанием, если он существует (используется
+htick, смотрите токен FileDescName; возможно, и другими husky программами).
+
+<pre class="example">     
+     Пример: unpack "unzip -joLqq $a -d $p $f" 0 504b0304
+     
+            файлы, упакованные zip, распознаются по
+              504b0304(hex) по смещению 0(integer)
+            они могут быть распакованы htick с помощью команды
+            "unzip -joLqq &lt;filename&gt; -d &lt;path&gt; &lt;description_filename&gt;"
+     
+</pre>
+   <p>Если какая-либо husky программа скомпилирована с hptzip, можно использовать
+следующее определение:
+<pre class="example">     
+     <code>Unpack zip zipInternal 0 504b0304</code>
+</pre>
+   <p>Этот оператор может повторяться.
+
+   <p>Смотрите также документацию к hpt и htick.
+
+<h4 class="subsection">2.3.20 Замечание</h4>
+
+<p>На некоторых ОС, если вызванная программа не найдена (не может быть запущена),
+результат команды unpack не определен. (Например, DOS. Причина: command.com не
+возвращает код ошибки, если исполняемый файл не найден). 
+Чтобы устранить опасность, пожалуйста, прописывайте распаковщики с полными
+путями.
+
+<div class="node">
+<a name="link"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#linkdefaults">linkdefaults</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#unpack">unpack</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.21 link</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>link &lt;string&gt;</code>
+<br><dt>Пример:<dd><code>link Matthias Tichy</code>
+</dl>
+
+   <p>Этот оператор начинает новое описание линка. Все операторы (если они имеют
+отношение к линкам), находящиеся до следующего оператора link, меняют настройки
+только этого линка. Имя - это имя линка.
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="linkdefaults"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#aka">aka</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#link">link</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.22 linkdefaults</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>linkdefaults [begin | end | destroy]</code>
+<br><dt>Пример:<dd><code>linkdefaults</code>
+</dl>
+
+   <p>Этот оператор начинает секцию определений по умолчанию для линков. 
+Все последующие (относящиеся к линкам) операторы изменяют настройки линка по
+умолчанию до тех пор, пока не найден один из операторов <code>'link'</code>,
+<code>'linkdefaults end'</code>, <code>'linkdefaults destroy'</code>. 
+Все параметры, указанные в секциях linkdefaults, копируются в настройки линка
+всякий раз, когда в конфигурационном файле найден оператор <code>'link'</code>. 
+Относящиеся к линкам операторы, найденные после <code>'linkdefaults end'</code> или
+<code>'linkdefaults destroy'</code>, или до первого оператора <code>'link'</code> или
+<code>'linkdefaults'</code>, рассматриваются как ошибки. 
+Оператор <code>'linkdefaults'</code> без <code>'begin'</code> или <code>'end'</code> означает
+<code>'linkdefaults begin'</code>. 
+<code>'linkdefaults destroy'</code> уничтожает все настройки по умолчанию.
+
+   <p>Будьте осторожны с <code>Pause</code>, <code>Export</code> и т.д. ;-)
+
+   <p>Этот оператор может повторяться. Новые определения заменяют предыдущие.
+
+<div class="node">
+<a name="aka"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ouraka">ouraka</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#linkdefaults">linkdefaults</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.23 aka</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>aka &lt;addr&gt;</code>
+<br><dt>Пример:<dd><code>aka 2:2433/1245</code>
+</dl>
+
+   <p>Этот оператор определяет aka текущего линка.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="ouraka"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#password">password</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#aka">aka</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.24 ouraka</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>ouraka &lt;addr&gt;</code>
+<br><dt>Пример:<dd><code>ouraka 2:2433/1247</code>
+</dl>
+
+   <p>Этот оператор определяет aka, который используется с этим линком.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="password"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#pktpwd">pktpwd</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ouraka">ouraka</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.25 password</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>password [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>password secret</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль по умолчанию для линка. 
+Если вы не задаете другие пароли, они совпадают с этим. 
+Пароль регистронезависим.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="pktpwd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ticpwd">ticpwd</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#password">password</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.26 pktpwd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>pktpwd [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>pktpwd geheim</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль на pkt для данного линка. 
+Пароль должен быть не длиннее 8 символов (из-за ограничений другого ПО). 
+Допустимо пустое значение.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="ticpwd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#areafixpwd">areafixpwd</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#pktpwd">pktpwd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.27 ticpwd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>ticpwd [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>ticpwd geheim</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль на tic для данного линка. 
+Пароль должен быть не длиннее 8 символов (из-за ограничений другого ПО). 
+Допустимо пустое значение.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="areafixpwd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#filefixpwd">filefixpwd</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ticpwd">ticpwd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.28 areafixpwd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>areafixpwd [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>areafixpwd geheim</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль на areafix для данного линка. 
+Пустое значение допустимо, но не рекомендуется.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="filefixpwd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#bbspwd">bbspwd</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#areafixpwd">areafixpwd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.29 filefixpwd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>filefixpwd [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>filefixpwd geheim</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль на filefix для данного линка. 
+Пустое значение допустимо, но не рекомендуется.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="bbspwd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#sessionpwd">sessionpwd</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#filefixpwd">filefixpwd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.30 bbspwd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>bbspwd [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>bbspwd geheim</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль на BBS для данного линка. 
+Допустимо пустое значение.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="sessionpwd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#handle">handle</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#bbspwd">bbspwd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.31 sessionpwd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>sessionpwd [&lt;string&gt;]</code>
+<br><dt>Пример:<dd><code>sessionpwd geheim</code>
+</dl>
+
+   <p>Этот оператор устанавливает пароль на сессию для данного линка. 
+Допустимо пустое значение.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="handle"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#packer">packer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#sessionpwd">sessionpwd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.32 handle</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>handle &lt;name&gt;</code>
+<br><dt>Пример:<dd><code>handle eddie</code>
+</dl>
+
+   <p>Этот оператор задает никнейм линка. Он предназначается для BBS.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="packer"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#badarea">badarea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#handle">handle</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.33 packer</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>packer &lt;packer&gt;</code>
+<br><dt>Пример:<dd><code>packer zip</code>
+</dl>
+
+   <p>Это оператор устанавливает паковщик для линка. Вы можете использовать паковщик,
+который определили ранее оператором pack. 
+Если этот оператор отсутствует, или установлено <code>packer none</code>, почта не
+будет паковаться. Pkt будут складываться в аутбаунд.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="badarea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#dupearea">dupearea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#packer">packer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.34 badarea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>BadArea &lt;name&gt; &lt;file&gt; [-b &lt;msgbase&gt;] [Options]</code>
+<br><dt>Пример:<dd><code>BadArea badarea /var/spool/fido/msgb/bad -b Squish</code>
+</dl>
+
+   <p>Этот оператор определяет <code>BadArea</code>. 
+Смотрите документацию на HPT.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="dupearea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#echoarea">echoarea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#badarea">badarea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.35 dupearea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>dupeArea &lt;name&gt; &lt;file&gt; [-b &lt;msgbase&gt;] [Options]</code>
+<br><dt>Пример:<dd><code>dupeArea dupeArea  /var/spool/fido/msgb/dupes -b Squish</code>
+</dl>
+
+   <p>Этот оператор определяет <code>DupeArea</code>. 
+Смотрите документацию на HPT.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="echoarea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#netmailarea">netmailarea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#dupearea">dupearea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.36 echoarea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>EchoArea &lt;name&gt; &lt;file&gt; [-b &lt;msgbase&gt;] [Options] [linkAKAs] [linkOptions]</code>
+<br><dt>Пример:<dd><code>EchoArea linux.develop.ger /var/spool/fido/msgb/linux.develop.ger
+-b Squish -a 2:2433/1247 -g A -dupeCheck move -dupehistory 11 -d "Linux
+development" 2:2433/1245 -def</code>
+</dl>
+
+   <p>Этот оператор определяет эхообласть. 
+Смотрите документацию на HPT.
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="netmailarea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#localarea">localarea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#echoarea">echoarea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.37 netmailarea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>NetmailArea &lt;name&gt; &lt;file&gt; [-b &lt;msgbase&gt;] [Options]</code>
+<br><dt>Пример:<dd><code>NetmailArea netmail /var/spool/fido/msgb/netmail -b Squish</code>
+</dl>
+
+   <p>Этот оператор определяет <code>NetMailArea</code>. 
+Смотрите документацию на HPT.
+
+   <p>Этот оператор может повторяться.
+
+<div class="node">
+<a name="localarea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#filearea">filearea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#netmailarea">netmailarea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.38 localarea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>LocalArea &lt;name&gt; &lt;file&gt; [-b &lt;msgbase&gt;] [Options]</code>
+<br><dt>Пример:<dd><code>LocalArea MyBBSarea /var/spool/fido/msgb/MyBBS -b Squish</code>
+</dl>
+
+   <p>Этот оператор определяет <code>LocalArea</code>: область сообщений на BBS. 
+Смотрите документацию на HPT.
+
+<div class="node">
+<a name="filearea"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#bbsarea">bbsarea</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#localarea">localarea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.39 filearea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>FileArea &lt;name&gt; &lt;fileareapath&gt; &lt;uplink&gt; [options] [&lt;downlinks&gt;]</code>
+<br><dt>Пример:<dd><code>filearea Photoes /var/spool/fido/fileecho/Photoes 2:50/1 -d "Sysop photoes"</code>
+</dl>
+
+   <p>Этот оператор определяет <code>FileArea</code>: определение файл-эхи. 
+Смотрите документацию на HTick.
+
+<div class="node">
+<a name="bbsarea"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#filearea">filearea</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Keywords">Keywords</a>
+
+</div>
+
+<h4 class="subsection">2.3.40 bbsarea</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>bbsarea &lt;name&gt; &lt;bbsareapath&gt;</code>
+<br><dt>Пример:<dd><code>BBSarea Incoming /var/spool/fido/BBS/incoming</code>
+</dl>
+
+   <p>Этот оператор определяет <code>BBSArea</code>: определение файл-области BBS. 
+Используется при построении файл-листа. 
+Смотрите документацию на HTick.
+
+<div class="node">
+<a name="HPT"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#HTick">HTick</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Keywords">Keywords</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.4 Ключевые слова Highly Portable Tosser</h3>
+
+<p>Эта секция содержит только список ключевых слов. Читайте документацию на HPT.
+
+<pre class="example">     accessgrp
+     address
+     addtoseen
+     advancedareafix
+     advisorylock
+     afterunpack
+     aka
+     allowemptypktpwd
+     allowpktaddrdiffer
+     arcmailsize
+     arcnetmail
+     areafix
+     areafixecholimit
+     areafixfrompkt
+     areafixhelp
+     areafixReportsAttr
+     areafixkillrequests
+     areafixmsgsize
+     areafixnames
+     areafixorigin
+     areafixpwd
+     areafixqueryreports
+     areafixqueuefile
+     areafixsplitstr
+     areafixfromname
+     areasfilenamecase
+     areasmaxdupeage
+     autoareacreate
+     autoareacreatedefaults
+     autoareacreatefile
+     autoareacreateflag
+     autoareacreatesubdirs
+     autopassive
+     autopause
+     availlist
+     badarea
+     beforepack
+     bundlenamestyle
+     carbonaddr
+     carbonandquit
+     carboncopy
+     carbondelete
+     carbonexcludefwdfrom
+     carbonextern
+     carbonfrom
+     carbonfromarea
+     carbongroups
+     carbonkeepsb
+     carbonkludge
+     carbonmove
+     carbonout
+     carbonreason
+     carbonrule
+     carbonsubj
+     carbontext
+     carbonto
+     createareascase
+     createfwdnonpass
+     defarcmailsize
+     denyfwdfile
+     denyfwdmask
+     denyfwdreqaccess
+     denyuncondfwdreqaccess
+     disabletid
+     disablepid
+     dupearea
+     dupebasetype
+     dupehistorydir
+     echoarea
+     echoareadefaults
+     echomailflavour
+     echotosslog
+     excludepassthroughcarbon
+     export
+     filebox
+     fileboxalways
+     fileboxesdir
+     forwardareapriority
+     forwardpkts
+     forwardrequestfile
+     forwardrequestmask
+     forwardrequests
+     forwardrequesttimeout
+     hptperlfile
+     idlepassthrutimeout
+     ignorecapword
+     ignoreseen
+     import
+     importlog
+     inbound
+     include
+     intab
+     keeptrsfiles
+     keeptrsmail
+     killedrequesttimeout
+     kludgeareanetmail
+     level
+     link
+     linkbundlenamestyle
+     linkdefaults
+     linkfilebasedir
+     linkgrp
+     linkmsgbasedir
+     linkwithimportlog
+     localarea
+     localinbound
+     lockfile
+     logechotoscreen
+     mandatory
+     mindiskfreespace
+     msgbasedir
+     name
+     netarea
+     netmailarea
+     netmailextern
+     netmailflag
+     newarearefusefile
+     noprocessbundles
+     norules
+     notvalidfilenamechars
+     optgrp
+     origin
+     ouraka
+     outbound
+     outtab
+     pack
+     packaka
+     packer
+     packnetmailonscan
+     password
+     pause
+     pktpwd
+     pktsize
+     processpkt
+     protinbound
+     publicgroup
+     readonly
+     reducedseenby
+     remap
+     remoterobotname
+     reportto
+     robotsarea
+     route
+     routefile
+     routemail
+     rulesdir
+     separatebundles
+     setconsoletitle
+     statlog
+     sysop
+     tearline
+     tempinbound
+     tempoutbound
+     tossingext
+     unpack
+     writeonly
+</pre>
+   <div class="node">
+<a name="HTick"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#NLTools">NLTools</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#HPT">HPT</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.5 Ключевые слова HTick (Husky Ticker)</h3>
+
+<p>Эта секция содержит только список ключевых слов. Читайте документацию на HTick.
+
+<pre class="example">     AddDLC
+     AnnAreaTag
+     AnnAddrfrom
+     AnnAddrto
+     AnnExclude
+     AnnFileOrigin
+     AnnFileRFrom
+     AnnFrom
+     AnnInclude
+     AnnMessFlags
+     AnnOrigin
+     AnnounceSpool
+     AnnSubj
+     AnnTo
+     AutoFileCreateFlag
+     BbsArea
+     BusyFileDir
+     ConvertLongNames
+     ConvertShortNames
+     DLCDigits
+     ExecOnFile
+     FileArea
+     FileAreaBaseDir
+     FileAreaCreatePerms
+     FileDescPos
+     FileAreaDefaults
+     FileDescName
+     FileEchoFlavour
+     FileLDescString
+     FileFixFromName
+     FileFixHelp
+     FileFixReportsAttr
+     FileFixKillRequests
+     FileFixNames
+     MaxTicLineLength
+     OriginInAnnounce (obsoleted)
+     PassFileAreaDir
+     RemoteFileRobotName
+     SaveTic
+     TicOutbound
+     
+      In Link section:
+       AutoFileCreate
+       AutoFileCreateDefaults
+       AutoFileCreateFile
+       AutoFileCreateSubdirs
+       DelNotRecievedTIC
+       FileFixEchoLimit
+       FileFixFSC87Subset
+       ForwardFilePriority
+       ForwardFileRequestFile
+       ForwardFileRequests
+       NoTIC
+       LinkFileBaseDir
+       PackAka
+       TickerPackToBox
+</pre>
+   <div class="node">
+<a name="NLTools"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#EmailPkt">EmailPkt</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#HTick">HTick</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.6 Ключевые слова NLTools</h3>
+
+<ul class="menu">
+<li><a accesskey="1" href="#nodelistdir">nodelistdir</a>:                  путь к нодлистам
+<li><a accesskey="2" href="#fidouserlist">fidouserlist</a>:                 имя скомпилированного файла со списком fido-пользователей
+<li><a accesskey="3" href="#nodelist">nodelist</a>:                     добавление нодлиста
+<li><a accesskey="4" href="#diffupdate">diffupdate</a>:                   где находятся ноддиффы для этого нодлиста
+<li><a accesskey="5" href="#fullupdate">fullupdate</a>:                   где находятся полные апдейты для нодлиста
+<li><a accesskey="6" href="#defaultzone">defaultzone</a>:                  указание номера зоны для нодлиста
+<li><a accesskey="7" href="#nodelistformat">nodelistformat</a>:               это нодлист или пойнтлист? 
+</ul>
+
+<div class="node">
+<a name="nodelistdir"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#fidouserlist">fidouserlist</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#NLTools">NLTools</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.1 nodelistDir</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>nodelistDir &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>nodelistDir /var/spool/fido/nodelist</code>
+</dl>
+
+   <p>Эта команда указывает путь, где актуальные нодлисты находятся, или куда они
+должны быть записаны. Путь содержит исходный нодлист (see <a href="#nodelist">nodelist</a>). Тут
+будут также храниться и скомпилированные нодлисты вроде <samp><span class="file">FIDOUSER.LST</span></samp>.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="fidouserlist"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#nodelist">nodelist</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#nodelistdir">nodelistdir</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.2 fidoUserList</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>fidoUserList &lt;filename&gt;</code>
+<br><dt>Пример:<dd><code>fidoUserList fidouser.lst</code>
+</dl>
+
+   <p>Если этот оператор определен, компилятор нодлиста (например, <code>ulc</code>)
+создаст в директории с нодлистами (see <a href="#nodelistdir">nodelistdir</a>) файл с заданным именем
+- список пользователей. Это простой текстовый файл со строками фиксированной
+длины, который содержит имена пользоватетелей (узлов, пойнтов) и
+соответствующие им узловые или пойнтовые адреса. Список отсортирован по именам
+пользователей (не учитывая регистр), так что он может быть быстро просмотрен в
+поисках адреса. Формат "список пользователей fido" понимает, к примеру,
+<code>msged</code>.
+
+<div class="node">
+<a name="nodelist"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#diffupdate">diffupdate</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#fidouserlist">fidouserlist</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.3 nodelist</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>Nodelist &lt;name&gt;</code>
+<br><dt>Пример:<dd><code>Nodelist nodelist</code> or <code>Nodelist points24</code>
+</dl>
+
+   <p>Этот оператор начинает новое определение нодлиста. Все последующие операторы,
+находящиеся до следующего оператора <code>nodelist</code> и относящиеся к нодлистам,
+изменяют настройки этого нодлиста.
+
+   <p>Имя, которое вы указываете, должно совпадать с базовым именем (без расширения и
+пути) исходного распакованного файла нодлиста. Утилиты husky <code>ulc</code> и
+<code>nlupdate</code> проверяют совпадение имен без учета регистра, но другим
+утилитам может понадобиться точное написание. Ожидается, что исходный нодлист
+находится в директории нодлистов (see <a href="#nodelistdir">nodelistdir</a>).
+
+<div class="node">
+<a name="diffupdate"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#fullupdate">fullupdate</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#nodelist">nodelist</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.4 diffupdate</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>DiffUpdate &lt;path_and_basname&gt;</code>
+<br><dt>Пример:<dd><code>DiffUpdate /var/spool/filebase/nodediff/nodediff</code>
+</dl>
+
+   <p>Здесь вы можете указать базовое имя файлов изменения нодлиста (ноддиффов),
+которые используются для поддержания свежести нодлиста. Аргументом DiffUpdate
+является полное, с путем, имя ноддиффа, без расширения. Например, если файлэха
+находится в <samp><span class="file">/var/spool/filebase/24000</span></samp>, куда ваш тикер складывает апдейты
+для немецкого пойнтлиста, и эти апдейты имеют имена <samp><span class="file">points24.a26</span></samp>,
+<samp><span class="file">points24.a33</span></samp> и т.д., то вы используете
+
+<pre class="example">     DiffUpdate /var/spool/filebase/24000/points24
+</pre>
+   <p>Ключевое слово <code>Diffupdate</code> используется, например, <code>nlupdate</code>. Он
+распакует ноддифф (если он заархивирован, конечно, неархивированные диффы также
+поддерживаются), применит дифф к соответствующему нодлисту и удалит временно
+распакованный дифф.
+
+<div class="node">
+<a name="fullupdate"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#defaultzone">defaultzone</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#diffupdate">diffupdate</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.5 fullupdate</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>FullUpdate &lt;path_and_basname&gt;</code>
+<br><dt>Пример:<dd><code>FullUpdate /var/spool/filebase/nodelist/nodelist</code>
+</dl>
+
+   <p>Этот оператор работает как <code>DiffUpdate</code> (see <a href="#diffupdate">diffupdate</a>). Разница в
+том, что здесь вы не указываете расположение файла ноддиффа, а указываете, где
+могут быть найдены файлы/архивы полных нодлистов. Некоторые левонеты (обычно)
+не распространяют файлы ноддиффов, но просто хатчат свежие нодлисты каждые
+несколько недель. В этом случае вам понадобится оператор <code>FullUpdate</code>.
+
+<div class="node">
+<a name="defaultzone"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#nodelistformat">nodelistformat</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#fullupdate">fullupdate</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.6 defaultzone</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>DefaultZone &lt;zone&gt;</code>
+<br><dt>Пример:<dd><code>DefaultZone 2</code>
+</dl>
+
+   <p>Некоторые нодлисты не начинаются с указания &lsquo;<samp><span class="samp">Zone</span></samp>&rsquo;. Это случай, например,
+немецкого пойнтлиста, но он возможен и в левонетах, где всего одна зона. В этом
+случае вы можете использовать ключевое слово <code>DefaultZone</code>, чтобы указать
+номер зоны по умолчанию для всех узлов, указанных в нодлисте.
+
+<div class="node">
+<a name="nodelistformat"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#defaultzone">defaultzone</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#NLTools">NLTools</a>
+
+</div>
+
+<h4 class="subsection">2.6.7 nodelistformat</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>Nodelistformat &lt;format&gt;</code>
+<br><dt>Пример:<dd>
+     <pre class="example">          NodelistFormat standard
+          NodelistFormat points4d
+          NodelistFormat points24
+</pre>
+     </dl>
+
+   <p>Здесь вы можете указать формат распакованного нодлиста. По умолчанию это
+&lsquo;<samp><span class="samp">standard</span></samp>&rsquo; - стандартный формат нодлиста Fidonet. Вы можете также указать
+&lsquo;<samp><span class="samp">points4d</span></samp>&rsquo;, что нужно компилятору нодлиста, чтобы распознать стандартный
+пойнтлист 4D формата или &lsquo;<samp><span class="samp">points24</span></samp>&rsquo; немецкого формата points24 - чтобы он
+видел правильные 5D пойнтовые адреса вместо фейковых.
+
+<div class="node">
+<a name="EmailPkt"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#BSOpack">BSOpack</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#NLTools">NLTools</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.7 Ключевые слова EmailPkt</h3>
+
+</li></ul>
+<p>Общие токены:
+<ul class="menu">
+<li><a accesskey="1" href="#sendMailCmd">sendMailCmd</a>:                  командная строка для отправки файла по e-mail
+
+</li></ul>
+<p>Токены определения линка:
+</p>
+<ul class="menu">
+<li><a accesskey="2" href="#email">email</a>:                        e-mail адрес этого линка
+<li><a accesskey="3" href="#emailSubj">emailSubj</a>:                    поле "Тема" в e-mail
+<li><a accesskey="4" href="#emailFrom">emailFrom</a>:                    адрес отправителя в исходящих e-mail
+<li><a accesskey="5" href="#emailEncoding">emailEncoding</a>:                кодировка исходящих e-mail
+</ul>
+
+<div class="node">
+<a name="sendMailCmd"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#email">email</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#EmailPkt">EmailPkt</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#EmailPkt">EmailPkt</a>
+
+</div>
+
+<h4 class="subsection">2.7.1 sendMailCmd</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>sendMailCmd string</code>
+<br><dt>Пример:<dd><code>sendMailCmd /usr/sbin/sendmail $a &lt;$f&gt;</code>
+</dl>
+
+   <p>Это ключевое слово используется для определения команды отправки почты и ее
+параметров. Макрос '$a' указывает положение e-mail адреса получателя; макрос
+'$f' указывает положение имени файла с телом письма. Если '$f' опущен, тело
+письма будет заполняться из stdin.
+
+   <p>Этот оператор не может повторяться.
+
+<div class="node">
+<a name="email"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#emailFrom">emailFrom</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#sendMailCmd">sendMailCmd</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#EmailPkt">EmailPkt</a>
+
+</div>
+
+<h4 class="subsection">2.7.2 email</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>email &lt;email-address&gt;</code>
+<br><dt>Пример:<dd><code>email eddie@ironmaiden.com</code>
+</dl>
+
+   <p>Это ключевое слово используется для указания e-mail адреса линка. Может быть
+использовано для отправки pkt по e-mail.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="emailFrom"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#emailSubj">emailSubj</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#email">email</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#EmailPkt">EmailPkt</a>
+
+</div>
+
+<h4 class="subsection">2.7.3 emailFrom</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>emailFrom &lt;email-address&gt;</code>
+<br><dt>Пример:<dd><code>emailFrom fred@ironmaiden.com</code>
+</dl>
+
+   <p>Это ключевое слово используется для указания e-mail адреса, используемого как
+адрес отправителя в исходящих письмах для этого линка.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="emailSubj"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#emailEncoding">emailEncoding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#emailFrom">emailFrom</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#EmailPkt">EmailPkt</a>
+
+</div>
+
+<h4 class="subsection">2.7.4 emailSubj</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>emailSubj &lt;subject&gt;</code>
+<br><dt>Пример:<dd><code>emailSubj Fido over EMail message in UUE format</code>
+</dl>
+
+   <p>Это ключевое слово используется для указания поля "Тема" в письмах к и от этого
+линка. Оно может игнорироваться некоторыми кодировками (например, SEAT).
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="emailEncoding"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#emailSubj">emailSubj</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#EmailPkt">EmailPkt</a>
+
+</div>
+
+<h4 class="subsection">2.7.5 emailEncoding</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>emailEncoding (MIME | SEAT | UUE)</code>
+<br><dt>Пример:<dd><code>emailEncoding MIME</code>
+</dl>
+
+   <p>Это ключевое слово используется для указания кодировки исходящих на этого линка
+писем.
+
+   <p>Этот оператор может повторяться только для разных линков.
+
+<div class="node">
+<a name="BSOpack"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#herp">herp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#EmailPkt">EmailPkt</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.8 Ключевые слова BSOpack</h3>
+
+<p>Эта секция содержит только список ключевых слов. Читайте документацию на BsoPack.
+
+<pre class="example">     maxunpackednetmail
+     packnetmail
+</pre>
+   <div class="node">
+<a name="herp"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Example">Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#BSOpack">BSOpack</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.9 Ключевые слова herp</h3>
+
+<p>Herp - это Husky External file Request Processor (внешний фрек-процессор). 
+Следующие ключевые слова fidoconfig специфичны для herp. Некоторые программы
+herp, в частности <samp><span class="file">herpidx</span></samp>, также используют часть конфигурации
+<samp><span class="file">htick</span></samp>, например, определения файловых областей.
+
+<ul class="menu">
+<li><a accesskey="1" href="#reqidxdir">reqidxdir</a>:                    путь к индексным файлам herp
+</ul>
+
+<div class="node">
+<a name="reqidxdir"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#herp">herp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#herp">herp</a>
+
+</div>
+
+<h4 class="subsection">2.9.1 reqidxdir</h4>
+
+     <dl>
+<dt>Синтаксис:<dd><code>reqidxDir &lt;path&gt;</code>
+<br><dt>Пример:<dd><code>reqidxDir /var/spool/fido/reqidx</code>
+</dl>
+
+   <p>Эта команда указывает директорию, которая будет использоваться для хранения
+индекса запросов, сгенерированного <samp><span class="file">herpidx</span></samp>. Эта директория должна быть
+доступной для записи для процесса <samp><span class="file">herpidx</span></samp> и как минимум доступной для
+чтения для пользователя, под которым будут запускаться ваш мейлер и <samp><span class="file">herp</span></samp>. 
+<samp><span class="file">herpidx</span></samp> будет размещать здесь разнообразные файлы индексов запросов. Эта
+директория не должна использоваться ни для каких других целей. Индекс может
+стать довольно большим, так что отведите достаточно места.
+
+<div class="node">
+<a name="Example"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#herp">herp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#config-file">config file</a>
+
+</div>
+
+<h3 class="section">2.10 Пример работающего конфига</h3>
+
+<pre class="example">     # sample fido config file for fidoconfig 1.4
+     # $Id: config,v 1.19.2.1 2006/03/11 21:25:52 stas_degteff Exp $
+     #
+     # This file is universal for unix-based and DOS-based OS. OS specific
+     # statements is specified using "if-elseif-else-endif" conditional operators.
+     
+     ##
+     ## Section 1: common
+     ##
+     
+     version 0.14 # Config format version. Some software may check this.
+     
+     Name hpt-HQ
+     Location Paderborn, GER
+     Sysop Matthias Tichy
+     
+     LogLevels 23456789ABCDEF   # see fidoconfig documentaion for log levels
+     
+     Address 2:2432/645
+     Address 44:4932/110
+     
+     #
+     # Define command lines of the packers and unpackers.
+     #
+     
+     if "[OS]"=="UNIX"
+       set fidoconfigdir=/usr/local/etc/fido
+       set fidodatadir=/var/fido
+       set path_archivers=/usr/local/bin/
+     else
+       set fidoconfigdir=c:\fido\config
+       set fidodatadir=c:\fido
+       set path_archivers=c:\arch
+     endif
+     
+     # INFO-ZIP
+     Unpack  "[path_archivers]unzip  -j -Loqq $a -d $p" 0 504b0304
+     Pack  zip [path_archivers]zip -9 -j -q $a $f
+     
+     if not "[OS]"=="UNIX"
+     #  Unpack "[path_archivers]pkzipc -ext -dir=none -over=all -nozip -silent $a $p $f" 0 504b0304
+     #  Unpack "[path_archivers]pkunzip -njCL $a -d $p $f" 0 504b0304
+     #  Unpack "[path_archivers]pkzip25 -ext -silent -over=all -nofix -nozip $a $p $f" 0 504b0304
+     endif
+     
+     Unpack  "[path_archivers]arc eno $a $p'*.*'" 0 1a
+     
+     if not "[OS]"=="UNIX"
+       Unpack  "[path_archivers]pkunpak /r $a $p" 0 1a
+       Pack  arc [path_archivers]pkpak -oct a $a $f
+     
+       Unpack  "[path_archivers]pak e /wn $a $p" -2 fe
+       Pack  pak [path_archivers]pak a $a $f
+     
+       Unpack  "[path_archivers]lha e /m $a $p" 2 2d6c68
+       Pack  lha [path_archivers]lha a /o /m $a $f
+     endif
+     
+     Unpack  "[path_archivers]zoo e:O $a $p" 0 5a4f4f
+     Pack  zoo [path_archivers]zoo a: $a $f
+     
+     if "[OS]"=="UNIX"
+       Unpack  "cd $p &amp;&amp; [path_archivers]unarj e $a &gt; /dev/null" 0 60ea
+     else
+       Unpack  "[path_archivers]arj e -+ -y $a $p" 0 60ea
+       Pack  arj [path_archivers]arj a -+ -e -y $a $f
+     endif
+     
+     Unpack  "[path_archivers]jar e -y $a $p" 14 1a4a61721b
+     Pack  jar [path_archivers]jar a -y $a $f
+     
+     Unpack  "[path_archivers]ha eyq $a"  0 4841
+     Pack  ha [path_archivers]ha a21eq $a $f
+     
+     # *.rar
+     Unpack  "[path_archivers]unrar e -y -c- -o+ -inul $a $p $f"   0 52617221
+     # rar-sfx/DOS
+     Unpack  "[path_archivers]unrar e -y -c- -o+ -inul $a $p $f"  28 52534658
+     # rar 2.90 R sfxs
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 23040 52617221  # Default.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f"  9573 52617221  # DOS.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f"  9493 52617221  # Dos_US.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 25099 52617221  # Os2.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 13312 52617221  # WinCon.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 13824 52617221  # WinConUS.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 25088 52617221  # Zip.sfx
+     # Rar 3.0 R sfxs
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 46592 52617221  # Default.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 93816 52617221  # Dos.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 37376 52617221  # WinCon.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 31232 52617221  # Zip.sfx
+     # Rar 3.0 sfxs
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 47104 52617221  # Default.sfx
+     # Rar 3.1b1 sfxs
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 50688 52617221  # Default.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 94128 52617221  # Dos.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 34816 52617221  # Zip.sfx
+     # Rar 3.1b2 sfxs
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 49152 52617221  # Default.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 94016 52617221  # Dos.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 34304 52617221  # Zip.sfx
+     # Rar 3.1b3 sfxs
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 49664 52617221  # Default.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 93932 52617221  # Dos.sfx
+     Unpack "[path_archivers]rar e -y -c- -o+ -inul $a $p $f" 37888 52617221  # WinCon.sfx
+     
+     Pack 	rar [path_archivers]rar a -ep -md1024 -m5 -mm -inul -s $a $f
+     
+     Unpack  "[path_archivers]arj e -+ -y $a $p &gt;nul" 0 60ea
+     Pack  arj [path_archivers]arj a -+ -e -y $a $f &gt;nul
+     
+     Unpack "[path_archivers]unace e -y -c- $a $p $f" 7 2a2a414345
+     
+     Pack 7ZIP [path_archivers]7za a -y $a $f
+     Unpack  "[path_archivers]7za e -y $a $p $f" 0 377ABCAF
+     
+     
+     if "[module]"==hpt
+       route hold noroute 2:2432/645.*
+       route hold noroute 2:240/6223.*
+       route crash noroute 2:2432/646
+       route hold 44:4932/120 44:4932/120 44:4932/130
+       route crash 44:4932/100 44:*
+       route normal 2:2435/424 2:2435/*
+       route crash 2:2432/646 *
+     endif
+     
+     Inbound		[fidodatadir]in
+     ProtInbound	[fidodatadir]in.sec
+     LocalInbound    [fidodatadir]in.loc
+     Outbound	[fidodatadir]out
+     tempOutbound    [fidodatadir]out.tmp
+     tempInbound     [fidodatadir]in.tmp
+     #MsgBaseDir      Passthrough
+     MsgBaseDir      [fidodatadir]msgb
+     FileAreaBaseDir [fidodatadir]files
+     public		[fidodatadir]public
+     logFileDir      [fidodatadir]log
+     DupeHistoryDir	[fidodatadir]dupes
+     NodelistDir	[fidodatadir]nodelist
+     PassFileAreaDir [fidodatadir]passFileDir
+     magic		[fidodatadir]magic
+     
+     if "[module]"=="hpt"
+     #  include [fidoconfigdir]config.hpt
+       # HPT's transcoding isn't recommended to use,
+       # You shoulds use recode features of your message editor instead.
+       #intab              [fidoconfigdir]outaltkoi8
+       #outtab             [fidoconfigdir]outkoi8alt
+       lockfile           [fidodatadir]lock.hpt
+       advisoryLock       9
+       echotosslog        [fidodatadir]echotoss.log
+       importlog          [fidodatadir]import.log
+       areafixhelp        [fidodatadir]areafix.hlp
+       AreafixReportsAttr loc pvt k/s dir
+     endif
+     
+     if "[module]"=="htick"
+     #  include [fidoconfigdir]config.htick
+       FileFixHelp     [fidodatadir]filefix.hlp
+       FilefixReportsAttr loc pvt k/s npd dir
+       lockfile        [fidodatadir]lock.htick
+       advisoryLock    6
+     endif
+     
+     ##
+     ## Section 2: Nodelists
+     ##
+     
+     if "[OS]"=="UNIX"
+       NodeList nodelist
+       DiffUpdate [fidodatadir]files/nodediff
+       NodeList linuxnet
+       DiffUpdate [fidodatadir]files/lin44.node
+     else
+       NodeList nodelist
+       DiffUpdate [fidodatadir]files\nodediff
+       NodeList linuxnet
+       DiffUpdate [fidodatadir]files\lin44.node
+     endif
+     
+     
+     ##
+     ## Section 3: define links
+     ##
+     
+     #
+     # Links for 2:2432/645
+     #
+     LinkDefaults
+       OurAka 2:2432/645
+       Level 65535
+       Packer ZIP
+       AutoAreaCreateDefaults passthrough -dupeHistory 11 -dupecheck move
+       AutoAreaCreateFile [fidoconfigdir]echoareas
+       AutoFileCreateFile [fidoconfigdir]fileareas
+       AutoFileCreateDefaults -lw 10
+       AutoFileCreateSubdirs on
+       EchomailFlavour direct
+       FileEchoFlavour normal
+       PackNetmail on
+       MaxUnpackedNetmail 64
+       EchomailFlavour Normal
+       EmailFrom fido@my.host
+       EmailSubj FTN Mail Transport : FTNbundle from 2:2432/645
+       EmailEncoding MIME
+       TickerPackToBox on
+       FileFixFSC87Subset
+       ArcmailSize 450
+       Pause off
+       LinkGrp COMMON
+       AccessGrp INTERNATIONAL,COMMON,LOCAL
+     LinkDefaults end
+     
+     Link Matthias Schniedermeyer
+     Aka 2:2432/600
+     Password xxxxxxxxx
+     EchoMailFlavour Crash
+     AutoAreaCreate on
+     AutoFileCreate on
+     forwardRequests on
+     
+     Link Carsten Ellermann
+     Aka 2:2432/215
+     password xxxxxxx
+     autoAreaCreate on
+     autoFileCreate on
+     
+     Link Matthias Tichy
+     Aka 2:2432/646
+     Password xxxxxxxx
+     autoAreaCreate on
+     forwardPkts on
+     
+     Link Matthias Born
+     Aka 2:240/6223
+     Password xxxxxxx
+     EchoMailFlavour hold
+     
+     Link Sascha Silbe
+     Aka 2:2435/424
+     ourAka 2:2432/645
+     AutoFileCreate on
+     Password xxxxxxxx
+     
+     #
+     # Links for 44:4932/110
+     #
+     LinkDefaults
+       OurAka 44:4932/110
+       Level 65535
+       Packer ZIP
+       AutoAreaCreateDefaults passthrough -dupeHistory 11 -dupecheck move
+       AutoAreaCreateFile [fidoconfigdir]echo44
+       AutoFileCreateFile [fidoconfigdir]file44
+       AutoFileCreateDefaults -lw 10
+       AutoFileCreateSubdirs on
+       EchomailFlavour direct
+       FileEchoFlavour normal
+       PackNetmail on
+       MaxUnpackedNetmail 64
+       EchomailFlavour Normal
+       EmailFrom fido@my.host
+       EmailSubj FTN Mail Transport : FTNbundle from 44:4932/110
+       EmailEncoding MIME
+       TickerPackToBox on
+       FileFixFSC87Subset
+       ArcmailSize 450
+       Pause off
+       LinkGrp LINNET
+       AccessGrp LINNET,LOCAL
+     LinkDefaults end
+     
+     Link Matthias Schniedermeyer
+     Aka 44:4932/100
+     password xxxxxxxx
+     EchoMailFlavour Crash
+     AutoAreaCreate on
+     AutoFileCreate on
+     
+     Link Matthias Born
+     Aka 44:4932/120
+     Password xxxxxxx
+     EchoMailFlavour hold
+     
+     ##
+     ## Section 4: define areas
+     ##
+     
+     if "[OS]"=="UNIX"
+       #NetmailArea NetmailArea [fidodatadir]msgb/netmail -b msg
+       NetmailArea NetmailArea [fidodatadir]msgb/net -b  Squish
+       BadArea     BadArea     [fidodatadir]msgb/bad -b Squish
+       DupeArea    DupeArea    [fidodatadir]msgb/dupe -b Squish
+       LocalArea   carbonArea  [fidodatadir]msgb/carbonArea  -b Squish -manual
+     else
+       #NetmailArea NetmailArea [fidodatadir]msgb\netmail -b msg
+       NetmailArea NetmailArea [fidodatadir]msgb\net -b  Squish
+       BadArea     BadArea     [fidodatadir]msgb\bad -b Squish
+       DupeArea    DupeArea    [fidodatadir]msgb\dupe -b Squish
+       LocalArea   carbonArea  [fidodatadir]msgb\carbonArea  -b Squish -manual
+     endif
+     
+     if "[OS]"=="UNIX"
+       LocalArea   carbonArea  [fidodatadir]msgb/carbonArea  -b Squish -manual
+     else
+       LocalArea   carbonArea  [fidodatadir]msgb\carbonArea  -b Squish -manual
+     endif
+     if "[module]"=="hpt"
+       CarbonTo Matthias Tichy
+       CarbonCopy carbonArea
+     endif
+     
+     ##
+     ## SubSection 4.1: include areas configs
+     ##
+     
+     include [fidoconfigdir]echoareas
+     include [fidoconfigdir]fileareas
+     include [fidoconfigdir]echo44
+     include [fidoconfigdir]file44
+</pre>
+<div class="node">
+<a name="converting"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#tparser">tparser</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#config-file">config file</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Конвертирование fidoconfig в конфиги golded, msged и aquaed</h2>
+
+<p>Так как оригинальный GoldEd от Odinn Sorensen совсем не поддерживает fidoconfig,
+а msged и aquaed - только в бета версиях, мы разработали три программы, которые
+конвертируют ваш fidoconfig в эти собственные форматы конфигурационных файлов.
+
+     <ol type=1 start=1>
+<li>fconf2golded
+fconf2golded &lt;goldedConfigFileName&gt; [&lt;default.cfg&gt;]
+
+     <pre class="example">          fconf2golded ~/golded/golded.cfg ~/golded/goldDefaults.cfg
+</pre>
+     <li>fconf2msged
+fconf2msged &lt;msgedConfigFileName&gt;
+
+     <pre class="example">          fconf2msged ~/msged.areas
+</pre>
+     <li>fconf2aquaed
+fconf2aquaed &lt;aquaedConfigFileName&gt; [&lt;default.cfg&gt;]
+(если вы указываете default.cfg, в вашем конфигурационном файле будет
+сгенерирован include &lt;default.cfg&gt; - подключение default.cfg)
+
+     <pre class="example">          fconf2aquaed ~/aquaed/aquaed.cfg
+</pre>
+        </ol>
+
+<div class="node">
+<a name="tparser"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#contact">contact</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#converting">converting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Проверка конфига</h2>
+
+<p>Вам следует запускать <samp><span class="command">tparser</span></samp> <span class="sc">каждый раз</span> после того, как вы
+изменили конфиг. Если tparser нашел ошибку в конфиге, пожалуйста, исправьте его
+и попробуйте снова.
+
+     <dl>
+<dt>Синтаксис:<dd><samp><span class="command">tparser [-h|&minus;-help] [-Dvar=value] [-E] [-P] [/path/to/config/file]</span></samp>
+<br><dt>Пример:<dd>
+     <pre class="example">          <samp><span class="command">tparser -Dmodule=hpt | less</span></samp>
+</pre>
+     </dl>
+
+   <p>tparser (как и любая программа fidoconfig) выведет сообщение об ошибке, если вы
+допустили таковую в конфиге. Также он может вывести какие-то предупреждения о
+ваших установках в конфиге. Он будет "ворчать" на любое ключевое слово, которое
+он не знает. Он остановится после первой же ошибки (не предупреждения), чтобы
+дать вам возможность изменить конфиг.
+
+<h4 class="subsection">4.0.1 Options</h4>
+
+     <dl>
+<dt>-Dvar=value<dd>Установить переменную конфига <code>var</code> в <code>value</code>. 
+<br><dt>-E<dd>Вывести конфиг на stdout (раскрываются все переменные). 
+<br><dt>-h<dt>&minus;-help<dd>Вывести информацию по использованию. 
+<br><dt>-P<dd>Попытаться создать еще не существующие директории. 
+</dl>
+
+<div class="node">
+<a name="contact"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#tparser">tparser</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Как связаться с автором</h2>
+
+<p>Вы можете написать мне на
+
+<pre class="example">     <a href="mailto:mtt@tichy.de">mtt@tichy.de</a>
+     2:2432/645
+</pre>
+   <p>и в фидошных эхах
+
+<pre class="example">     linux.develop.ger
+     fidosoft.husky
+</pre>
+   <p>Max Levenkov:
+<pre class="example">     <a href="mailto:sackett@mail.ru">sackett@mail.ru</a>
+     ru.husky (русская)
+     ru.echoprocessors (русская)
+     fidosoft.husky (английская)
+</pre>
+   <p>Свежая библиотека fidoconfig и другой fido софт будут доступны на
+<a href="http://husky.sourceforge.net">http://husky.sourceforge.net</a>.
+
+</body></html>
+

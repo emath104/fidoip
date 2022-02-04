@@ -1,4 +1,8 @@
 #!/bin/sh
+#/* Copyright (C) 2007-2012 Maxim Sokolsky, 2:5020/828.777.
+#   This file is part of fidoip. It is free software and it is covered
+#   by the GNU general public license. See the file LICENSE for details. */
+
 # Usage:  fido_slamd64.sh login
 CWD=`pwd`
 OSNAME=`uname`
@@ -229,29 +233,22 @@ sh husky.Slack64Build.old
 cd ../golded
 sh golded.Slack64Build+.old
 
-# Add screen's settings for user:
-
-if [ -e /home/"$VAR_01"/.screenrc ]; then
-C1=`cat  /home/$VAR_01/.screenrc | grep encoding | head -n1 | sed "s| ||g"`
-if [ "$C1" = "encodingutf8" ]; then
-echo "Found /home/"$VAR_01"/.screenrc file with key bindings for screen."
-sleep 3
-else
-cat $CWD/binkd/.screenrc >> /home/$VAR_01/.screenrc
-fi
-else
-cat $CWD/binkd/.screenrc > /home/$VAR_01/.screenrc
-fi
 
 
 echo ''
 echo '------------------------------------------------------------------------------'
 echo "   Done! Creation of packages BinkD, Husky HPT and GoldEd+ are finished."
-echo '   Install *.txz packages from /tmp directory, then edit    '
-echo '   configuration files files as it decribed in fido.rus.koi file.      '
+echo '   Install *.tgz packages from /tmp directory: '
+echo
+echo  "installpkg `ls /tmp/binkd-1*86_64*.tgz | head -n1`"
+echo  "installpkg `ls /tmp/husky*86_64*.tgz | head -n1`"
+echo  "installpkg `ls /tmp/golded-*86_64*.tgz | head -n1`"
+echo '   Then use "setup_configs.bash" to create configuration for you, then use   '
+echo '   "relinkapps.sh" and "set_perm.sh" to finish setup fidoip. '
 echo '   Visit http://sourceforge.net/projects/fidoip/ for info and updates.  '
 echo '   http://sourceforge.net/apps/mediawiki/fidoip for wiki documentation.  '
 echo '------------------------------------------------------------------------------'
+
 
 
 } 

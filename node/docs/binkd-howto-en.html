@@ -1,0 +1,207 @@
+<html lang="en">
+<head>
+<title>binkd 1.0 How-To</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="binkd 1.0 How-To">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">binkd 1.0 How-To</h1>
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#g_t01">01</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">binkd 1.0 How-To</h2>
+
+<!-- üÔÏÔ ÄÏËÕÍÅÎÔ ÏÐÉÓÙ×ÁÅÔ ÔÉÐÉÞÎÙÅ ÄÅÊÓÔ×ÉÑ ÐÏ ÎÁÓÔÒÏÊËÅ -->
+<!-- @value{BINKD} @value{VERSION}. -->
+<ul class="menu">
+<li><a accesskey="1" href="#g_t01">01</a>:                 How Can BinkD Work via HTTP-proxy? 
+<li><a accesskey="2" href="#g_t02">02</a>:                 How Can BinkD Work via SOCKS-proxy? 
+<li><a accesskey="3" href="#g_t03">03</a>:                 How Can I Add BinkD To a Fidonet Box Working With a Modem? 
+<li><a accesskey="4" href="#g_t04">04</a>:                 What binkd processes the descriptions an links and file of passwords. 
+</ul>
+
+<div class="node">
+<a name="g_t01"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#g_t02">02</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 How Can BinkD Work via HTTP-proxy?</h2>
+
+<p>It is not a rare case when users go out to the internet from their
+corporate LAN exclusively via the proxy server based at the only computer
+connected to the internet. Thus BinkD cannot make a direct connection to
+the remote node and one must use the proxy server.  Proxy servers support
+was included in versions 0.9.3.https, 0.9.4 and the later ones.
+
+   <p>One can use BinkD via a HTTP proxy only if CONNECT host 24554 command is
+allowed in the proxy server or the CONNECT command is allowed for all
+remote ports.  The command is usually used for the secure HTTP protocol (URLs
+of the "HTTPS://..." type), it is also known as S-HTTP. Because of that
+such a proxy is quite often referred as a HTTPS proxy.
+
+   <p>If BinkD reports of an authorization error then the necessary command is
+prohibited in the proxy configuration or it is allowed for the port 443
+only (that is inessential for us).
+
+   <p>Suppose the connected to the Internet computer has the IP address
+192.168.0.1 in its LAN and the proxy server at the computer responds on
+port 3128. Here is the line in BinkD configuration file necessary for
+working via the HTTP proxy.
+
+   <p>1. A proxy server without user authorization (no login and password are
+demanded):
+
+<pre class="example">         proxy 192.168.0.1:3128
+</pre>
+   <p>2. A proxy server with user authorization (it is necessary to type login
+and password, e.g. login "user", password "password"):
+
+<pre class="example">         proxy 192.168.0.1:3128/user/password
+</pre>
+   <p>3. Microsoft proxy server with NTLM protocol of user authorization (one
+must be inside a domain).  Suppose login is "user", password is "password",
+the user computer is "host" and the domain name is "ntdomain":
+
+<pre class="example">         proxy 192.168.0.1:3128/user/password/host/ntdomain
+</pre>
+   <p>If the proxy server administrator has allowed connection only to some
+selected ports (usually to port 443) then BinkD reports "Connection
+rejected by proxy". Here is an example:
+
+<pre class="verbatim">      31 Mar 16:48:43 [59987] BEGIN, binkd/0.9.3/SOCKS/HTTPS -p BINKD.CFG
+      31 Mar 16:48:43 [59987] clientmgr started
+    + 31 Mar 16:48:43 [40423] call to 2:5000/44@fidonet
+      31 Mar 16:48:43 [40423] trying 195.209.235.3, port 24554...
+      31 Mar 16:48:43 [40423] connected to proxy.osu.ru:24554
+      31 Mar 16:48:44 [40423] Connection rejected by proxy (HTTP/1.0 403 Forbidden)
+    ? 31 Mar 16:48:44 [40423] unable to connect: {13} Permission denied
+</pre>
+
+   <p>In such a case you may try to use http tunnelling for instance with the
+help of httport (one can take it at http://www.htthost.com/).
+
+<div class="node">
+<a name="g_t02"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#g_t03">03</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#g_t01">01</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 How Can BinkD Work via SOCKS-proxy?</h2>
+
+<p>It is not a rare case when users go out to the internet from their
+corporate LAN exclusively via the proxy server based at the only computer
+connected to the internet. Thus BinkD cannot make a direct connection to
+the remote node and one must use the proxy server. Proxy servers support
+was included in version 0.9.4 and the later ones.
+
+   <p>BinkD works with a SOCKS proxy version 4 and 5. The first one does not
+demand an authorization (no login and password), the second one demands it
+as a rule.
+
+   <p>Suppose the connected to the Internet computer has the IP address
+192.168.0.1 in its LAN and the SOCKS server at the computer responds on
+port 1080. Here is the line in BinkD configuration file necessary for
+working via the SOCKS proxy.
+
+   <p>1. A SOCKS server without user authorization (no login and password are
+demanded):
+
+<pre class="example">         socks 192.168.0.1:1080
+</pre>
+   <p>2. A proxy server with user authorization (it is necessary to type login
+and password, e.g. login "user", password "password"):
+
+<pre class="example">         socks 192.168.0.1:1080/user/password
+</pre>
+   <p>If the proxy server administrator has allowed connection only to some
+selected ports (usually to port 443) then BinkD reports "Connection
+rejected by proxy". See example in a chapter See <a href="#g_t01">01</a>.
+
+<div class="node">
+<a name="g_t03"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#g_t04">04</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#g_t02">02</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 How Can I Add BinkD To a Fidonet Box Working With a Modem?</h2>
+
+<p>1. You must configure your modem mailer and tosser for BSO (binkley-style
+outbound) mode so that all of them including BinkD would have the same
+inbound directories (and also the same outbound directories). If your
+mailer can work with AMA (arcmail-attach) only you have to change your
+mailer.
+
+   <p>(This part don't translated, sorry.)
+
+<pre class="verbatim">    t-mail.ctl:
+    Address             2:5080/102.1@fidonet
+    Address             7:1500/102.1@fidonet
+    BinkStyle_Pack_For  All
+    Busy_Flags_Scan     Bink
+    Busy_Flags_Create   Bink
+    BinkOutbound        \ftn\outbound\fidonet
+    Inbound             \ftn\inbound\
+    InboundUnProtected  \ftn\inbound\uncheck\
+    FileBoxes           \ftn\outbound\fboxes\
+    Security            \ftn\t-mail\password.ctl
+
+    binkd.cfg:
+    address             2:5080/102.1@fidonet 7:1500/102.1@fidonet
+    domain fidonet      \\ftn\\outbound\\fidonet 2
+    inbound             \\ftn\\inbound
+    inbound-nonsecure   \\ftn\\inbound\\uncheck
+    filebox             \\ftn\\fboxes
+    passwords           \\ftn\\t-mail\\password.ctl
+</pre>
+
+<div class="node">
+<a name="g_t04"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#g_t03">03</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 What binkd processes the descriptions an links and file of passwords.</h2>
+
+<p>(This chapter don't translated, sorry.)
+
+</body></html>
+
+<!--
+
+Local Variables:
+coding: iso-8859-1
+End:
+
+-->

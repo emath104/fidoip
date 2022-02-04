@@ -1,0 +1,129 @@
+username SYSTEM-OPERATOR-NAME
+
+Address MYNODE-ADDRESS
+
+XLATPATH /usr/local/etc/golded+/cfgs/charset/
+XLATLOCALSET KOI8
+XLATIMPORT CP866
+XLATEXPORT CP866
+XLATCHARSET KOI8 CP866 koi_866.chs
+XLATCHARSET CP866 KOI8 866_koi.chs
+
+IGNORECHARSET
+
+CTRLINFONET   TEARLINE, ORIGIN
+CTRLINFOECHO  TEARLINE, ORIGIN
+CTRLINFOLOCAL TEARLINE, ORIGIN
+
+TEARLINE -Пиши, старик, пиши! Мы тебя не покинем.
+
+ORIGIN "Неужели опять: яйца всмятку, котлеты, цыплята?"
+
+COLOR MENU   UNREAD     YELLOW  ON BLACK
+HighlightUnread Yes
+SEMAPHORE EXPORTLIST  /home/fido/echotoss.log
+SEMAPHORE IMPORTLIST  /home/fido/import.log
+AreaFile FidoConfig  /usr/local/etc/fido/config
+LOADLANGUAGE         /usr/local/etc/golded+/goldlang.cfg
+AREASCAN *
+UseSoftCRxlat Yes
+EditSoftCrXLat H                     ;EditCompletion "Н"  "H"
+DispSoftCr Yes
+
+TAGLINESUPPORT Yes
+;TAGLINE @random.txt   
+;VIEWHIDDEN YES
+VIEWKLUDGE NO
+
+TwitName Bad User
+TwitName Urgy Spammer
+TwitMode Skip
+TwitTo Yes
+
+UuDecodePath	/home/fido/uudecode
+
+Invalidate Tearline     "" ""
+Invalidate Origin       "" ""
+EditCrlFTerm    No
+ViewQuote       Yes
+ImportBegin     -Hачало файла @file-
+ImportEnd       -Конец файла @file-
+OutPutFile      /home/fido/outfile/
+AttribsNet      Loc Pvt
+DispMsgSize     Kbytes
+DispAttachSize  Kbytes
+NodelistWarn    No
+TemplatePath    /usr/local/etc/golded+
+Template        golded.tpl     "Основной шаблон"
+include         /usr/local/etc/golded+/gedcolor.cfg
+include         /usr/local/etc/golded+/goldkeys.cfg
+NodePath        /home/fido/nodelist
+; Измените net5020.ndl и pnt5020.ndl на соответсвующие вашему региону. 
+; Скопируйте эти файлы в /usr/local/etc/golded+ и перейдите в тот же каталог.
+; Для генерации индекса запустите /usr/local/sbin/gnlnx -f golded.cfg
+NODELIST        net5020.ndl		; NodeList  @FidoNet ZONE 2
+NODELIST        pnt5020.ndl		; PointList @FidoNet 5020
+      
+;Nodelist net5020.* MYNODE-ADDRESS
+;Nodelist pnt5020.* MYNODE-ADDRESS
+;Nodelist 5020828.pnt MYNODE-ADDRESS
+
+; Не приветвовать роботов
+RobotName AreaFix
+RobotName AllFix
+RobotName T-fix
+RobotName FAQServer
+RobotName FileFix
+RobotName Dumb-robot
+LogFile /home/fido/golded.log
+
+; Макросы автоматически вбивающие пароль при наборе в поле адреса
+; сокращения aСОКРАЩЕННОЕ-НАЗВАНИЕ-УЗЛА и fСОКРАЩЕННОЕ-НАЗВАНИЕ-УЗЛА. К примеру, для 2:5020/828 набор a5020-828 подставит адрес AreaFix'а и пароль  
+
+include /usr/local/etc/golded+/macro.cfg
+
+; Добавление всех адресатов, которым пишите во всех областях в алресную
+; книгу /usr/local/etc/golded+/golduser.lst
+AddressBookAdd  Always
+
+; Для занесения в  адресную книгу автора сообщения вручную нажмите Ctrl-B
+^B      READAddressBookAdd
+
+; Просмотр адресной книги - Alt-F10.
+@F10    READUserBase
+
+; Описания арий
+AreaDef Netmail "Почта" 0 Net Squish /home/fido/netmail MYNODE-ADDRESS
+AreaDef dupes "Дупли у нас вторые" 0 Local Squish /home/fido/dupearea MYNODE-ADDRESS
+AreaDef bad "А косяки - кривые" 0 Local Squish /home/fido/badarea MYNODE-ADDRESS
+AreaDef carbonarea "Карбонка не пустая" 0 Local Squish /home/fido/carbonarea MYNODE-ADDRESS
+
+ConfirmFile golded.cfm
+ConfirmResponse  Ask  ; Спросить пользователя
+
+
+PeekURLOptions FromTop
+URLHANDLER -NoPause -NoKeepCtrl -Wipe /usr/bin/firefox `echo "@url" | /usr/bin/iconv -f CP866 -t UTF-8` > /dev/null 2>&1 &
+DispHdrLocation Yes
+DispHdrFGHIUrl  SHORT
+MsgListHeader   1
+URLBrackets     Yes
+AreaDef FGHIGET  "Полученное с fghi.pp.ru" 0 LOCAL  OPUS /home/fido/fghigetdir
+FGHIGetHandler wget http://fghi.pp.ru/get?@fghiurl -O @ofile -U "GoldED-NSF Downloader"
+FGHIReverseSearch YES
+MsgListFirstFGHI NO
+
+KeybExt         Yes
+
+AREALISTGROUPID NO
+;AREALISTSORT YTU-E
+AREASEP !NET "Netmail              ------------  Почта" 0 Net
+AREASEP !LOCAL "Auxiliary Areas      ------------  служебные области" 0 Local
+AREASEP !ECHO "Other FIDONet Echoes ------------  другие конференции Фидонет" 0 Echo
+AREALISTFORMAT "AM D CPUN E G "
+AREALISTTYPE New
+AREALISTECHOMAX 0
+AREALISTGROUPORDER TE
+AREATYPEORDER Net Local Echo
+AREALISTPAGEBAR YES
+
