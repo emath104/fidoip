@@ -1,0 +1,11 @@
+#!/bin/sh
+USERNAME=`whoami` ; T1="root"
+if [ "$T1" = "$USERNAME" ]; then 
+echo  'Please do not run this script as root' ; exit
+fi
+/usr/local/sbin/hpt -c /usr/local/etc/fido/config scan
+/usr/local/sbin/hpt -c /usr/local/etc/fido/config pack
+/usr/local/sbin/binkd -p -P 2:5020/828 /usr/local/etc/binkd.cfg
+/usr/local/sbin/hpt -c /usr/local/etc/fido/config toss
+/usr/local/sbin/htick -c /usr/local/etc/fido/config toss
+/usr/local/sbin/htick -c /usr/local/etc/fido/config announce

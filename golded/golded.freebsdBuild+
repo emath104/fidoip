@@ -1,0 +1,72 @@
+#!/bin/sh
+
+########################
+# NOTES:
+#
+########################
+# Golded+ Fido Editor 
+# Files, directory and templates creation script for GoldEd+ on FreeBSD
+########################
+
+# Set initial variables:
+
+CWD=`pwd`
+TMP=${TMP:-/tmp}	# Location to compile the source
+
+mkdir -p /usr/local/etc/fidoip
+mkdir -p /usr/local/etc/golded+
+
+if [ -e $CWD/decode.txt ]; then
+  cat $CWD/decode.txt > /usr/local/etc/fidoip/decode.txt.template
+  cat $CWD/decode.txt > /usr/local/etc/golded+/golded.cfg
+fi
+
+if [ -e $CWD/goldhelp.cfg ]; then
+  cat $CWD/goldhelp.cfg > /usr/local/etc/golded+/goldhelp.cfg
+fi
+
+if [ -e $CWD/goldkeys.cfg ]; then
+  mkdir -p /usr/local/etc/golded+
+  cat $CWD/goldkeys.cfg > /usr/local/etc/golded+/goldkeys.cfg
+fi
+
+if [ -e $CWD/goldlang.cfg ]; then
+  cat $CWD/goldlang.cfg > /usr/local/etc/golded+/goldlang.cfg
+fi
+
+if [ -e $CWD/gedcolor.cfg ]; then
+  cat $CWD/gedcolor.cfg > /usr/local/etc/golded+/gedcolor.cfg
+fi
+
+if [ -e $CWD/golded.tpl ]; then
+  cat $CWD/golded.tpl > /usr/local/etc/golded+/golded.tpl
+fi
+
+if [ -e $CWD/ge ]; then
+   cp -p $CWD/ge.freebsd /usr/local/bin/ge
+fi
+
+if [ -e $CWD/g ]; then
+   cp -p $CWD/g /usr/local/bin/
+fi
+
+if [ -e $CWD/gl ]; then
+   cp -p $CWD/gl /usr/local/bin/
+fi
+
+if [ -e $CWD/golded.cfm ]; then
+   cp $CWD/golded.cfm /usr/local/etc/golded+/ 
+fi
+
+if [ -e $CWD/net5020.ndl ]; then
+    mkdir -p /home/fido
+    mkdir -p /home/fido/nodelist 
+    cp $CWD/*.ndl /home/fido/nodelist/ 
+fi
+if [ -e $CWD/nodelist.sh ]; then
+    cat $CWD/nodelist.sh > /usr/local/bin/nodelist.sh
+    chmod +x /usr/local/bin/nodelist.sh
+fi
+
+
+

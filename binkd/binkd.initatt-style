@@ -1,0 +1,43 @@
+#!/bin/sh -e
+
+OPTS=" -DCq /usr/local/etc/binkd.cfg"
+PIDFILE=/var/run/binkd/binkd.pid
+DAEMON=/usr/local/sbin/binkd
+USERNAME="username2change"
+
+test -f $DAEMON || exit 0
+
+# don't start binkd if it is started by inetd
+ if [ -e /etc/xinetd.conf ]; then
+grep -q '^binkp[[:space:]]' /etc/xinetd.conf && exit 0
+fi
+
+case "$1" in
+  start)
+    echo -n "Starting FTN mailer: binkd"
+    start-stop-daemon --start --background --pidfile $PIDFILE \
+        --chuid $USERNAME:$USERNAME --exec $DAEMON -- $OPTS
+    echo "."
+    ;;
+  stop)
+    echo -n "Stopping FTN mailer: binkd"
+    start-stop-daemon --oknodo --stop --pidfile $PIDFILE --exec $DAEMON
+    echo "."
+    ;;
+  reload)
+    echo -n "Reloading FTN mailer: binkd"
+    start-stop-daemon --stop --signal 1 --pidfile $PIDFILE --exec $DAEMON
+    echo "."
+    ;;
+  restart|force-reload)
+    sh $0 stop
+    sleep 1
+    sh $0 start
+    ;;
+  *)
+    echo "Usage: /etc/init.d/binkd {start|stop|restart|reload|force-reload}"
+    exit 1
+    ;;
+esac
+
+exit 0

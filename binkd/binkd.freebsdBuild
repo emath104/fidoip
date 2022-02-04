@@ -1,0 +1,51 @@
+#!/bin/sh
+
+########################
+# NOTES:
+# 
+########################
+# Binkd Fido Mailer package
+# Files, directory and templates creation script for GoldEd+ on FreeBSD
+########################
+
+# Set initial variables:
+
+CWD=`pwd`
+TMP=${TMP:-/tmp}	# Location to compile the source
+
+mkdir -p /usr/local/doc/
+cat $CWD/fido.rus.koi > /usr/local/doc/fido.rus.koi
+cat $CWD/fido.rus.utf > /usr/local/doc/fido.rus.utf
+
+if [ -e $CWD/binkd.cfg ]; then
+  mkdir -p /usr/local/etc
+  mkdir -p /usr/local/etc/fidoip
+  cat $CWD/binkd.cfg > /usr/local/etc/binkd.cfg
+  cat $CWD/binkd.cfg > /usr/local/etc/fidoip/binkd.cfg.template
+fi
+
+if [ -e $CWD/recv ]; then
+  cat $CWD/recv.freebsd > /usr/local/bin/recv
+  cat $CWD/recv.freebsd > /usr/local/etc/fidoip/recv.template
+  chmod +x /usr/local/bin/recv
+  chmod +x /usr/local/etc/fidoip/recv.template
+
+fi
+
+if [ -e $CWD/send ]; then
+  cat $CWD/send.freebsd > /usr/local/bin/send
+  cat $CWD/send.freebsd > /usr/local/etc/fidoip/send.template
+  chmod +x /usr/local/bin/send
+  chmod +x /usr/local/etc/fidoip/send.template
+fi
+
+if [ -e $CWD/binkdstat.pl ]; then
+  cp $CWD/binkdstat.pl /usr/local/bin/
+  cp $CWD/stat-binkd.pl  /usr/local/bin/
+  cp $CWD/binkd_yesterday_stat.sh  /usr/local/bin/
+  cp $CWD/binkd_weekly_stat.sh  /usr/local/bin/
+  cp $CWD/binkd_monthly_stat.sh  /usr/local/bin/
+fi
+
+
+

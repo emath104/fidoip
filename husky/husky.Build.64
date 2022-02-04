@@ -1,0 +1,398 @@
+#!/bin/sh
+
+########################
+# NOTES:
+#
+########################
+# Husky Fido Project http://husky.sourceforge.net/index.html
+# Download latest verisons rename in bottom
+# You could do it automatically if uncomment this line:  
+#wget -c http://heanet.dl.sourceforge.net/sourceforge/husky/fidoconf-1.4-rc5.tar.gz
+#wget -c http://surfnet.dl.sourceforge.net/sourceforge/husky/smapi-2.4-rc5.tar.gz
+#wget -c http://surfnet.dl.sourceforge.net/sourceforge/husky/huskybase-1.4-tar.gz
+#wget -c http://switch.dl.sourceforge.net/sourceforge/husky/hpt-1.4-rc5.tar.gz
+# And optional for point and useful for fido node husky programms:
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/hptkill-1.10.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/hptsqfix-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/hpucode-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/htick-1.0.4-src.tar.gz
+#http://nchc.dl.sourceforge.net/sourceforge/husky/nltools-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/sqpack-1.2.4-src.tar.gz
+#wget -c http://nchc.dl.sourceforge.net/sourceforge/husky/bsopack-0.2.4-src.tar.gz
+# To simplify editing configuration files added an easy to use text editor ee:
+#wget -c http://mahon.cwx.net/sources/ee-1.4.6.src.tgz
+########################
+
+# Set initial variables:
+
+NAME=husky			# Program name
+PNAME=husky			# Package name (Useful for changing case, removing "-"s, etc.)
+VERSION=1.4.rc5		# Program version
+PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
+ARCH=${ARCH:-x86_64}	# Package architecture
+BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
+
+CWD=`pwd`
+TMP=${TMP:-/tmp}	# Location to compile the source
+PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
+
+HPTVER=hpt-1.4-rc5
+FIDOCONFVER=fidoconf-1.4-rc5
+HASKYBASEVER=huskybase-1.4-tar.gz
+SMAPIVER=smapi-2.4-rc5
+
+#Additional husky program
+HPTKILLVER=hptkill-1.12-rc5.tar.gz
+HPTSQFIXVER=hptsqfix-1.4-rc5-1.tar.gz
+HPUCODEVER=hpucode-1.4-rc5-tar.gz
+HTICKVER=htick-1.4-rc5.tar.gz
+NLTOOLVER=nltools-1.4-rc5.tar.gz
+SQPACKVER=sqpack-1.4-rc5.tar.gz
+BSOPACKVER=bsopack-1.4.0-rc5.tar.gz
+
+# And ease editor ee
+EEVER=ee-1.4.6.src.tgz
+
+PDOC1="ChangeLog VERSION DEPENDENCIES INSTALL README BUGS COPYING"
+PDOC2="LICENSE TODO README.TXT BUG-REPORTING UPGRADE CREDITS HISTORY"
+PDOC3="develop-docs doc new rus"
+
+
+# Define compiler flags based on intended architecture:
+# Can easily expand this for alternate compilations
+
+if [ "$ARCH" = "i386" ]; then
+  SLKCFLAGS="-O2 -march=i386 -mcpu=i686"
+elif [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mcpu=i686"
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mcpu=i686"
+elif [ "$ARCH" = "s390" ]; then
+  SLKCFLAGS="-O2"
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2"
+fi
+
+########################
+# Husky temporary files delete
+cd $TMP
+rm -r huskybse
+rm -r smapi
+rm -r hpt
+rm -r fidoconf
+
+# Additional husky temporary delete 
+rm -r hptkill
+rm -r hptsqfix
+rm -r hpucode
+rm -r htick
+rm -r nltools
+rm -r sqpack
+rm -r bsopack
+
+# Ease Editor temporary delete
+rm -r easyedit-1.4.6
+
+########################
+# Husky files extract for building
+#tar xvzf $CWD/$NAME-$VERSION.tar.gz # Should consider changing to check for tar.gz or tar.bz2
+# Correct file names upper if you are using fresh version. 
+
+
+tar xvzf $CWD/$HPTVER.tar.gz
+tar xvzf $CWD/$FIDOCONFVER.tar.gz
+tar xvzf $CWD/$HASKYBASEVER
+tar xvzf $CWD/$SMAPIVER.tar.gz
+# Additional husky programm extract
+tar xvzf $CWD/$HPTKILLVER
+tar xvzf $CWD/$HPTSQFIXVER
+tar xvzf $CWD/$HPUCODEVER
+tar xvzf $CWD/$HTICKVER
+tar xvzf $CWD/$NLTOOLVER
+tar xvzf $CWD/$SQPACKVER
+tar xvzf $CWD/$BSOPACKVER
+
+# Easy Editor extraction
+tar xvzf $CWD/$EEVER
+
+#copy Husky rules for compily
+cp $CWD/huskymak.cfg $TMP/
+
+
+mkdir -p /usr/local/sbin
+
+# Begin compily and install
+
+cd smapi 
+
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+# Classic "./configure && make && make install":
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../fidoconf
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../hpt
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+# Additional husky programm compily
+
+cd ../hptkill
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../hptsqfix
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../hpucode
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../htick
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../nltools
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../sqpack
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+cd ../bsopack
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+make clean
+make all
+make PREFIX=/usr/local install
+
+# Ease Editor build and install
+cd ../easyedit-1.4.6
+make
+cp ee /usr/bin/
+
+
+# Correct binaries ownership:
+
+if ls /usr/local/sbin &> /dev/null; then
+  chown -R root.bin /usr/local/sbin
+fi
+
+
+# Strip binaries and libs:
+
+( cd $PKG
+  find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null
+  find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null
+)
+
+# Compress man pages:
+
+find /usr/local/man -type f -exec gzip -9 {} \;
+
+# Create package docs:
+# Probably should define the package documentation with
+# a variable ($PDOCS) up top and replace the names
+
+mkdir -p /usr/local/doc/$PNAME-$VERSION
+mkdir -p /usr/local/doc/$PNAME-$VERSION/hpt
+mkdir -p /usr/local/doc/$PNAME-$VERSION/smapi
+mkdir -p /usr/local/doc/$PNAME-$VERSION/fidoconf
+
+#Additional husky documentation directory creation
+
+
+mkdir -p /usr/local/doc/$PNAME-$VERSION/hptkill
+mkdir -p /usr/local/doc/$PNAME-$VERSION/hptsqfix
+mkdir -p /usr/local/doc/$PNAME-$VERSION/sqpack
+mkdir -p /usr/local/doc/$PNAME-$VERSION/bsopack
+#
+mkdir -p /usr/local/doc/$PNAME-$VERSION/hpucode
+mkdir -p /usr/local/doc/$PNAME-$VERSION/nltools
+mkdir -p /usr/local/doc/$PNAME-$VERSION/htick
+
+# Ease Editor documentation and licence
+mkdir -p /usr/local/doc/ee
+
+# Husky documentation copy
+cd ../hpt
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/hpt/ 
+cd ../smapi
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/smapi/ 
+cd ../fidoconf
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/fidoconf/ 
+cd ../huskybse
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION
+
+#Additional husky documentation copy
+cd ../hptkill
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/hptkill/ 
+cd ../hptsqfix
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/hptsqfix/ 
+cd ../sqpack
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/sqpack/
+cd ../bsopack
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/bsopack/
+cd ../hpucode
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/hpucode/
+cd ../nltools
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/nltools/
+cd ../htick
+cp -a $PDOC1 $PDOC2 $PDOC3/* /usr/local/doc/$PNAME-$VERSION/htick/
+
+
+# Ease Editor ee documenetaton copy
+cd ../easyedit-1.4.6
+cp README.ee Artistic ee.msg ee.i18n.guide Changes /usr/local/doc/ee/
+
+#Creating configuration directory    
+
+mkdir -p /usr/local/etc
+mkdir -p /usr/local/etc/fido
+cp $TMP/huskymak.cfg /usr/local/etc/fido
+chmod -R 644 /usr/local/doc/$PNAME-$VERSION/*
+
+#Copy Husky configuration file  
+
+if [ -e $CWD/config ]; then
+  mkdir -p /usr/local/etc/fidoip
+  cat $CWD/config > /usr/local/etc/fido/config
+  cat $CWD/config > /usr/local/etc/fidoip/config.template
+
+fi
+
+if [ -e $CWD/hpt_area.pl ]; then
+  cp $CWD/hpt_area.pl /usr/local/bin/
+  cp $CWD/hpt_log.pl /usr/local/bin/
+  cp $CWD/hpt_info.sh /usr/local/bin/
+  cp $CWD/linkarea_stat.sh /usr/local/bin/
+  cp $CWD/import_arealist_from_windows.sh /usr/local/bin/
+  cp $CWD/export_arealist_to_windows.sh /usr/local/bin/
+  cp $CWD/save_arealist.sh /usr/local/bin/
+fi
+
+

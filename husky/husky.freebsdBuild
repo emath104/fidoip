@@ -1,0 +1,32 @@
+#!/bin/sh
+
+########################
+# NOTES:
+#
+########################
+# Husky Fido Project
+# Files, directory and templates creation script for Husky Fido on FreeBSD
+########################
+
+# Set initial variables:
+
+CWD=`pwd`
+TMP=${TMP:-/tmp}	# Location to compile the source
+
+
+if [ -e $CWD/config ]; then
+  cat $CWD/config.freebsd > /usr/local/etc/fido/config
+  cat $CWD/config.freebsd > /usr/local/etc/fidoip/config.template
+fi
+
+if [ -e $CWD/hpt_area.pl ]; then
+  cp $CWD/hpt_area.pl /usr/local/bin/
+  cp $CWD/hpt_log.pl /usr/local/bin/
+  cp $CWD/hpt_info.sh /usr/local/bin/
+  cp $CWD/linkarea_stat.sh /usr/local/bin/
+  cp $CWD/import_arealist_from_windows.sh /usr/local/bin/
+  cp $CWD/export_arealist_to_windows.sh /usr/local/bin/
+  cp $CWD/save_arealist.sh /usr/local/bin/
+fi
+
+

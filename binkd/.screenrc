@@ -1,0 +1,5 @@
+encoding utf8
+bind -c enc "^u" encoding utf8
+bind -c enc "^k" encoding koi8-r
+bind -c enc "^w" encoding cp1251
+bindkey "^e" command -c enc
