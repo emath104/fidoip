@@ -62,14 +62,14 @@ ConvertLongNames        DontTouch
 FileDescName            file_id.diz
 FileAreaCreatePerms     0755
 FileDescPos             13
-AnnAreaTag      NetmailArea
+AnnAreaTag      Netmail
 AnnInclude      *
 AnnTo           Vasiliy Pampasov
 AnnFrom         HTick Robot
 AnnSubj         New files!
 AnnAddrFrom     2:5020/828.555
 AnnAddrTo       2:5020/828.555
-AnnOrigin       Бездумный робот htick
+AnnOrigin       Thoghtless robot htick
 endif
 
 

@@ -3,4 +3,4 @@ USERNAME=`whoami` ; T1="root"
 if [ "$T1" = "$USERNAME" ]; then 
 echo  'Please do not run this script as root' ; exit
 fi
-/usr/bin/luit -encoding koi8-r /usr/local/bin/ge
+/usr/bin/luit -x -encoding koi8-r /usr/local/bin/ge

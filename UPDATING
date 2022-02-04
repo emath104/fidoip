@@ -1,24 +1,23 @@
 ОБНОВЛЕНИЕ FIDOIP
 
-Если у Вас уже установлена предыдущая версия fidoip, то загрузите fidoip-1.0.5_1.tar, раскройте его и обновите поинткомплект следующим образом:
+Если у Вас уже установлена предыдущая версия fidoip, то загрузите fidoip-1.0.5_3.tar, раскройте его и обновите поинткомплект следующим образом:
 
 
-	ОБНОВЛЕНИЕ FIDOIP ДЛЯ WINDOWS
-
+ОБНОВЛЕНИЕ FIDOIP ДЛЯ WINDOWS 
 
 1. Откройте командный интерпретатор cmd.exe(для этого нужно открыть меню "Пуск" и ввести с строке "Запустить" команду cmd.exe), перейдите на тот диск, на котором у вас установлен fidoip и запустите скрипт:
 
 \usr\bin\export_windows_arealist.bat
 
-2. Откройте "Проводник", "Total Commander", Far и создайте каталог \home\fido\fghigetdir. Этот каталог служебный, поэтому его следует создать, иначе гипертекстовые возможности редактора GoldEd-NSF будут недоступны.
+2. Откройте "Проводник", "Total Commander", Far и если каталог \home\fido\fghigetdir отсутствует - создайте его. Этот каталог служебный, поэтому его следует создать, иначе гипертекстовые возможности редактора GoldEd-NSF будут недоступны.
 
 3. Переименуйте каталог с вашими базами \home в \home_old и каталог \usr в \usr_old
 
-4. Извлеките файл fidoip_win-1.0.5.zip из архива fidoip-1.0.5_1.tar. Раскройте этот файл в корень диска и настройте комплект как это описано в разделе 12. "Установка поинткомплекта в Windows"
+4. Извлеките файл fidoip_win-1.0.5_3.zip из архива fidoip-1.0.5_3.tar. Раскройте этот файл в корень диска и настройте комплект как это описано в разделе 14. "Установка поинткомплекта в Windows"
 
 5. Удалите каталог \home и затем переименуйте каталог с вашими базами из \home_old в \home
 
-6. Отредактируйте и запустите файл \usr\setup_config.vbs как это описано в разделе 12. "Установка поинткомплекта в Windows"
+6. Отредактируйте и запустите файл \usr\setup_config.vbs как это описано в разделе 14. "Установка поинткомплекта в Windows"
 
 7. Откройте командный интерпретатор cmd.exe(для этого нужно открыть меню "Пуск" и ввести с строке "Запустить" команду cmd.exe), перейдите на тот диск, на котором у вас установлен fidoip и запустите скрипт:
 
@@ -29,13 +28,13 @@
 9. Запустите редактор и проверьте, все ли эхи читаются.
 
 
-	ОБНОВЛЕНИЕ FIDOIP ВО FREEBSD
+ОБНОВЛЕНИЕ FIDOIP ВО FREEBSD
 
 
 1. Под root'ом выполните команды:
 
 cat /usr/local/etc/fido/config | grep EchoArea > arealist.save
-tar -czf fido_etc.tar /usr/local/etc/binkd.cfg /home/fido/*.log /usr/local/etc/fido /usr/local/etc/golded+
+tar -cf fido_etc.tar /usr/local/etc/binkd.cfg /usr/local/etc/fido /usr/local/etc/golded+
 
 Первая команда сохраняет список используемых вами эхоконференций в файл arealist.save, вторая сохраняет все ваши конфиги и логи в файл fido_etc.tar. Если в скриптах /usr/local/bin/recv и /usr/local/bin/send у Вас были добавлены какие-то дополнительные команды, тогда сохраните их также.
 
@@ -49,7 +48,7 @@ pkg_delete "binkd*"
 pkg_delete "husky*"
 pkg_delete "golded*" 
 
-4. Установите fidoip-1.0.5 как это описано ниже в разделе 3. "Установка поинткомплекта во FreeBSD";
+4. Установите fidoip как это описано ниже в разделе 3. "Установка поинткомплекта во FreeBSD";
 
 5. Под root'ом при помощи конфигуратора setup_config.bash настройте поинткомплект под Ваши данные
 
@@ -76,13 +75,13 @@ cat /usr/local/etc/fido/config | grep EchoArea | sort | uniq -d
 9. Запустите редактор и проверьте все ли эхи читаются.
 
 
-	ОБНОВЛЕНИЕ FIDOIP В LINUX'Е
+ОБНОВЛЕНИЕ FIDOIP В LINUX'Е
 
 
 1. Под root'ом выполните команды:
 
 cat /usr/local/etc/fido/config | grep EchoArea > arealist.save
-tar -czf fido_etc.tar /usr/local/etc/binkd.cfg /home/fido/*.log /usr/local/etc/fido /usr/local/etc/golded+ 
+tar -cf fido_etc.tar /usr/local/etc/binkd.cfg /usr/local/etc/fido /usr/local/etc/golded+ 
 
 
 Первая команда сохраняет список используемых вами эхоконференций в файл arealist.save, вторая сохраняет все ваши конфиги и логи в файл fido_etc.tar. Если в скриптах /usr/local/bin/recv и /usr/local/bin/send у Вас были добавлены какие-то дополнительные команды, тогда сохраните их также.
@@ -107,7 +106,7 @@ cat /usr/local/etc/fido/config | grep EchoArea > arealist.save
 Если у вас Arch Linux, под root'ом удалите старые пакеты fidoip:
 
 su
-pacman -R binkd husky-bsopack husky-fidoconf husky-hpt husky-hptkill husky-hptsqfix husky-hpucode husky-htick husky-nltools husky-smapi husky-sqpack golded+
+pacman -R binkd husky-bsopack husky-fidoconf husky-hpt husky-hptkill husky-hptsqfix husky-hpucode husky-htick husky-nltools husky-smapi husky-sqpack golded-nsf
 
 
 Если у Вас Slackware удалите пакеты "binkd*", "husky*", "golded*" при помощи pkgtool или removepkg
@@ -121,7 +120,7 @@ cd fidoip-1.0.5
 
 sudo ./clear_fidoip_files.sh
 
-6. Установите поинткомплект fidoip-1.0.5 как это описано ниже для вашего дистрибутива;
+6. Установите поинткомплект fidoip как это описано ниже для вашего дистрибутива;
 
 7. Под root'ом удалите пустой каталог /home/fido
 
