@@ -10,6 +10,7 @@ USERNAME=`whoami`
 date=`date +%Y%m%d%m%s`
 shortdate=`echo ${date} | sed s/^...//`
 shortname=fidoip_configs_${shortdate}.tar
+UNAME=`uname -m`
 
 T1="root"
 T2="Linux"
@@ -86,6 +87,20 @@ chmod 755 /usr/local/bin/rs
 chown "$VAR_01": /usr/local/bin/rs
 
 if [ "$T2" = "$OSNAME" ]; then
+
+rm -f /usr/local/sbin/golded
+
+if [ "$UNAME" = "x86_64" ]; then
+
+cp golded/gedlnx-lin-x64 /usr/local/sbin/gedlnx
+cp golded/gnlnx-lin-x64 /usr/local/sbin/gnlnx
+cp golded/rddtlnx-lin-x64 /usr/local/sbin/rddtlnx
+
+chmod +x  /usr/local/sbin/gedlnx
+chmod +x /usr/local/sbin/gnlnx
+chmod +x /usr/local/sbin/rddtlnx
+
+fi
 
 if [ -e /usr/local/bin/poll ];then
 chmod 755 /usr/local/bin/poll

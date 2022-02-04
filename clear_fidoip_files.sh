@@ -146,6 +146,9 @@ rm -f /usr/local/sbin/sqpack
 rm -f /usr/local/sbin/tparser
 rm -f /usr/local/sbin/txt2pkt
 rm -f /usr/local/sbin/ulc
+rm -f /usr/local/sbin/golded
+rm -f /usr/local/sbin/openbsd-vt220.sh
+rm -f /usr/local/sbin/screenrc_koi8r
 
 rm -f /usr/local/man/man1/bsopack.1.gz
 rm -f /usr/local/man/man1/hpt*.gz
