@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: multi-configs.bash login install_number
+# usage: bash ./multi-configs.bash login install_number
 # Script which allow change default fidoip /home/fido/ directory to /home/your_login/fido
 # or make multiply fidoip's configurations for multiply users to work at one PC.
 # Works only on FreeBSD and Linux

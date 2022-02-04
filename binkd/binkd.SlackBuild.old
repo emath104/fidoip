@@ -1,0 +1,211 @@
+#!/bin/sh
+
+########################
+# NOTES:
+# 
+########################
+# Binkd Fido Mailer pakage for Slackware 
+# Download latest verison of and remame in bottom in unzip
+# You could do it automatically if uncomment this line:  
+# wget ftp://cvs.happy.kiev.ua/pub/fidosoft/mailer/binkd/binkd098.zip 
+# If you are using newest version of binkd pls change 
+# name of zip file below. 
+#
+########################
+
+# Set initial variables:
+
+NAME=binkd			# Program name
+PNAME=binkd			# Package name (Useful for changing case, removing "-"s, etc.)
+VERSION=1.0.0		# Program version last from cvs
+PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
+ARCH=${ARCH:-i486}	# Package architecture
+BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
+
+CWD=`pwd`
+TMP=${TMP:-/tmp}	# Location to compile the source
+PKG=$TMP/package-$NAME	# Location to build the package (use "package-$NAME" to avoid poss. conflicts)
+
+# Defining pakage documentation files 
+
+PDOC="!README !README.FIX !SRIF.TXT COPYING binkd.txt readme.ND"
+
+# Compiler flags based on intended architecture:
+# Can easily expand this for alternate compilations
+
+if [ "$ARCH" = "i386" ]; then
+  SLKCFLAGS="-O2 -march=i386 -mtune=i686"
+elif [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+elif [ "$ARCH" = "s390" ]; then
+  SLKCFLAGS="-O2"
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2"
+fi
+
+rm -rf $PKG		# Get rid of any leftovers
+mkdir -p $PKG		# Make sure $PKG and $TMP (-p switch) exist
+
+cd $TMP
+rm -rf binkd-$VERSION
+
+# Correct Binkd zip file name if you are using fresh version. 
+unzip $CWD/binkd100.zip
+
+
+cd binkd-$VERSION
+cp /tmp/binkd-$VERSION/mkfls/unix/* /tmp/binkd-$VERSION/
+chmod +x $TMP/binkd-$VERSION/mkinstalldirs
+
+
+# Correct general permissions/ownership:
+
+chown -R root.root .
+find . -perm 777 -exec chmod 755 {} \;
+find . -perm 775 -exec chmod 755 {} \;
+find . -perm 711 -exec chmod 755 {} \;
+find . -perm 666 -exec chmod 644 {} \;
+find . -perm 664 -exec chmod 644 {} \;
+find . -perm 600 -exec chmod 644 {} \;
+find . -perm 555 -exec chmod 755 {} \;
+find . -perm 511 -exec chmod 755 {} \;
+find . -perm 444 -exec chmod 644 {} \;
+find . -perm 440 -exec chmod 644 {} \;
+find . -perm 400 -exec chmod 644 {} \;
+
+# Classic "./configure && make && make install":
+
+CFLAGS="$SLKCFLAGS" \
+sh configure \
+  --prefix=/usr/local \
+  --sysconfdir=/usr/local/etc \
+  --localstatedir=/var/lib \
+  --with-https -with-bwlim --with-perl \
+  $ARCH-slackware-linux
+make
+#make PREFIX=$PKG/usr/local install
+
+mkdir -p $PKG/usr/local/sbin
+mkdir -p $PKG/usr/local/bin
+mkdir -p $PKG/usr/local/etc
+mkdir -p $PKG/usr/local/man
+mkdir -p $PKG/home/fido
+
+/usr/bin/ginstall -c -D binkd $PKG/usr/local/sbin/binkd
+/usr/bin/ginstall -c -D -m 644 binkd.8 $PKG/usr/local/share/man/man8/binkd.8
+/usr/bin/ginstall -c -D -m644 binkd.conf $PKG/usr/local/etc/binkd.conf-dist
+
+
+# Correct binaries ownership:
+
+if ls $PKG/usr/local/sbin &> /dev/null; then
+  chown -R root.bin $PKG/usr/local/sbin
+fi
+
+
+# Compress man pages:
+
+find $PKG/usr/local/man -type f -exec gzip -9 {} \;
+
+# Create package docs:
+# Probably should define the package documentation with
+# a variable ($PDOCS) up top and replace the names with it
+
+mkdir -p $PKG/usr/local/doc/$PNAME-$VERSION
+cp -a $PDOC $PKG/usr/local/doc/$PNAME-$VERSION/
+mkdir -p $PKG/usr/local/doc/fidoip
+cat $CWD/documentation.txt > $PKG/usr/local/doc/fidoip/documentation.txt
+chmod 644 $PKG/usr/local/doc/$PNAME-$VERSION/*
+chmod 644 $PKG/usr/local/doc/fidoip/*
+
+# Add package description:
+
+if [ -e $CWD/slack-desc ]; then
+  mkdir -p $PKG/install
+  cat $CWD/slack-desc > $PKG/install/slack-desc
+fi
+
+if [ -e $CWD/binkd.cfg ]; then
+
+mkdir -p $PKG/usr/local/etc
+mkdir -p $PKG/usr/local/etc/fidoip
+cat $CWD/binkd.cfg > $PKG/usr/local/etc/binkd.cfg
+cat $CWD/binkd.cfg > $PKG/usr/local/etc/fidoip/binkd.cfg.template
+fi
+
+if [ -e $CWD/recv ]; then
+cat $CWD/recv > $PKG/usr/local/bin/recv
+cat $CWD/recv > $PKG/usr/local/etc/fidoip/recv.template
+chmod +x $PKG/usr/local/bin/recv
+chmod +x $PKG/usr/local/etc/fidoip/recv.template
+fi
+
+if [ -e $CWD/send ]; then
+cat $CWD/send > $PKG/usr/local/bin/send
+cat $CWD/send > $PKG/usr/local/etc/fidoip/send.template
+chmod +x $PKG/usr/local/bin/send
+chmod +x $PKG/usr/local/etc/fidoip/send.template
+fi
+
+if [ -e $CWD/binkdstat.pl ]; then
+  mkdir -p $PKG/usr/local
+  mkdir -p $PKG/usr/local/bin
+  cat $CWD/binkdstat.pl > $PKG/usr/local/bin/binkdstat.pl
+  chmod +x $PKG/usr/local/bin/binkdstat.pl
+  cat $CWD/stat-binkd.pl > $PKG/usr/local/bin/stat-binkd.pl
+  chmod +x $PKG/usr/local/bin/stat-binkd.pl
+  cat $CWD/binkd_yesterday_stat.sh > $PKG/usr/local/bin/binkd_yesterday_stat.sh
+  chmod +x $PKG/usr/local/bin/binkd_yesterday_stat.sh
+  cat $CWD/binkd_weekly_stat.sh > $PKG/usr/local/bin/binkd_weekly_stat.sh
+  chmod +x $PKG/usr/local/bin/binkd_weekly_stat.sh 
+  cat $CWD/binkd_monthly_stat.sh > $PKG/usr/local/bin/binkd_monthly_stat.sh
+  chmod +x $PKG/usr/local/bin/binkd_monthly_stat.sh
+fi
+
+if [ -e $CWD/binkd.log ]; then
+  mkdir -p $PKG/home
+  mkdir -p $PKG/home/fido
+  mkdir -p $PKG/home/fido/outbound
+  mkdir -p $PKG/home/fido/protinb
+  mkdir -p $PKG/home/fido/inbound
+  mkdir -p $PKG/home/fido/tempinb
+  mkdir -p $PKG/home/fido/tempoutb
+  mkdir -p $PKG/home/fido/filebox
+  mkdir -p $PKG/home/fido/badarea 
+  mkdir -p $PKG/home/fido/carbonarea
+  mkdir -p $PKG/home/fido/msgbasedir
+  mkdir -p $PKG/home/fido/netmailarea
+  mkdir -p $PKG/home/fido/localinb
+  mkdir -p $PKG/home/fido/uudecode
+  mkdir -p $PKG/home/fido/outfile
+  mkdir -p $PKG/home/fido/nodelist
+  mkdir -p $PKG/home/fido/2uplink
+  mkdir -p $PKG/home/fido/public
+  mkdir -p $PKG/home/fido/flags
+  mkdir -p $PKG/home/fido/magic
+  mkdir -p $PKG/home/fido/announce
+
+ cat $CWD/binkd.log > $PKG/home/fido/binkd.log
+ 
+fi
+
+
+# Add install script:
+
+if [ -e $CWD/doinst.sh ]; then
+  cat $CWD/doinst.sh > $PKG/install/doinst.sh
+fi
+
+
+# Build the package:
+
+cd $PKG
+makepkg -l y -c n $TMP/$PNAME-$VERSION-$ARCH-$BUILD.tgz
+
+# Clean up the extra stuff:
+
+if [ "$1" = "--cleanup" ]; then
+  rm -rf $PKG
+fi

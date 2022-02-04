@@ -1,0 +1,58 @@
+--- golded3/geinit.cpp.orig	2008-05-29 03:21:46.000000000 +0400
++++ golded3/geinit.cpp	2009-06-01 06:05:59.000000000 +0400
+@@ -529,9 +529,9 @@
+   // First inits
+   tzset();
+   // set locale
+-  setlocale(LC_CTYPE, "");
++  setlocale(LC_CTYPE, "C-TRADITIONAL");
+   // and get it's name
+-  const char* lc = setlocale(LC_CTYPE, "");
++  const char* lc = setlocale(LC_CTYPE, "C-TRADITIONAL");
+   if(lc and not (strstr(lc, "German_") or strstr(lc, "Polish_")))
+     right_alt_same_as_left = true;
+   #if defined(GUTLOS_FUNCS)
+--- goldlib/gall/gcharset.cpp.orig	2007-02-22 14:10:55.000000000 +0300
++++ goldlib/gall/gcharset.cpp	2009-06-01 06:05:59.000000000 +0400
+@@ -81,7 +81,7 @@
+   const char *cp;
+ 
+   strcpy(charsetbuf, GOLDED_DEFAULT_CHARSET);
+-  cp = setlocale(LC_CTYPE, "");
++  cp = setlocale(LC_CTYPE, "C-TRADITIONAL");
+   if((cp != NULL) and ((cp = strchr(cp, '.')) != NULL)) {
+     cp++;
+ /* Commented on reason: Non-standard charset values isn't used in unix locale, may be in very old implementations?
+--- goldlib/gall/gutlwin.cpp.orig	2005-11-01 05:31:41.000000000 +0300
++++ goldlib/gall/gutlwin.cpp	2009-06-01 06:05:59.000000000 +0400
+@@ -73,7 +73,7 @@
+   if(WinVer.dwPlatformId == VER_PLATFORM_WIN32_NT) {
+ #ifdef __MSVCRT__
+     char locale[256] = "";
+-    char *lc = setlocale(LC_CTYPE, "");
++    char *lc = setlocale(LC_CTYPE, "C-TRADITIONAL");
+     if(lc) {
+       strxcpy(locale, lc, 256);
+       lc = strchr(locale, '.');
+--- goldnode/goldnode.cpp.orig	2009-06-01 06:01:24.000000000 +0400
++++ goldnode/goldnode.cpp	2009-06-01 06:06:00.000000000 +0400
+@@ -1624,7 +1624,7 @@
+   throw_init();
+ 
+   // set locale
+-  setlocale(LC_CTYPE, "");
++  setlocale(LC_CTYPE, "C-TRADITIONAL");
+   #if defined(GUTLOS_FUNCS)
+   g_init_os(0);
+   #endif
+--- rddt/rddt.cpp.orig	2007-01-08 15:09:42.000000000 +0300
++++ rddt/rddt.cpp	2009-06-01 06:05:59.000000000 +0400
+@@ -331,7 +331,7 @@
+   throw_init();
+ 
+   // set locale
+-  setlocale(LC_CTYPE, "");
++  setlocale(LC_CTYPE, "C-TRADITIONAL");
+ 
+   cout << "Route Diagram Drawing Tool v." << __gver_shortver__ << __gver_platform__ << __gver_postversion__;
+ #ifdef KOI8

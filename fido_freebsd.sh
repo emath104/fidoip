@@ -52,7 +52,7 @@ echo $CWD/$shortname
 echo ''
 echo '------------------------------------------------------------------------'
 echo ''
-tar -cf tar -cf $CWD/$shortname /usr/local/etc/binkd.cfg /usr/local/etc/golded+/g* /usr/local/etc/fido/config /usr/local/bin/recv /usr/local/bin/send > /dev/null 2>&1
+tar -cf $CWD/$shortname /usr/local/etc/binkd.cfg /usr/local/etc/golded+/g* /usr/local/etc/fido/config /usr/local/bin/recv /usr/local/bin/send > /dev/null 2>&1
 
 if [ -e /usr/local/sbin/recv ]; then
 rm /usr/local/sbin/recv
@@ -131,7 +131,6 @@ exit
 fi
 fi
 
-
 echo ""
 if [ -e /usr/local/bin/bash  ]; then
 echo  'Found bash package.'
@@ -157,6 +156,39 @@ exit
 fi
 fi
 
+echo ""
+if [ -e /usr/local/bin/wget  ]; then
+echo  'Found wget package.'
+else
+echo 'wget package is not installed!'
+echo 'Trying to install it from ports'
+if [ -e /usr/ports/ftp/wget/Makefile ]; then
+echo '-------------------------------------------------------------------------'
+echo 'using port /usr/ports/ftp/wget/, begin compilation'
+sleep 5
+cd /usr/ports/ftp/wget/ ; make install clean
+if [ -e /usr/local/bin/wget  ]; then
+echo '-------------------------------------------------------------------------'
+echo  'Wow! Found wget package now.'
+sleep 3
+else
+fi
+else
+echo '-------------------------------------------------------------------------'
+echo 'wget package is still not installed!                       '
+echo 'Error. Install this package manually, then rerun this script'
+exit
+fi
+fi
+
+rm -rf /usr/ports/net/*-fidoip
+rm -rf /usr/ports/news/*-fidoip
+
+tar -xzpf $CWD/bsd_ports.tar.gz -C / 
+
+mkdir -p /usr/ports/packages
+
+cp $CWD/binkd/binkd100.zip /usr/ports/distfiles/
 
 echo ""
 if [ -e /usr/local/sbin/binkd  ]; then
@@ -164,11 +196,13 @@ echo  'Found BinkD package.'
 else
 echo 'BinkD package is not installed!'
 echo 'Trying to install it from ports'
-if [ -e /usr/ports/net/binkd/Makefile ]; then
+if [ -e /usr/ports/net/binkd-fidoip/Makefile ]; then
 echo '------------------------------------------------------------------------'
-echo 'using port /usr/ports/net/binkd/, begin compilation'
+echo 'using port /usr/ports/net/binkd-fidoip/, begin compilation'
 sleep 5
-cd /usr/ports/net/binkd ; make install clean
+cd /usr/ports/net/binkd-fidoip ; make extract
+mv /usr/ports/net/binkd-fidoip/work/binkd-1.0.0 /usr/ports/net/binkd-fidoip/work/binkd-fidoip-1.0.0
+make package ; make clean
 if [ -e /usr/local/sbin/binkd  ]; then
 echo '-------------------------------------------------------------------------'
 echo  'Wow! Found BinkD package now.'
@@ -183,6 +217,41 @@ exit
 fi
 fi
 
+cp $CWD/golded/gps90710.tb2 /usr/ports/distfiles/
+
+echo ""
+if [ -e /usr/local/bin/golded  ]; then
+echo  'Found GoldEd+ package.'
+else
+echo 'GoldEd+ package is not installed!'
+echo 'Trying to install it from ports'
+if [ -e /usr/ports/news/golded+-fidoip/Makefile ]; then
+echo '--------------------------------------------------------------------------'
+echo 'using port /usr/ports/news/golded+-fidoip/, begin compilation'
+sleep 5
+cd /usr/ports/news/golded+-fidoip ; make extract 
+mv /usr/ports/news/golded+-fidoip/work/golded+ /usr/ports/news/golded+-fidoip/work/golded+-fidoip
+mkdir -p /usr/local/etc/golded+
+cp -R /usr/ports/news/golded+-fidoip/work/golded+-fidoip/cfgs /usr/local/etc/golded+/
+cp -R /usr/ports/news/golded+-fidoip/work/golded+-fidoip/chsgen/map /usr/local/etc/golded+/
+
+make patch ; make package ; make clean
+
+if [ -e /usr/local/bin/golded  ]; then
+echo '-------------------------------------------------------------------------'
+echo  'Wow! Found GoldEd+ package now.'
+sleep 3
+else
+fi
+else
+echo '---------------------------------------------------------------------------'
+echo 'GoldEd+ package is still not installed!                     '  
+echo 'Error. Install this package manually, then rerun this script'
+exit
+fi
+fi
+
+
 mkdir -p /usr/ports/distfiles/husky
 cp $CWD/husky/huskybase-1.4-tar.gz /usr/ports/distfiles/husky/
 cp $CWD/husky/smapi-2.4-rc5.tar.gz /usr/ports/distfiles/husky/smapi-fidoip-2.4-rc5.tar.gz
@@ -196,10 +265,15 @@ cp $CWD/husky/sqpack-1.4-rc5.tar.gz /usr/ports/distfiles/husky/sqpack-fidoip-1.4
 cp $CWD/husky/hptsqfix-1.4-rc5-1.tar.gz /usr/ports/distfiles/husky/hptsqfix-fidoip-1.4-src.tar.gz
 cp $CWD/husky/bsopack-1.4.0-rc5.tar.gz /usr/ports/distfiles/husky/bsopack-fidoip-1.4.0-src.tar.gz
 
-cp $CWD/golded/gps70503.tb2 /usr/ports/distfiles/gps70503.tb2
+UNAME=`uname -m`
 
-cp $CWD/bsd_ports.tar.gz / ; cd / ; tar -xzpf bsd_ports.tar.gz
-rm /bsd_ports.tar.gz
+if [ "$UNAME" = "amd64" ];
+then
+export MACHINE="i386"
+export UNAME_p="i386"
+export UNAME_m="i386"
+export CFLAGS="-fPIC"
+fi
 
 echo ""
 if [ -e /usr/local/etc/fido/huskymak.cfg  ]; then
@@ -211,7 +285,7 @@ if [ -e /usr/ports/news/husky-base-devel-fidoip/Makefile ]; then
 echo '--------------------------------------------------------------------------'
 echo 'using port /usr/ports/news/husky-base-devel-fidoip/, begin compilation'
 sleep 5
-cd /usr/ports/news/husky-base-devel-fidoip ; make install clean
+cd /usr/ports/news/husky-base-devel-fidoip ; make package ; make clean
 if [ -e /usr/local/etc/fido/huskymak.cfg  ]; then
 echo '-------------------------------------------------------------------------'
 echo  'Wow! Husky HPT Base package installed now.'
@@ -240,7 +314,7 @@ echo 'using port /usr/ports/news/husky-smapi-devel-fidoip/, begin compilation'
 sleep 5
 cd /usr/ports/news/husky-smapi-devel-fidoip ; make extract
 mv /usr/ports/news/husky-smapi-devel-fidoip/work/smapi /usr/ports/news/husky-smapi-devel-fidoip/work/smapi-fidoip
-make patch ; make install clean
+make patch ; make package ; make clean
 
 if [ -e /usr/local/lib/libsmapi.so.2  ]; then
 echo '-------------------------------------------------------------------------'
@@ -269,7 +343,7 @@ echo 'using port /usr/ports/news/husky-fidoconf-devel-fidoip/, begin compilation
 sleep 5
 cd /usr/ports/news/husky-fidoconf-devel-fidoip ; make extract
 mv /usr/ports/news/husky-fidoconf-devel-fidoip/work/fidoconf /usr/ports/news/husky-fidoconf-devel-fidoip/work/fidoconf-fidoip
-make patch ; make install clean
+make patch ; make package ; make clean
 
 if [ -e /usr/local/info/fidoconfig.info  ]; then
 echo '-------------------------------------------------------------------------'
@@ -298,7 +372,7 @@ echo 'using port /usr/ports/news/husky-hpt-devel-fidoip/, begin compilation'
 sleep 5
 cd /usr/ports/news/husky-hpt-devel-fidoip ; make extract
 mv /usr/ports/news/husky-hpt-devel-fidoip/work/hpt /usr/ports/news/husky-hpt-devel-fidoip/work/hpt-fidoip
-make patch ; make install clean
+make patch ; make package ; make clean
 
 if [ -e /usr/local/bin/hpt  ]; then
 echo '-------------------------------------------------------------------------'
@@ -339,7 +413,7 @@ cd /usr/ports/news/husky-hptkill-fidoip/ ; make extract
 
 mv /usr/ports/news/husky-hptkill-fidoip/work/hptkill /usr/ports/news/husky-hptkill-fidoip/work/hptkill-fidoip
 
-make install clean
+make package ; make clean
 
 if [ -e /usr/local/bin/hptkill  ]; then
 echo '-------------------------------------------------------------------------'
@@ -370,7 +444,7 @@ sleep 5
 
 cd /usr/ports/news/husky-hptsqfix-fidoip/ ; make extract
 mv /usr/ports/news/husky-hptsqfix-fidoip/work/hptsqfix /usr/ports/news/husky-hptsqfix-fidoip/work/hptsqfix-fidoip
-make install clean
+make package ; make clean
 
 if [ -e /usr/local/bin/hptsqfix  ]; then
 echo '-------------------------------------------------------------------------'
@@ -400,7 +474,7 @@ sleep 5
 
 cd /usr/ports/news/husky-hpucode-fidoip/ ; make extract
 mv /usr/ports/news/husky-hpucode-fidoip/work/hpucode /usr/ports/news/husky-hpucode-fidoip/work/hpucode-fidoip
-make patch ; make install
+make patch ; make package ; make clean
 if [ -e /usr/local/bin/hpucode  ]; then
 echo '-------------------------------------------------------------------------'
 echo  'Wow! UUE message base scanning utility husky-hpucode installed now.'
@@ -431,7 +505,7 @@ sleep 5
 cd /usr/ports/news/husky-htick-fidoip/ ; make extract
 mv /usr/ports/news/husky-htick-fidoip/work/htick /usr/ports/news/husky-htick-fidoip/work/htick-fidoip
 cp /usr/ports/news/husky-htick-fidoip/Makefile.doc /usr/ports/news/husky-htick-fidoip/work/htick-fidoip/doc/Makefile
-make patch ; make install clean
+make patch ; make package ; make clean
 if [ -e /usr/local/bin/htick  ]; then
 echo '-------------------------------------------------------------------------'
 echo  'Wow!  FTN File ticker utility husky-htick installed now.'
@@ -460,7 +534,7 @@ sleep 5
 
 cd /usr/ports/news/husky-nltools-fidoip/ ; make extract 
 mv /usr/ports/news/husky-nltools-fidoip/work/nltools /usr/ports/news/husky-nltools-fidoip/work/nltools-fidoip
-make install clean
+make package ; make clean
 if [ -e /usr/local/bin/nldiff  ]; then
 echo '-------------------------------------------------------------------------'
 echo  'Wow!  Nodelist tools husky-nltools installed now.'
@@ -489,7 +563,7 @@ sleep 5
 
 cd /usr/ports/news/husky-sqpack-fidoip/ ; make extract 
 mv /usr/ports/news/husky-sqpack-fidoip/work/sqpack /usr/ports/news/husky-sqpack-fidoip/work/sqpack-fidoip
-make install clean
+make package ; make clean
 
 if [ -e /usr/local/bin/sqpack  ]; then
 echo '-------------------------------------------------------------------------'
@@ -519,7 +593,7 @@ sleep 5
 
 cd /usr/ports/news/husky-bsopack-fidoip/ ; make extract
 mv /usr/ports/news/husky-bsopack-fidoip/work/bsopack /usr/ports/news/husky-bsopack-fidoip/work/bsopack-fidoip
-make install clean
+make package ; make clean
 
 if [ -e /usr/local/bin/bsopack  ]; then
 echo '-------------------------------------------------------------------------'
@@ -535,39 +609,6 @@ exit
 fi
 fi
 
-
-echo ""
-if [ -e /usr/local/bin/golded  ]; then
-echo  'Found GoldEd+ package.'
-else
-echo 'GoldEd+ package is not installed!'
-echo 'Trying to install it from ports'
-if [ -e /usr/ports/news/golded+-fidoip/Makefile ]; then
-echo '--------------------------------------------------------------------------'
-echo 'using port /usr/ports/news/golded+-fidoip/, begin compilation'
-sleep 5
-
-cd /usr/ports/news/golded+-fidoip ; make extract 
-mv /usr/ports/news/golded+-fidoip/work/golded+ /usr/ports/news/golded+-fidoip/work/golded+-fidoip
-mkdir -p /usr/local/etc/golded+
-cp -R /usr/ports/news/golded+-fidoip/work/golded+-fidoip/cfgs /usr/local/etc/golded+/
-cp -R /usr/ports/news/golded+-fidoip/work/golded+-fidoip/chsgen/map /usr/local/etc/golded+/
-
-make patch ; make install clean
-
-if [ -e /usr/local/bin/golded  ]; then
-echo '-------------------------------------------------------------------------'
-echo  'Wow! Found GoldEd+ package now.'
-sleep 3
-else
-fi
-else
-echo '---------------------------------------------------------------------------'
-echo 'GoldEd+ package is still not installed!                     '  
-echo 'Error. Install this package manually, then rerun this script'
-exit
-fi
-fi
 
 
 echo '-----------------------------------------------------------------------------'
@@ -593,6 +634,7 @@ if [ -e $CWD/binkd/binkd.log ]; then
   mkdir -p /home/fido/nodelist
   mkdir -p /home/fido/2uplink
   mkdir -p /home/fido/public
+  mkdir -p /home/fido/fghigetdir
   mkdir -p /home/fido/flags
   mkdir -p /home/fido/magic
   mkdir -p /home/fido/announce
@@ -802,6 +844,7 @@ if [ -e /usr/local/bin/golded  ]; then
 echo '------------------------------------------------------------------------'
 echo "   Done! Installation fidoip for user $VAR_01 are finished successully."
 echo '   Edit config files as it decribed in fido.rus.koi file.      '
+echo '   Visit http://sourceforge.net/apps/mediawiki/fidoip for documentation'
 echo '   Visit http://sourceforge.net/projects/fidoip/ for info and updates.  '
 echo '------------------------------------------------------------------------'
 

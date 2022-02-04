@@ -4,7 +4,7 @@
 # NOTES:
 #
 ########################
-# Golded+ Fido Editor 
+# Golded+ Fido Editor pakage for Slamd64 
 # Download latest verison of and remame in bottom in unzip
 # You could do it automatically if uncomment this line:  
 # wget -c http://superb-east.dl.sourceforge.net/sourceforge/golded-plus/gps70503.tb2
@@ -15,13 +15,13 @@
 
 # Set initial variables:
 
-NAME=golded+			# Program name
-PNAME=golded+			# Package name (Useful for changing case, removing "-"s, etc.)
+NAME=golded			# Program name
+PNAME=golded			# Package name (Useful for changing case, removing "-"s, etc.)
 VERSION=1.1.5-b		# Program version
 PVERSION=		# Package version (Useful for removing "-"s, CVS builds, etc.)
 ARCH=${ARCH:-x86_64}	# Package architecture
 BUILD=${BUILD:-fido_my1}	# Build number plus packager initials (use your own)
-ZIPNAME=gps70503.tb2
+ZIPNAME=gps90710.tb2
 
 CWD=`pwd`
 TMP=${TMP:-/tmp}	# Location to compile the source
@@ -48,8 +48,13 @@ elif [ "$ARCH" = "x86_64" ]; then
   SLKCFLAGS="-O2"
 fi
 
-rm -rf $PKG		# Get rid of any leftovers
-mkdir -p $PKG		# Make sure $PKG and $TMP (-p switch) exist
+rm -rf $PKG		
+mkdir -p /usr/local		
+mkdir -p /usr/local/bin
+mkdir -p /usr/local/sbin
+mkdir -p /usr/local/etc
+mkdir -p /usr/local/etc/golded+
+mkdir -p /usr/local/etc/fidoip
 
 cd $TMP
 rm -rf $TMP/golded+
@@ -57,57 +62,11 @@ rm -rf $TMP/golded+
 # Correct GoldEd+ zip file name if you are using fresh version. 
 tar -xjpf $CWD/$ZIPNAME
 
-rm $ZIPNAME
 cd $TMP/golded+
 
-
-echo '-------------------------------------------------------------------'
-echo "Now I am preparing to patch GoldEd+..."
-echo '-------------------------------------------------------------------'
-sleep 2
-echo ""
-
-# Patching for GCC 4.3 support 
-
-cat $CWD/1patch-golded3-golded.h | patch -p0
-cat $CWD/1patch-goldlib-gall-gdbgerr.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gespell.h | patch -p0
-cat $CWD/1patch-goldlib-gall-gfilutl1.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gfilutl2.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gftnnl.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gftnnlfd.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gftnnlge.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gmemdbg.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gstrutil.cpp | patch -p0
-cat $CWD/1patch-goldlib-gall-gutlgrp.cpp | patch -p0
-cat $CWD/1patch-goldlib-gallgdbgtrk.cpp | patch -p0
-cat $CWD/1patch-rddt-rddt.cpp | patch -p0
-
-sleep 10
-
-# Patching GoldEd for amd64:
-
-cat $CWD/patch-goldlib-gall-gmemdbg.cpp | patch -p0
-cat $CWD/patch-goldlib-hunspell-csutil.cxx | patch -p0
-cat $CWD/patch-goldnode-goldnode.cpp | patch -p0
-
-#Patching of Golded+ to prevent crashing it after pressing F9 for listing messages
-
-sed -i 's/LC_CTYPE,\ \"\"/LC_CTYPE,\ \"C-TRADITIONAL"/g' rddt/rddt.cpp 
-sed -i 's/LC_CTYPE,\ \"\"/LC_CTYPE,\ \"C-TRADITIONAL"/g' golded3/geinit.cpp 
-sed -i 's/LC_CTYPE,\ \"\"/LC_CTYPE,\ \"C-TRADITIONAL"/g' goldlib/gall/gutlwin.cpp
-sed -i 's/LC_CTYPE,\ \"\"/LC_CTYPE,\ \"C-TRADITIONAL"/g' goldlib/gall/gcharset.cpp
-sed -i 's/LC_CTYPE,\ \"\"/LC_CTYPE,\ \"C-TRADITIONAL"/g' goldnode/goldnode.cpp
-
-echo '-------------------------------------------------------------------'
-echo "OK. GoldEd+ successfully patched! Starting comlilation..."
-echo '-------------------------------------------------------------------'
-sleep 3
-echo ""
-
 sh dist-gpl.sh
 sh dist-gpl.sh
-# Correct general permissions/ownership:
+
 
 # Create package docs:
 # Probably should define the package documentation with
@@ -119,17 +78,8 @@ cp -a $PDOC /usr/local/doc/$PNAME-$VERSION/
 
 chmod 644 /usr/local/doc/$PNAME-$VERSION/*
 
-# Add package description:
-
-#if [ -e $CWD/slack-desc ]; then
-#  mkdir -p /install
-#  cat $CWD/slack-desc > /install/slack-desc
-#fi
 
 if [ -e $CWD/decode.txt ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  mkdir -p /usr/local/etc/fidoip
   cat $CWD/decode.txt > /usr/local/etc/fidoip/decode.txt.template
   cat $CWD/decode.txt > /usr/local/etc/golded+/golded.cfg
 fi
@@ -164,11 +114,11 @@ if [ -e $CWD/golded.tpl ]; then
   cat $CWD/golded.tpl > /usr/local/etc/golded+/golded.tpl
 fi
 
-if [ -e $CWD/golded.cfm ]; then
-  mkdir -p /usr/local/etc
-  mkdir -p /usr/local/etc/golded+
-  cat $CWD/golded.cfm > /usr/local/etc/golded+/golded.cfm
-fi
+# Add log for golded+:
+
+  mkdir -p /home/fido
+  cat $CWD/golded.log > /home/fido/golded.log
+ 
 
 
 if [ -e $CWD/ge ]; then
@@ -186,11 +136,11 @@ if [ -e $CWD/gl ]; then
    cp -p $CWD/gl /usr/local/bin/
 fi
 
-mkdir -p /usr/local/etc/golded+
-mkdir -p /usr/local/sbin/
+mkdir -p /usr/local/etc/golded+ 
 cp -a $TMP/golded+/cfgs /usr/local/etc/golded+/
 cp -a $TMP/golded+/bin/* /usr/local/sbin/
 cp -a $TMP/golded+/chsgen/* /usr/local/etc/golded+/
+
 
 if [ -e $CWD/golded.cfm ]; then
   cp $CWD/golded.cfm /usr/local/etc/golded+/
@@ -200,24 +150,24 @@ if [ -e $CWD/net5020.ndl ]; then
   mkdir -p /home/fido
   mkdir -p /home/fido/nodelist
   cp $CWD/*.ndl /home/fido/nodelist/
+  cp $CWD/goldnode.* /home/fido/nodelist/
 fi
 if [ -e $CWD/nodelist.sh ]; then
 cat $CWD/nodelist.sh > /usr/local/bin/nodelist.sh
 chmod +x /usr/local/bin/nodelist.sh
 fi
 
+# Adding fghigetdir directory for downloading messages
 
-# Add install script:
+mkdir -p /home/fido/fghigetdir
 
-#if [ -e $CWD/doinst.sh ]; then
-#  cat $CWD/doinst.sh > /install/doinst.sh
-#fi
+cp $CWD/*.eng /usr/local/etc/fidoip/
+
+# Removing dump staff
+rm -f /usr/local/sbin/*.Diz
+rm -f /usr/local/sbin/*.txt
 
 
-# Build the package:
-
-#cd $PKG
-#makepkg -l y -c n $TMP/$PNAME-$VERSION-$ARCH-$BUILD.tgz
 
 # Clean up the extra stuff:
 

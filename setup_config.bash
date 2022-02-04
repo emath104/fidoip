@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage:  bash setup_config.bash
+# Usage:  bash ./setup_config.bash
 # Bash only!!! Do not use sh interpretator
 CWD=`pwd`
 OSNAME=`uname`
@@ -61,6 +61,11 @@ fi
 #echo  "$fullname" | sed 's_ _\\ _g' > /tmp/fidoiptmp
 echo  "$fullname" | sed 's/ /\\ /g' > /tmp/fidoiptmp
 fullname1=`cat /tmp/fidoiptmp`
+
+# Inserting space instead of space
+
+echo  "$fullname" | sed 's/ /\_/g' > /tmp/fidoiptmp
+fullname2=`cat /tmp/fidoiptmp`
 
 
 echo "Enter your station name and press[ENTER]."
@@ -127,6 +132,17 @@ locationname1=`cat /tmp/fidoiptmp`
 echo  "$locationname1" | sed 's/_/\ /g' > /tmp/fidoiptmp
 locationname2=`cat /tmp/fidoiptmp`
 
+# Deleting spaces
+
+
+echo  "$locationname" | sed 's/\ //g' > /tmp/fidoiptmp
+locationname3=`cat /tmp/fidoiptmp`
+
+# Deleting ,
+echo  "$locationname3" | sed 's/\,//g' > /tmp/fidoiptmp
+locationname4=`cat /tmp/fidoiptmp`
+
+
 echo "Enter your FTN address and press [ENTER]."
 echo -n "Sample -  2:5020/828.555: "
 read ftnaddress
@@ -151,6 +167,10 @@ echo 'Please run this script again and be more carefull during inputing.'
 echo -n '               '
 exit
 fi
+
+
+# Select zone number
+zonenumber=`echo  "$ftnaddress" | sed 's|\:.*||'`
 
 # Inserting \ before / in a FTN address
 echo  "$ftnaddress" | sed 's|/|\\/|g' > /tmp/fidoiptmp
@@ -324,7 +344,7 @@ echo ''
 echo '------------------------------------------------------------------------'
 echo ''
 
-tar -cf tar -cf $CWD/$shortname /usr/local/etc/binkd.cfg /usr/local/etc/golded+/g* /usr/local/etc/fido/config /usr/local/bin/recv /usr/local/bin/send > /dev/null 2>&1
+tar -cf $CWD/$shortname /usr/local/etc/binkd.cfg /usr/local/etc/golded+/g* /usr/local/etc/fido/config /usr/local/bin/recv /usr/local/bin/send > /dev/null 2>&1
 sleep 3 
 fi
 
@@ -342,6 +362,7 @@ echo 'Detecting OS...'
 echo 'Your OS is Linux.'
 
 sed -i "2s/Vasiliy\ Pampasov"/"$fullname1""/" /usr/local/etc/fido/config
+sed -i "3s/Moscow"/"$locationname4""/" /usr/local/etc/fido/config
 sed -i "4s/Vasiliy\ Pampasov"/"$fullname1""/" /usr/local/etc/fido/config
 sed -i "34s/Vasiliy\ Pampasov"/"$fullname1""/" /usr/local/etc/fido/config
 sed -i "67s/Vasiliy\ Pampasov"/"$fullname1""/" /usr/local/etc/fido/config
@@ -355,6 +376,9 @@ sed -i "7s/$locationname1"/"$locationname2""/" /usr/local/etc/binkd.cfg
 
 
 sed -i "5s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/binkd.cfg
+
+sed -i "2s|outbound\ 2|outbound\ "$zonenumber"|" /usr/local/etc/binkd.cfg
+
 sed -i "6s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
 sed -i "11s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
 sed -i "70s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/fido/config
@@ -374,10 +398,10 @@ sed -i "103s/2:5020\/828.555"/"$ftnaddress1""/" /usr/local/etc/golded+/golded.cf
 sed -i "81s/a828"/"a$nodeaddress""/" /usr/local/etc/golded+/golded.cfg
 sed -i "82s/a828"/"a$nodeaddress""/" /usr/local/etc/golded+/golded.cfg
 sed -i "96s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/golded+/golded.cfg
-
+sed -i "96s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/golded+/golded.cfg
 
 sed -i "9s/Kirill\ Temnenkov"/"$uplinkname1""/" /usr/local/etc/fido/config
-sed -i "8s/Kirill_Temnenkov"/"$uplinkname2""/" /usr/local/etc/binkd.cfg
+sed -i "8s/Kirill_Temnenkov"/"$fullname2""/" /usr/local/etc/binkd.cfg
 
 sed -i "33s/2:5020\/828"/"$uplinkftnaddress1""/" /usr/local/etc/binkd.cfg
 
@@ -401,6 +425,9 @@ sed -i "33s/temnenkov.dyndns.org"/$uplinkdnsaddress"/" /usr/local/etc/binkd.cfg
 sed -i "33s/12345678"/$uplinkpassword"/" /usr/local/etc/binkd.cfg
 sed -i "82s/12345678"/"$uplinkpassword""/" /usr/local/etc/golded+/golded.cfg
 sed -i "12s/12345678"/$uplinkpassword"/" /usr/local/etc/fido/config
+sed -i "40s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/fido/config
+sed -i "40s/828\.local"/"$nodeaddress"\.local"/" /usr/local/etc/fido/config
+sed -i "34s|defnode\ \-nr\ \*|\#for\ default\ node\ use\#\ defnode\ \-nr\ \-nd\ \-md\ \-|" /usr/local/etc/binkd.cfg
 
 # Fixing netmailarea scanning bug for hpt x86_64  
 if [ "$MACHINE" = "x86_64" ]; then
@@ -408,6 +435,20 @@ sed -i "31s/netmailarea\ -b\ msg"/netmail\ -b\ squish"/" /usr/local/etc/fido/con
 sed -i "95s/netmailarea"/"netmail""/" /usr/local/etc/golded+/golded.cfg
 fi
 
+# Set codepage of URL for ru_RU.KOI8-R  
+if [ "$LANG" = "ru_RU.KOI8-R" ]; then
+sed -i "s|t\ UTF-8|t\ KOI8R|" /usr/local/etc/golded+/golded.cfg
+fi
+
+FIREFOXINST=`ls -A1 /usr/bin/firefox  2>/dev/null`
+if [ "$FIREFOXINST" = "" ];
+then
+echo "/usr/bin/firefox not found."
+echo "It is highly recommended install firefox if you would like to use URL"
+echo "in GoldEd-NSF and hypertext support. If you using another browser define"
+echo "it in the URLHANDLER in /usr/local/etc/golded+/golded.cfg"
+sleep 5
+fi
 
 echo "OK. Original configuration files modified successfully."
 echo "Please review configuration files."  
@@ -450,7 +491,7 @@ sed "96s/828\.local"/"$nodeaddress"\.local"/" /tmp/golded.cfg13 > /tmp/golded.cf
 
 
 sed "9s/Kirill\ Temnenkov"/"$uplinkname1""/" /tmp/config5 > /tmp/config6
-sed "8s/Kirill_Temnenkov"/"$uplinkname2""/" /tmp/binkd.cfg4 > /tmp/binkd.cfg5
+sed "8s/Kirill_Temnenkov"/"$fullname2""/" /tmp/binkd.cfg4 > /tmp/binkd.cfg5
 
 sed "33s/2:5020\/828"/"$uplinkftnaddress1""/" /tmp/binkd.cfg5 > /tmp/binkd.cfg6
 
@@ -477,12 +518,56 @@ sed "12s/12345678"/$uplinkpassword"/" /tmp/config13 > /tmp/config14
 sed "67s/Vasiliy\ Pampasov"/"$fullname1""/" /tmp/config14 > /tmp/config15
 sed "70s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/config15 > /tmp/config16
 sed "71s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/config16 > /tmp/config17
+sed "40s/828\.local"/"$nodeaddress"\.local"/" /tmp/config17 > /tmp/config18
+sed "40s/828\.local"/"$nodeaddress"\.local"/" /tmp/config18 > /tmp/config19
+sed "3s/Moscow"/"$locationname4""/" /tmp/config19 > /tmp/config20
 
 sed "103s/2:5020\/828.555"/"$ftnaddress1""/" /tmp/golded.cfg17 > /tmp/golded.cfg18
+sed "96s/828\.local"/"$nodeaddress"\.local"/" /tmp/golded.cfg18 > /tmp/golded.cfg19
 
-cat /tmp/config17 > /usr/local/etc/fido/config
-cat /tmp/golded.cfg18 > /usr/local/etc/golded+/golded.cfg
-cat /tmp/binkd.cfg8 > /usr/local/etc/binkd.cfg
+cat /tmp/config20 > /usr/local/etc/fido/config
+
+# Set codepage of URL for ru_RU.KOI8-R  
+if [ "$LANG" = "ru_RU.KOI8-R" ]; then
+sed "s|t\ UTF-8|t\ KOI8R|" /tmp/golded.cfg19 > /tmp/golded.cfg20
+rm -rf /tmp/golded.cfg19
+cp /tmp/golded.cfg20 /tmp/golded.cfg19 
+fi
+
+# Set Firefox3 browser for URLHANDLER  
+
+sed "s|usr/bin/firefox|usr/local/bin/firefox3|" /tmp/golded.cfg19 > /tmp/golded.cfg20
+rm -rf /tmp/golded.cfg19
+cp /tmp/golded.cfg20 /tmp/golded.cfg19 
+
+FIREFOXINST=`which firefox3  2>/dev/null`
+if [ "$FIREFOXINST" = "" ];
+then
+echo "Firefox3 not found."
+echo "It is highly recommended install firefox3 port if you would like to use URL"
+echo "in GoldEd-NSF and hypertext support.If you using another browser define"
+echo "it in the URLHANDLER in /usr/local/etc/golded+/golded.cfg"
+sleep 5
+fi
+
+# Fixing netmailarea scanning bug for hpt x86_64
+if [ "$MACHINE" = "amd64" ]; then
+sed "31s/netmailarea\ -b\ msg"/netmail\ -b\ squish"/" /tmp/config20 > /tmp/config21
+sed "95s/netmailarea"/"netmail""/" /tmp/golded.cfg19 > /tmp/golded.cfg20
+rm -rf /tmp/config20
+rm -rf /tmp/golded.cfg19
+cp /tmp/config21 /tmp/config20
+cp /tmp/golded.cfg20 /tmp/golded.cfg19 
+fi
+
+cat /tmp/golded.cfg19 > /usr/local/etc/golded+/golded.cfg
+
+cat /tmp/config20 > /usr/local/etc/fido/config
+
+sed "2s|outbound\ 2|outbound\ "$zonenumber"|" /tmp/binkd.cfg8  > /tmp/binkd.cfg9
+sed "34s|defnode\ \-nr\ \*|\#for\ default\ node\ use\#\ defnode\ \-nr\ \-nd\ \-md\ \-|" /tmp/binkd.cfg9 > /tmp/binkd.cfg10
+
+cat /tmp/binkd.cfg10 > /usr/local/etc/binkd.cfg
 cat /tmp/recv1 > /usr/local/bin/recv
 cat /tmp/send1 > /usr/local/bin/send
 

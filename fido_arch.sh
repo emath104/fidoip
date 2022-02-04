@@ -195,7 +195,7 @@ echo ""
 
 echo ''
 echo '----------------------------------------------------------------------'
-echo '| Starting creating packages of fidoip (BinkD, Husky HPT and GoldEd+).|'
+echo '| Starting creating packages of fidoip (BinkD, Husky HPT and GoldEd) |'
 echo '----------------------------------------------------------------------'
 echo ''
 sleep 10
@@ -224,7 +224,7 @@ fi
 
 sleep 3
 
-if [ -e /usr/local/sbin/binkd-0.9.9  ]; then
+if [ -e /usr/local/sbin/binkd-1.0.0  ]; then
 
 echo
 if [ -e /usr/local/sbin/hpt  ]; then
@@ -234,8 +234,9 @@ if [ -e /usr/local/sbin/gedlnx  ]; then
 
 echo "------------------------------------------------------------------------"
 echo "   Done! Installation fidoip for user $VAR_01 are finished successully."
-echo "   Edit config files as it decribed in fido.rus.koi file.      "
+echo "   Setup configuration as it decribed in fido.rus.* files.      "
 echo "   Visit http://sourceforge.net/projects/fidoip/ for info and updates.  "
+echo "   Visit http://sourceforge.net/apps/mediawiki/fidoip for documentation."
 echo "------------------------------------------------------------------------"
 
 else

@@ -10,7 +10,7 @@
 # Set initial variables:
 
 CWD=`pwd`
-cp $CWD/{binkd099.zip,binkd.cfg,binkd.log,binkd_monthly_stat.sh,binkd_weekly_stat.sh,binkd_yesterday_stat.sh,binkdstat.pl,fido.rus.koi,fido.rus.utf,recv,send,stat-binkd.pl} /var/abs/local/binkd/
+cp $CWD/{binkd100.zip,documentation.txt,binkd.cfg,binkd.log,binkd_monthly_stat.sh,binkd_weekly_stat.sh,binkd_yesterday_stat.sh,binkdstat.pl,fido.rus.koi,fido.rus.utf,recv,send,stat-binkd.pl} /var/abs/local/binkd/
 
 cd  /var/abs/local/binkd/ 
 makepkg --asroot -i -f 

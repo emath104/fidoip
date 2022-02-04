@@ -1,0 +1,37 @@
+#!/bin/sh
+# Notificator for *nix desktops
+# If you whould like to see notfication messages place this script to crontab
+# If for example you whould like to start this script every 50 minutes copy this script to
+# /usr/local/bin
+# sudo cp fidomail /usr/local/bin
+# and add to crontab this string:
+# */50 * * * * /usr/local/bin/fidorecv >/dev/null 2>&1  
+# Script created by Vladimir Smagin - 2:5020/8080.21
+#
+USERNAME=`whoami` ; T1="root"
+if [ "$T1" = "$USERNAME" ]; then 
+echo  'Please do not run this script as root' ; exit
+fi
+
+rm -rf /tmp/recv.tmp
+/usr/local/bin/recv 2> /tmp/recv.tmp
+bla=`cat /tmp/recv.tmp |grep 'receiving'`
+if [ -z "$bla" ]
+then
+sleep 1
+else
+DISPLAY=:0 notify-send "You've got new FIDO-messages!" "Start Golded for reading"
+fi
+
+rm -rf /tmp/send.tmp
+/usr/local/bin/send 2> /tmp/send.tmp
+bla2=`cat /tmp/send.tmp | grep 'sending'`
+if [ -z "$bla2" ]
+then
+sleep 1
+else
+DISPLAY=:0 notify-send "You've sent your FIDO-messages!" "Your messages have been sent"
+fi
+
+rm -rf /tmp/recv.tmp
+rm -rf /tmp/send.tmp

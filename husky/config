@@ -16,7 +16,7 @@ AutoAreaCreateDefaults -g F -p 14 -dupeCheck move -dupeHistory 11
 AutoFileCreate on
 Packer zip
 accessgrp F
-Route normal 2:5020/828.0 2:*
+Route normal 2:5020/828.0 1:* 2:* 3:* 4:* 5:*
 inbound /home/fido/inbound
 ProtInbound /home/fido/protinb
 Localinbound /home/fido/localinb

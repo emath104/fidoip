@@ -184,6 +184,22 @@ fi
 echo ""
 echo "-----------------------------------"
 
+wgetloc=`which wget`
+
+if [ -x "$wgetloc" ]
+then
+    echo "Wget package found: $wgetloc"
+else
+    echo "Information: Wget package not found."
+    echo "You may need install it later,"
+    echo "as described in fidoip.rus.* files."
+    sleep 5
+fi
+
+echo ""
+echo "-----------------------------------"
+
+
 ## make sure gettext available
 
 if [ -e /usr/share/gettext ]
@@ -225,9 +241,10 @@ fi
 echo ''
 echo '------------------------------------------------------------------------------'
 echo "   Done! Creation of packages BinkD, Husky HPT and GoldEd+ are finished."
-echo '   Install *.tgz packages from /tmp directory, then edit    '
+echo '   Install *.txz packages from /tmp directory, then edit    '
 echo '   configuration files files as it decribed in fido.rus.koi file.      '
 echo '   Visit http://sourceforge.net/projects/fidoip/ for info and updates.  '
+echo '   http://sourceforge.net/apps/mediawiki/fidoip for wiki documentation.  '
 echo '------------------------------------------------------------------------------'
 
 

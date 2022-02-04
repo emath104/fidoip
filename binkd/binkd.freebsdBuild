@@ -14,8 +14,9 @@ CWD=`pwd`
 TMP=${TMP:-/tmp}	# Location to compile the source
 
 mkdir -p /usr/local/doc/
-cat $CWD/fido.rus.koi > /usr/local/doc/fido.rus.koi
-cat $CWD/fido.rus.utf > /usr/local/doc/fido.rus.utf
+cd $CWD
+cat ../fido.rus.koi > /usr/local/doc/fido.rus.koi
+cat ../fido.rus.utf > /usr/local/doc/fido.rus.utf
 
 if [ -e $CWD/binkd.cfg ]; then
   mkdir -p /usr/local/etc

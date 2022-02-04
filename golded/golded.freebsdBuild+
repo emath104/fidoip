@@ -61,12 +61,12 @@ fi
 if [ -e $CWD/net5020.ndl ]; then
     mkdir -p /home/fido
     mkdir -p /home/fido/nodelist 
-    cp $CWD/*.ndl /home/fido/nodelist/ 
+    cp $CWD/*.ndl /home/fido/nodelist/
+    cp $CWD/goldnode.* $PKG/home/fido/nodelist/ 
 fi
 if [ -e $CWD/nodelist.sh ]; then
     cat $CWD/nodelist.sh > /usr/local/bin/nodelist.sh
     chmod +x /usr/local/bin/nodelist.sh
 fi
 
-
-
+cp $CWD/*.eng /usr/local/etc/fidoip/

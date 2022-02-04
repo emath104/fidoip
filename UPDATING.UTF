@@ -1,21 +1,59 @@
+ОБНОВЛЕНИЕ FIDOIP
 
-                2. Обновление fidoip
+Если у Вас уже установлена предыдущая версия fidoip, то загрузите fidoip-1.0.5.tar, раскройте его и обновите поинткомплект следующим образом:
 
-Если у Вас уже установлена предыдущая версия fidoip, то:
 
-1. Загрузите новую версию fidoip-1.0.4.tar и раскройте архив, и перейдите в каталог fidoip-1.0.4.
+	ОБНОВЛЕНИЕ FIDOIP ДЛЯ WINDOWS
 
-2. Под root'ом выполните команду:
+
+1. Откройте командный интерпретатор cmd.exe(для этого нужно открыть меню "Пуск" и ввести с строке "Запустить" команду cmd.exe), перейдите на тот диск, на котором у вас установлен fidoip и запустите скрипт:
+
+\usr\bin\export_windows_arealist.bat
+
+2. Откройте "Проводник", "Total Commander", Far и создайте каталог \home\fido\fghigetdir. Этот каталог служебный, поэтому его следует создать, иначе гипертекстовые возможности редактора GoldEd-NSF будут недоступны.
+
+3. Переименуйте каталог с вашими базами \home в \home_old и каталог \usr в \usr_old
+
+4. Извлеките файл fidoip_win-1.0.5.zip из архива fidoip-1.0.5.tar. Раскройте этот файл в корень диска и настройте комплект как это описано в разделе 12. "Установка поинткомплекта в Windows"
+
+5. Удалите каталог \home и затем переименуйте каталог с вашими базами из \home_old в \home
+
+6. Отредактируйте и запустите файл \usr\setup_config.vbs как это описано в разделе 12. "Установка поинткомплекта в Windows"
+
+7. Откройте командный интерпретатор cmd.exe(для этого нужно открыть меню "Пуск" и ввести с строке "Запустить" команду cmd.exe), перейдите на тот диск, на котором у вас установлен fidoip и запустите скрипт:
+
+\usr\bin\import_windows_arealist.bat
+
+8. Откройте текстовым редактором файл \usr\fidoconf\config.cfg и удалите в списке эхоконференций лишние повторяющиеся описания EchoArea(Дупликаты могут быть для эхоконференций ru.linux.chainik, ru.linux и ru.unix.bsd);
+
+9. Запустите редактор и проверьте, все ли эхи читаются.
+
+
+	ОБНОВЛЕНИЕ FIDOIP ВО FREEBSD
+
+
+1. Под root'ом выполните команды:
 
 cat /usr/local/etc/fido/config | grep EchoArea > arealist.save
+tar -czf fido_etc.tar /usr/local/etc/binkd.cfg /home/fido/*.log /usr/local/etc/fido /usr/local/etc/golded+
 
-3. Установите поинкомплект fidoip-1.0.4 как это описано ниже для вашего дистрибутива и ОС;
+Первая команда сохраняет список используемых вами эхоконференций в файл arealist.save, вторая сохраняет все ваши конфиги и логи в файл fido_etc.tar. Если в скриптах /usr/local/bin/recv и /usr/local/bin/send у Вас были добавлены какие-то дополнительные команды, тогда сохраните их также.
 
-4. Под root'ом выполните команду:
+2. Создайте служебный каталог /home/fido/fghigetdir. Если этого не сделать, то гипертекстовые возможности редактора GoldEd-NSF будут недоступны.
 
-./relinkapps.sh
+mkdir /home/fido/fghigetdir
 
-5. Под root'ом при помощи конфигуратора setup_config.bash настройте поинкомплект под Ваши данные;
+3. Удалите старые пакеты fidoip
+
+pkg_delete "binkd*"
+pkg_delete "husky*"
+pkg_delete "golded*" 
+
+4. Установите fidoip-1.0.5 как это описано ниже в разделе 3. "Установка поинткомплекта во FreeBSD";
+
+5. Под root'ом при помощи конфигуратора setup_config.bash настройте поинткомплект под Ваши данные
+
+/usr/local/bin/bash ./setup_config.bash
 
 6. Под root'ом выполните команду:
 
@@ -23,6 +61,100 @@ cat arealist.save >> /usr/local/etc/fido/config
 
 7. Запустите скрипт set_perm.sh login, где login - ваше имя входа.
 
-8. Под вашим логином откройте текстовым редактором файл /usr/local/etc/fido/config и проверьте нет ли в конце этого в списка эхоконференций повторяюшихся описаний эх EchoArea;
+8. Проверьте, нет ли в конце списка эхоконференций в файле /usr/local/etc/fido/config повторяюшихся описаний эх EchoArea. Чтобы найти повторяющиеся строки описаний эхоконференций выполните команду:
+
+cat /usr/local/etc/fido/config | grep EchoArea | sort | uniq -d 
+
+Под вашим логином откройте текстовый редактором файл /usr/local/etc/fido/config и удалите в конце файла повторяющиеся эхоконференции.
+
+Чтобы убедиться, что повторяющихся эхоконференций больше нет, снова выполните команду:
+
+cat /usr/local/etc/fido/config | grep EchoArea | sort | uniq -d 
+
+Если вывод этой команды теперь пустой, то значит можно переходить к следующему пункту.
 
 9. Запустите редактор и проверьте все ли эхи читаются.
+
+
+	ОБНОВЛЕНИЕ FIDOIP В LINUX'Е
+
+
+1. Под root'ом выполните команды:
+
+cat /usr/local/etc/fido/config | grep EchoArea > arealist.save
+tar -czf fido_etc.tar /usr/local/etc/binkd.cfg /home/fido/*.log /usr/local/etc/fido /usr/local/etc/golded+ 
+
+
+Первая команда сохраняет список используемых вами эхоконференций в файл arealist.save, вторая сохраняет все ваши конфиги и логи в файл fido_etc.tar. Если в скриптах /usr/local/bin/recv и /usr/local/bin/send у Вас были добавлены какие-то дополнительные команды, тогда сохраните их также.
+
+
+2. Создайте служебный каталог /home/fido/fghigetdir
+
+mkdir /home/fido/fghigetdir
+
+3. Под root'ом переименуйте каталог /home/fido, чтобы сохранить ваши базы
+
+sudo mv /home/fido /home/fido-old
+
+
+4. Выполните команду, чтобы сохранить описание эх:
+
+cat /usr/local/etc/fido/config | grep EchoArea > arealist.save
+
+5. Удалите старые версии бинарников и конфигов предыдущей версии fidoip
+
+
+Если у вас Arch Linux, под root'ом удалите старые пакеты fidoip:
+
+su
+pacman -R binkd husky-bsopack husky-fidoconf husky-hpt husky-hptkill husky-hptsqfix husky-hpucode husky-htick husky-nltools husky-smapi husky-sqpack golded+
+
+
+Если у Вас Slackware удалите пакеты "binkd*", "husky*", "golded*" при помощи pkgtool или removepkg
+
+
+Затем, вне зависимости от того, какой у Вас дистрибутив, перейдите в каталог fidoip-1.0.5
+
+cd fidoip-1.0.5
+
+и запустите под root'ом скрипт, который удалит старые бинарные файлы и конфиги:
+
+sudo ./clear_fidoip_files.sh
+
+6. Установите поинткомплект fidoip-1.0.5 как это описано ниже для вашего дистрибутива;
+
+7. Под root'ом удалите пустой каталог /home/fido
+
+sudo rm -rf /home/fido
+
+8. Переименуйте каталог с вашими базами в /home/fido
+
+sudo mv /home/fido-old /home/fido
+
+9. Под root'ом при помощи конфигуратора setup_config.bash настройте поинткомплект под Ваши данные:
+
+sudo ./setup_config.bash
+
+10. Под root'ом выполните команду:
+
+sudo cat arealist.save >> /usr/local/etc/fido/config
+
+11. Под root'ом запустите скрипт
+
+./set_perm.sh login
+
+где login - ваше имя входа.
+
+12. Проверьте нет ли в конце списка эхоконференций в файле /usr/local/etc/fido/config повторяюшихся описаний эх EchoArea. Чтобы найти повторяющиеся строки описаний эхоконференций выполните команду:
+
+cat /usr/local/etc/fido/config | grep EchoArea | sort | uniq -d 
+
+Под вашим логином откройте текстовый редактором файл /usr/local/etc/fido/config и удалите в конце файла повторяющие эхоконференции.
+
+Чтобы убедиться, что повторяющихся эхоконференций больше нет, снова выполните команду:
+
+cat /usr/local/etc/fido/config | grep EchoArea | sort | uniq -d 
+
+Если вывод этой команды теперь пустой, то значит можно переходить к следующему пункту.
+
+13. Запустите редактор GoldEd-NSF и проверьте все ли эхи читаются. 

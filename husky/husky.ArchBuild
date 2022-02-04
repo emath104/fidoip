@@ -48,7 +48,7 @@ cp config *.pl *.log *.sh *.tar.gz huskymak.cfg /var/abs/local/husky-sqpack/
 cp libiconv-1.12.tar.gz /var/abs/local/libiconv/
 cp $EEVER /var/abs/local/ee/ 
 
-cd /var/abs/local/libiconv/ ; makepkg --asroot -i -f
+#cd /var/abs/local/libiconv/ ; makepkg --asroot -i -f
 cd /var/abs/local/ee ;  makepkg --asroot -i -f 
 cd /var/abs/local/husky-smapi ;  makepkg --asroot -i -f
 cd /var/abs/local/husky-fidoconf ;  makepkg --asroot -i -f
